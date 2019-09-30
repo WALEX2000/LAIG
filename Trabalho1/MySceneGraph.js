@@ -227,7 +227,100 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+        //get Default View ID for the nodes
+        let defaultViewID = viewsNode.getAttribute("default");
+        if(defaultViewID == null) this.onXMLMinorError("No default view defined.");
+
+        this.views = [];
+        this.defaultView = defaultViewID;
+
+        let defaultViewExists = false;
+        
+        //get all views inside views element
+        let children = viewsNode.children;
+        if(children.length == 0) this.onXMLError("No views Provided!");
+        for(let i = 0; i < children.length; i++) {
+            let child = children[i];
+            let name = child.nodeName;
+            if(name != "ortho" && name != "perspective") {
+                this.onXMLMinorError("Unexpedted view: " + name);
+                continue;
+            }
+
+            let viewId = child.getAttribute("id");
+            if(viewId == null) this.onXMLMinorError("ID for " + name + " view not provided!");
+            if(viewId == defaultViewID) defaultViewExists = true;
+
+            let viewNear = parseFloat(child.getAttribute("near"));
+            if(viewNear == null) this.onXMLMinorError("Near attribute for " + name + " view not provided!");
+            let viewFar = parseFloat(child.getAttribute("far"));
+            if(viewFar == null) this.onXMLMinorError("Far attribute for " + name + " view not provided!");
+
+            let fromList = child.getElementsByTagName("from");
+            let fromX;
+            let fromY;
+            let fromZ;
+            if(fromList.length == 0) {
+                this.onXMLMinorError("From element for " + name + " view not provided!");
+            }
+            else if(fromList.length > 1) {
+                this.onXMLMinorError("More than 1 For element for " + name + " view provided!");
+            }
+            else {
+                fromX = parseFloat(fromList[0].getAttribute("x"));
+                fromY = parseFloat(fromList[0].getAttribute("y"));
+                fromZ = parseFloat(fromList[0].getAttribute("z"));
+            }
+
+            let toList = child.getElementsByTagName("to");
+            let toX;
+            let toY;
+            let toZ;
+            if(toList.length == 0) {
+                this.onXMLMinorError("To element for " + name + " view not provided!");
+            }
+            else if(toList.length > 1) {
+                this.onXMLMinorError("More than 1 To element for " + name + " view provided!");
+            }
+            else {
+                toX = parseFloat(toList[0].getAttribute("x"));
+                toY = parseFloat(toList[0].getAttribute("y"));
+                toZ = parseFloat(toList[0].getAttribute("z"));
+            }
+
+            let currentView = {id:viewId, near:viewNear, far:viewFar, from: vec3.fromValues(fromX,fromY,fromZ), to: vec3.fromValues(toX,toY,toZ)}
+
+            if(name = "perspective") {
+                let viewAngle = parseFloat(child.getAttribute("angle"));
+                if(viewAngle == null) this.onXMLMinorError("no angle attribute for " + name + " view provided!");
+                currentView.type = "perspective";
+
+                currentView.angle = viewAngle;
+            }
+            else if(name = "ortho") {
+                let viewTop = child.getAttribute("top");
+                let viewBottom = child.getAttribute("bottom");
+                let viewLeft = child.getAttribute("left");
+                let viewRight = child.getAttribute("right");
+
+                let upList = child.child.getElementsByTagName("up");
+                let upX = parseFloat(upList[0].getAttribute("x"));
+                let upY = parseFloat(upList[0].getAttribute("y"));
+                let upZ = parseFloat(upList[0].getAttribute("z"));
+
+                currentView.type = "ortho";
+                currentView.angle = viewAngle;
+                currentView.top = viewTop;
+                currentView.bottom = viewBottom;
+                currentView.left = viewLeft;
+                currentView.right = viewRight;
+                currentView.up = vec3.fromValues(upX, upY, upZ);
+            }
+
+            this.views.push(currentView);
+        }
+        if(this.views.length == 0) this.onXMLError("No Views successfully loaded!");
+        if(!defaultViewExists) this.onXMLMinorError("Default View doesn't exist");
 
         return null;
     }
