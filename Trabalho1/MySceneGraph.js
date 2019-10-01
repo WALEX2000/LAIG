@@ -242,20 +242,24 @@ class MySceneGraph {
         for(let i = 0; i < children.length; i++) {
             let child = children[i];
             let name = child.nodeName;
+            //if view has an invalid name throw error and proceed.
             if(name != "ortho" && name != "perspective") {
                 this.onXMLMinorError("Unexpedted view: " + name);
                 continue;
             }
 
+            //get ID and test for errors.
             let viewId = child.getAttribute("id");
             if(viewId == null) this.onXMLMinorError("ID for " + name + " view not provided!");
             if(viewId == defaultViewID) defaultViewExists = true;
-
+            
+            //get near and far and test for errors.
             let viewNear = parseFloat(child.getAttribute("near"));
             if(viewNear == null) this.onXMLMinorError("Near attribute for " + name + " view not provided!");
             let viewFar = parseFloat(child.getAttribute("far"));
             if(viewFar == null) this.onXMLMinorError("Far attribute for " + name + " view not provided!");
 
+            //get from array values and test for errors.
             let fromList = child.getElementsByTagName("from");
             let fromX;
             let fromY;
@@ -272,6 +276,7 @@ class MySceneGraph {
                 fromZ = parseFloat(fromList[0].getAttribute("z"));
             }
 
+            //get to array values and test for errors.
             let toList = child.getElementsByTagName("to");
             let toX;
             let toY;
@@ -288,8 +293,10 @@ class MySceneGraph {
                 toZ = parseFloat(toList[0].getAttribute("z"));
             }
 
+            //create object with currentView to add to our views array
             let currentView = {id:viewId, near:viewNear, far:viewFar, from: vec3.fromValues(fromX,fromY,fromZ), to: vec3.fromValues(toX,toY,toZ)}
 
+            //complete currentView object with appropriate information depending on the view type
             if(name = "perspective") {
                 let viewAngle = parseFloat(child.getAttribute("angle"));
                 if(viewAngle == null) this.onXMLMinorError("no angle attribute for " + name + " view provided!");
@@ -499,9 +506,6 @@ class MySceneGraph {
 
         this.materials = [];
 
-        var grandChildren = [];
-        var nodeNames = [];
-
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
 
@@ -517,13 +521,48 @@ class MySceneGraph {
 
             // Checks for repeated IDs.
             if (this.materials[materialID] != null)
-                return "ID must be unique for each light (conflict: ID = " + materialID + ")";
+                return "ID must be unique for each material (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            // get shininess for material and check for errors
+            let shininess = this.reader.getFloat(children[i], 'shininess');
+            if(shininess == null)
+                return "no shininess defined for material with ID: " + materialID;
+
+            // get emission for material and check for errors, then parse color into list
+            let emission = children[i].getElementsByTagName("emission");
+            if(emission.length == 0)
+                return "no emission provided for materia with ID: " + materialID;
+            else
+                emission = this.parseColor(emission[0], "emission in " + materialID + "has an incorrect format");
+
+            // get ambient for material and check for errors, then parse color into list
+            let ambient = children[i].getElementsByTagName("ambient");
+            if(ambient.length == 0)
+                return "no ambient provided for materia with ID: " + materialID;
+            else
+                ambient = this.parseColor(ambient[0], "ambient in " + materialID + "has an incorrect format");
+
+            // get diffuse for material and check for errors, then parse color into list
+            let diffuse = children[i].getElementsByTagName("diffuse");
+            if(diffuse.length == 0)
+                return "no diffuse provided for materia with ID: " + materialID;
+            else
+                diffuse = this.parseColor(diffuse[0], "diffuse in " + materialID + "has an incorrect format");
+            
+            // get specular for material and check for errors, then parse color into list
+            let specular = children[i].getElementsByTagName("specular");
+            if(specular.length == 0)
+                return "no specular provided for materia with ID: " + materialID;
+            else
+                specular = this.parseColor(specular[0], "specular in " + materialID + "has an incorrect format");
+
+            // build final material with all attributes
+            let material = {id: materialID, shininess: shininess, emission: emission, ambient: ambient, diffuse: diffuse, specular: specular};
+
+            this.materials[materialID] = material;
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
@@ -569,12 +608,34 @@ class MySceneGraph {
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
-                    case 'scale':                        
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                    case 'scale':
+                        let parameters = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID); 
+                        if (!Array.isArray(parameters))
+                            return parameters;
+
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, parameters);             
                         break;
                     case 'rotate':
-                        // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        let axis = grandChildren[j].getAttribute("axis");
+                        let angle = parseFloat(grandChildren[j].getAttribute("angle"));
+
+                        switch(axis) {
+                            case "X":
+                            case "x":
+                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                                break;
+                            case "y":
+                            case "Y":
+                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                                break;
+                            case "z":
+                            case "Z":
+                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                                break;
+                            default:
+                                this.onXMLError("Unexpected axis '" + axis + "' in rotation " + transformationID);
+                                break;
+                        }
                         break;
                 }
             }

@@ -40,7 +40,11 @@ class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
+        //In case there are no views it does nothing (if there were none provided or there was an error loading).
+        if(this.graph.views.length == 0) return;
+        //Default camera is the first one (in case there was an error with the ID in the XML file).
         let selectedView = this.graph.views[0];
+        //Choose the camera with the appropriate default ID in case it exists.
         for(let i = 0; i < this.graph.views.length; i++) {
             let view = this.graph.views[i];
             if(view.id = this.graph.defaultView) {
@@ -48,6 +52,7 @@ class XMLscene extends CGFscene {
                 break;
             }
         }
+        //In case there's an error with the camera do nothing.
         if(selectedView == null) return null;
         else if(selectedView.type == "perspective"){
             this.camera = new CGFcamera(selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);  
