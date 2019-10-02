@@ -25,21 +25,21 @@ class MyCylinder extends CGFobject {
         let heightInterval = this.height/this.stacks;
         let angleStep = 2*Math.PI/this.slices;
 
-		for(let i = 0, currHeight = 0; i < this.stacks; i++, currHeight += heightInterval) {
-			let currRadius = i*(this.base-this.top)/this.slices;
+		for(let i = 0, currHeight = 0; i <= this.stacks; i++, currHeight += heightInterval) {
+			let currRadius = this.base + i*(this.top-this.base)/this.slices;
             for(let j = 0, currAngle = 0; j <= this.slices; j++, currAngle += angleStep) {
                 this.vertices.push(currRadius*Math.cos(currAngle), currRadius*Math.sin(currAngle), currHeight);
-                this.normals.push(currRadius*Math.cos(currAngle), currRadius*Math.sin(currAngle), this.height*(this.base-this.top));
+                this.normals.push(Math.cos(currAngle), Math.sin(currAngle), this.base-this.top);
             }
 		}
 		
-		for(let i = 0; i < this.stacks-1; ++i) {
+		for(let i = 0; i < this.stacks; ++i) {
 			for(let j = 0; j < this.slices; j++) {
 				this.indices.push(i*(this.slices+1)+j, i*(this.slices+1)+j+1, (i+1)*(this.slices+1)+j);
                 this.indices.push(i*(this.slices+1)+j+1, (i+1)*(this.slices+1)+j+1, (i+1)*(this.slices+1)+j);
 			}
 		}
-		
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
 	}
