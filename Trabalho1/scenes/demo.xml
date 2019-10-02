@@ -37,6 +37,7 @@
 
     <transformations>
         <transformation id="demoTransform">
+            <translate x="1" y="1" z="1" />
             <scale x="5" y="1" z="5" />
             <rotate axis="x" angle="-45" />
             <rotate axis="z" angle="-45" />

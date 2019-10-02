@@ -227,7 +227,107 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+        //get Default View ID for the nodes
+        let defaultViewID = viewsNode.getAttribute("default");
+        if(defaultViewID == null) this.onXMLMinorError("No default view defined.");
+
+        this.views = [];
+        this.defaultView = defaultViewID;
+
+        let defaultViewExists = false;
+        
+        //get all views inside views element
+        let children = viewsNode.children;
+        if(children.length == 0) this.onXMLError("No views Provided!");
+        for(let i = 0; i < children.length; i++) {
+            let child = children[i];
+            let name = child.nodeName;
+            //if view has an invalid name throw error and proceed.
+            if(name != "ortho" && name != "perspective") {
+                this.onXMLMinorError("Unexpedted view: " + name);
+                continue;
+            }
+
+            //get ID and test for errors.
+            let viewId = child.getAttribute("id");
+            if(viewId == null) this.onXMLMinorError("ID for " + name + " view not provided!");
+            if(viewId == defaultViewID) defaultViewExists = true;
+            
+            //get near and far and test for errors.
+            let viewNear = parseFloat(child.getAttribute("near"));
+            if(viewNear == null) this.onXMLMinorError("Near attribute for " + name + " view not provided!");
+            let viewFar = parseFloat(child.getAttribute("far"));
+            if(viewFar == null) this.onXMLMinorError("Far attribute for " + name + " view not provided!");
+
+            //get from array values and test for errors.
+            let fromList = child.getElementsByTagName("from");
+            let fromX;
+            let fromY;
+            let fromZ;
+            if(fromList.length == 0) {
+                this.onXMLMinorError("From element for " + name + " view not provided!");
+            }
+            else if(fromList.length > 1) {
+                this.onXMLMinorError("More than 1 For element for " + name + " view provided!");
+            }
+            else {
+                fromX = parseFloat(fromList[0].getAttribute("x"));
+                fromY = parseFloat(fromList[0].getAttribute("y"));
+                fromZ = parseFloat(fromList[0].getAttribute("z"));
+            }
+
+            //get to array values and test for errors.
+            let toList = child.getElementsByTagName("to");
+            let toX;
+            let toY;
+            let toZ;
+            if(toList.length == 0) {
+                this.onXMLMinorError("To element for " + name + " view not provided!");
+            }
+            else if(toList.length > 1) {
+                this.onXMLMinorError("More than 1 To element for " + name + " view provided!");
+            }
+            else {
+                toX = parseFloat(toList[0].getAttribute("x"));
+                toY = parseFloat(toList[0].getAttribute("y"));
+                toZ = parseFloat(toList[0].getAttribute("z"));
+            }
+
+            //create object with currentView to add to our views array
+            let currentView = {id:viewId, near:viewNear, far:viewFar, from: vec3.fromValues(fromX,fromY,fromZ), to: vec3.fromValues(toX,toY,toZ)}
+
+            //complete currentView object with appropriate information depending on the view type
+            if(name = "perspective") {
+                let viewAngle = parseFloat(child.getAttribute("angle"));
+                if(viewAngle == null) this.onXMLMinorError("no angle attribute for " + name + " view provided!");
+                currentView.type = "perspective";
+
+                currentView.angle = viewAngle;
+            }
+            else if(name = "ortho") {
+                let viewTop = child.getAttribute("top");
+                let viewBottom = child.getAttribute("bottom");
+                let viewLeft = child.getAttribute("left");
+                let viewRight = child.getAttribute("right");
+
+                let upList = child.child.getElementsByTagName("up");
+                let upX = parseFloat(upList[0].getAttribute("x"));
+                let upY = parseFloat(upList[0].getAttribute("y"));
+                let upZ = parseFloat(upList[0].getAttribute("z"));
+
+                currentView.type = "ortho";
+                currentView.angle = viewAngle;
+                currentView.top = viewTop;
+                currentView.bottom = viewBottom;
+                currentView.left = viewLeft;
+                currentView.right = viewRight;
+                currentView.up = vec3.fromValues(upX, upY, upZ);
+            }
+
+            this.views.push(currentView);
+        }
+        if(this.views.length == 0) this.onXMLError("No Views successfully loaded!");
+        if(!defaultViewExists) this.onXMLMinorError("Default View doesn't exist");
 
         return null;
     }
@@ -391,9 +491,29 @@ class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
+        this.textures = [];
 
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        let children = texturesNode.children;
+        if(children.length == 0)
+            this.onXMLMinorError("No Textures in file");
+        for(let i = 0; i < children.length; i++) {
+            let tex = children[i];
+
+            let id = this.reader.getString(tex, "id");
+            if(this.textures[id] != null) {
+                this.onXMLMinorError("Texture with repeated ID: " + id);
+                continue;   
+            }
+            
+            let path = this.reader.getString(tex, "file");
+            let format = path.substring(path.length -4);
+            if(format != ".png" && format != ".jpg") {
+                this.onXMLMinorError("Texture " + id + " has an innvalid file format.");
+                continue;
+            }
+
+            this.textures[id] = path;
+        }
         return null;
     }
 
@@ -405,9 +525,6 @@ class MySceneGraph {
         var children = materialsNode.children;
 
         this.materials = [];
-
-        var grandChildren = [];
-        var nodeNames = [];
 
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
@@ -424,13 +541,48 @@ class MySceneGraph {
 
             // Checks for repeated IDs.
             if (this.materials[materialID] != null)
-                return "ID must be unique for each light (conflict: ID = " + materialID + ")";
+                return "ID must be unique for each material (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            // get shininess for material and check for errors
+            let shininess = this.reader.getFloat(children[i], 'shininess');
+            if(shininess == null)
+                return "no shininess defined for material with ID: " + materialID;
+
+            // get emission for material and check for errors, then parse color into list
+            let emission = children[i].getElementsByTagName("emission");
+            if(emission.length == 0)
+                return "no emission provided for materia with ID: " + materialID;
+            else
+                emission = this.parseColor(emission[0], "emission in " + materialID + "has an incorrect format");
+
+            // get ambient for material and check for errors, then parse color into list
+            let ambient = children[i].getElementsByTagName("ambient");
+            if(ambient.length == 0)
+                return "no ambient provided for materia with ID: " + materialID;
+            else
+                ambient = this.parseColor(ambient[0], "ambient in " + materialID + "has an incorrect format");
+
+            // get diffuse for material and check for errors, then parse color into list
+            let diffuse = children[i].getElementsByTagName("diffuse");
+            if(diffuse.length == 0)
+                return "no diffuse provided for materia with ID: " + materialID;
+            else
+                diffuse = this.parseColor(diffuse[0], "diffuse in " + materialID + "has an incorrect format");
+            
+            // get specular for material and check for errors, then parse color into list
+            let specular = children[i].getElementsByTagName("specular");
+            if(specular.length == 0)
+                return "no specular provided for materia with ID: " + materialID;
+            else
+                specular = this.parseColor(specular[0], "specular in " + materialID + "has an incorrect format");
+
+            // build final material with all attributes
+            let material = {id: materialID, shininess: shininess, emission: emission, ambient: ambient, diffuse: diffuse, specular: specular};
+
+            this.materials[materialID] = material;
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
@@ -476,12 +628,34 @@ class MySceneGraph {
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
-                    case 'scale':                        
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                    case 'scale':
+                        let parameters = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID); 
+                        if (!Array.isArray(parameters))
+                            return parameters;
+
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, parameters);             
                         break;
                     case 'rotate':
-                        // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        let axis = grandChildren[j].getAttribute("axis");
+                        let angle = parseFloat(grandChildren[j].getAttribute("angle"));
+
+                        switch(axis) {
+                            case "X":
+                            case "x":
+                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                                break;
+                            case "y":
+                            case "Y":
+                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                                break;
+                            case "z":
+                            case "Z":
+                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                                break;
+                            default:
+                                this.onXMLError("Unexpected axis '" + axis + "' in rotation " + transformationID);
+                                break;
+                        }
                         break;
                 }
             }

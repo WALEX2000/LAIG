@@ -23,7 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initCameras();
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 
         this.enableTextures(true);
 
@@ -40,7 +40,26 @@ class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        //In case there are no views it does nothing (if there were none provided or there was an error loading).
+        if(this.graph.views.length == 0) return;
+        //Default camera is the first one (in case there was an error with the ID in the XML file).
+        let selectedView = this.graph.views[0];
+        //Choose the camera with the appropriate default ID in case it exists.
+        for(let i = 0; i < this.graph.views.length; i++) {
+            let view = this.graph.views[i];
+            if(view.id = this.graph.defaultView) {
+                selectedView = view;
+                break;
+            }
+        }
+        //In case there's an error with the camera do nothing.
+        if(selectedView == null) return null;
+        else if(selectedView.type == "perspective"){
+            this.camera = new CGFcamera(selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);  
+        }
+        else if(selectedView.type = "ortho"){
+            this.camera = new CGFcameraOrtho(selectedView.left, selectedView.right, selectedView.bottom, selectedView.top, selectedView.near, selectedView.far, selectedView.from, selectedView.to, selectedView.up);
+        }
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -96,6 +115,8 @@ class XMLscene extends CGFscene {
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
+
+        this.initCameras();
 
         this.initLights();
 
