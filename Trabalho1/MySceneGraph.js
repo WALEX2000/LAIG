@@ -491,9 +491,29 @@ class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
+        this.textures = [];
 
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        let children = texturesNode.children;
+        if(children.length == 0)
+            this.onXMLMinorError("No Textures in file");
+        for(let i = 0; i < children.length; i++) {
+            let tex = children[i];
+
+            let id = this.reader.getString(tex, "id");
+            if(this.textures[id] != null) {
+                this.onXMLMinorError("Texture with repeated ID: " + id);
+                continue;   
+            }
+            
+            let path = this.reader.getString(tex, "file");
+            let format = path.substring(path.length -4);
+            if(format != ".png" && format != ".jpg") {
+                this.onXMLMinorError("Texture " + id + " has an innvalid file format.");
+                continue;
+            }
+
+            this.textures[id] = path;
+        }
         return null;
     }
 
