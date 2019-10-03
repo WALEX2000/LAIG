@@ -49,6 +49,10 @@
             <!--<cylinder top="0" base="3" height="3" slices="30" stacks="30" />-->
             <torus inner = "3" outter = "1" slices="100" loops="100" />
         </primitive>
+
+        <primitive id="ball">
+            <sphere radius="1" slices="100" stacks="100" />
+        </primitive>
     </primitives>
 
     <components>
@@ -63,6 +67,7 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="test" />
+                <primitiveref id="ball" />
             </children>
         </component>
     </components>

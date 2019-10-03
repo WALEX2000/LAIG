@@ -977,12 +977,10 @@ class MySceneGraph {
 
             for(let i = 0; i < grandgrandChildren.length; i++) {
                 let child = grandgrandChildren[i];
-                let type, object;
+                let object;
 
                 switch(child.nodeName) {
                     case 'componentref':
-                        type = "componentref";
-
                         let childID = this.reader.getString(child, "id");
                         if(childID == null) {
                             this.onXMLError("componentref in component " + componentID + " doesn't have an ID");
@@ -995,15 +993,9 @@ class MySceneGraph {
                             allComponents[childID] = new MyComponent(false);
                             object = allComponents[childID];
                         }
-                        /*else {
-                            this.onXMLError("componentref child in component " + componentID + " with ID '" + compID + "' doesn't exist");
-                            continue;
-                        }*/
 
                         break;
                     case 'primitiveref':
-                        type = "primitiveref";
-
                         let id = this.reader.getString(child, "id");
                         if(id == null) {
                             this.onXMLError("primitiveref child in component " + componentID + " doesn't have an ID");
@@ -1022,7 +1014,7 @@ class MySceneGraph {
                         break;
                 }
 
-                children.push({type: type, object: object});
+                children.push(object);
             }
 
             if(allComponents[componentID] == null) {
@@ -1034,6 +1026,13 @@ class MySceneGraph {
 
             if(componentID === this.idRoot) {
                 this.rootComponent = allComponents[componentID];
+            }
+        }
+        
+        //check if any component is not loaded.
+        for(let component in allComponents) {
+            if(!allComponents[component].isLoaded()) {
+                this.onXMLMinorError("Compoenent with id '" + component + "' has been referenced but doesn't exist");
             }
         }
     }

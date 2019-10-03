@@ -22,10 +22,13 @@ class MyComponent{
     }
 
     display(scene) {
-        //scene.multmatrix(this.transformation);
+        if(!this.loaded) return;
+        scene.multMatrix(this.transformation);
         for(let i = 0; i < this.children.length; i++) {
-                this.children[i].object.display();
-            }
+            scene.pushMatrix();
+            this.children[i].display();
+            scene.popMatrix();
+        }
     }
 
     isLoaded() {
