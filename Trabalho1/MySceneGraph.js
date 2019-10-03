@@ -494,12 +494,15 @@ class MySceneGraph {
         this.textures = [];
 
         let children = texturesNode.children;
+        //check if there are any textures
         if(children.length == 0)
             this.onXMLMinorError("No Textures in file");
+        //get path and id of every texture
         for(let i = 0; i < children.length; i++) {
             let tex = children[i];
 
             let id = this.reader.getString(tex, "id");
+            //check if ID is repeated
             if(this.textures[id] != null) {
                 this.onXMLMinorError("Texture with repeated ID: " + id);
                 continue;   
@@ -507,12 +510,14 @@ class MySceneGraph {
             
             let path = this.reader.getString(tex, "file");
             let format = path.substring(path.length -4);
+            //check if file format is supported
             if(format != ".png" && format != ".jpg") {
-                this.onXMLMinorError("Texture " + id + " has an innvalid file format.");
+                this.onXMLMinorError("Texture " + id + " has an invalid file format.");
                 continue;
             }
 
-            this.textures[id] = path;
+            //add texture to array
+            this.textures[id] = new CGFtexture(path, this.scenne);
         }
         return null;
     }
@@ -620,42 +625,19 @@ class MySceneGraph {
             var transfMatrix = mat4.create();
 
             for (var j = 0; j < grandChildren.length; j++) {
-                switch (grandChildren[j].nodeName) {
+                let transformation = grandChildren[j];
+                switch (transformation.nodeName) {
                     case 'translate':
-                        var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
-
-                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                        transfMatrix = this.parseTranslate(transfMatrix, transformation, transformationID);
                         break;
                     case 'scale':
-                        let parameters = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID); 
-                        if (!Array.isArray(parameters))
-                            return parameters;
-
-                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, parameters);             
+                        transfMatrix = this.parseScale(transfMatrix, transformation, transformationID);
                         break;
                     case 'rotate':
-                        let axis = grandChildren[j].getAttribute("axis");
-                        let angle = parseFloat(grandChildren[j].getAttribute("angle"));
-
-                        switch(axis) {
-                            case "X":
-                            case "x":
-                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
-                                break;
-                            case "y":
-                            case "Y":
-                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
-                                break;
-                            case "z":
-                            case "Z":
-                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
-                                break;
-                            default:
-                                this.onXMLError("Unexpected axis '" + axis + "' in rotation " + transformationID);
-                                break;
-                        }
+                        transfMatrix = this.parseRotation(transfMatrix, transformation, transformationID);
+                        break;
+                    default:
+                        this.onXMLMinorError("unknown transformation <" + transformation.nodeName + ">");
                         break;
                 }
             }
@@ -666,12 +648,59 @@ class MySceneGraph {
         return null;
     }
 
+    parseTranslate(transfMatrix, transformation, transformationID) {
+        let coordinates = this.parseCoordinates3D(transformation, "translate transformation for ID " + transformationID);
+        if (!Array.isArray(coordinates)) {
+            this.onXMLError("Error parsing coordinates '" + coordinates + "' in translate " + transformationID);
+            return transfMatrix;
+        }
+
+        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+        return transfMatrix;
+    }
+
+    parseScale(transfMatrix, transformation, transformationID) {
+        let parameters = this.parseCoordinates3D(transformation, "scale transformation for ID " + transformationID);
+        if (!Array.isArray(parameters)) {
+            this.onXMLError("Error parsing parameters '" + parameters + "' in scale " + transformationID);
+            return transfMatrix;
+        }
+
+        transfMatrix = mat4.scale(transfMatrix, transfMatrix, parameters);
+        return transfMatrix;
+    }
+
+    parseRotation(transfMatrix, transformation, transformationID) {
+        let axis = transformation.getAttribute("axis");
+        let angle = parseFloat(transformation.getAttribute("angle"));
+
+        switch(axis) {
+            case "X":
+            case "x":
+                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                break;
+            case "y":
+            case "Y":
+                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                break;
+            case "z":
+            case "Z":
+                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                break;
+            default:
+                this.onXMLError("Unexpected axis '" + axis + "' in rotation " + transformationID);
+                break;
+        }
+
+        return transfMatrix;
+    }
+
     /**
      * Parses the <primitives> block.
      * @param {primitives block element} primitivesNode
      */
     parsePrimitives(primitivesNode) {
-        var children = primitivesNode.children;
+        let children = primitivesNode.children;
 
         this.primitives = [];
 
@@ -806,32 +835,33 @@ class MySceneGraph {
    * @param {components block element} componentsNode
    */
     parseComponents(componentsNode) {
-        var children = componentsNode.children;
+        let XMLcomponents = componentsNode.children;
 
-        this.components = [];
+        this.rootComponent;
+        let allComponents = [];
 
         var grandChildren = [];
         var grandgrandChildren = [];
         var nodeNames = [];
 
         // Any number of components.
-        for (var i = 0; i < children.length; i++) {
+        for (var i = 0; i < XMLcomponents.length; i++) {
 
-            if (children[i].nodeName != "component") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+            if (componentsNode.children[i].nodeName != "component") {
+                this.onXMLMinorError("unknown tag <" + XMLcomponents[i].nodeName + ">");
                 continue;
             }
 
             // Get id of the current component.
-            var componentID = this.reader.getString(children[i], 'id');
+            var componentID = this.reader.getString(XMLcomponents[i], 'id');
             if (componentID == null)
                 return "no ID defined for componentID";
 
             // Checks for repeated IDs.
-            if (this.components[componentID] != null)
+            if (allComponents[componentID] != null)
                 return "ID must be unique for each component (conflict: ID = " + componentID + ")";
 
-            grandChildren = children[i].children;
+            grandChildren = XMLcomponents[i].children;
 
             nodeNames = [];
             for (var j = 0; j < grandChildren.length; j++) {
@@ -843,14 +873,168 @@ class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            this.onXMLMinorError("To do: Parse components.");
-            // Transformations
+            // TRANSFORMATIONS
+            let matrix = mat4.create();
 
-            // Materials
+            grandgrandChildren = grandChildren[transformationIndex].children;
+            let numberOfTransformations = grandgrandChildren.length;
+            
+            for (let j = 0; j < grandgrandChildren.length; j++) {
+                let transformation = grandgrandChildren[j];
+                switch (transformation.nodeName) {
+                    case 'translate':
+                        matrix = this.parseTranslate(matrix, transformation, "Component: " + componentID);
+                        break;
+                    case 'scale':
+                        matrix = this.parseScale(matrix, transformation, "Component: " + componentID);
+                        break;
+                    case 'rotate':
+                        matrix = this.parseRotation(matrix, transformation, "Component: " + componentID);
+                        break;
+                    case 'transformationref':
+                        let transID = this.reader.getString(transformation, "id");
+                        if(this.transformations[transID] == null) {
+                            this.onXMLMinorError("transformationref '" + transID + "' doesn't exist.");
+                        }
+                        matrix = mat4.multiply(matrix, matrix, this.transformations[transID]);
+                        break;
+                    default:
+                        numberOfTransformations--;
+                        this.onXMLMinorError("unknown transformation <" + transformation.nodeName + ">");
+                        break;
+                }
+            }
+            //check if there were no valid transformations loaded
+            if(numberOfTransformations == 0)
+                this.onXMLMinorError("No transformations in component " + componentID);
+            
+            // MATERIALS
+            grandgrandChildren = grandChildren[materialsIndex].children;
 
-            // Texture
+            let componentMaterials = [];
 
-            // Children
+            for (let j = 0; j < grandgrandChildren.length; j++) {
+                let material = grandgrandChildren[j];
+                if(material.nodeName != "material") {
+                    this.onXMLMinorError("unknown material <" + material.nodeName + ">");
+                    continue;
+                }
+
+                let matID = this.reader.getString(material, "id");
+                if(matID == null) {
+                    this.onXMLMinorError("no ID defined for material in component: " + componentID);
+                    continue;
+                }
+                else if(matID == "inherit") {
+                    componentMaterials.push({id: "inherit"});
+                }
+                else if(!this.materials[matID]) {
+                    this.onXMLMinorError("material with ID " + matID + " in component: " + componentID + " doesn't exist");
+                    continue;
+                }
+                else componentMaterials.push(this.materials[matID]);
+            }
+
+            if (componentMaterials.length == 0)
+                this.onXMLError("No material in component " + componentID);
+
+            let materials = {current: 0, materials: componentMaterials};
+
+            // TEXTURE
+            let textureNode = grandChildren[textureIndex];
+
+            let length_s = 1.0, length_t = 1.0;
+            let type;
+            let tex = "";
+
+            let texID = this.reader.getString(textureNode, "id");
+            if(texID == null) {
+                this.onXMLError("No texture ID in component " + componentID);
+                type = "none";
+            }
+            else if(texID == "inherit") {
+                type = "inherit";
+            }
+            else if(texID == "none") {
+                type = "none";
+            }
+            else if(this.textures[texID] == null) {
+                this.onXMLMinorError("Texture with ID " + matID + " in component: " + componentID + " doesn't exist");
+                type = "none";
+            }
+            else {
+                type = "texture";
+                tex = this.textures[texID];
+            }
+
+            //Falta ler length
+            let texture = {type: type, texture: tex, length_s: length_s, length_t: length_t};
+
+            // CHILDREN
+            grandgrandChildren = grandChildren[childrenIndex].children;
+
+            let children = [];
+
+            for(let i = 0; i < grandgrandChildren.length; i++) {
+                let child = grandgrandChildren[i];
+                let type, object;
+
+                switch(child.nodeName) {
+                    case 'componentref':
+                        type = "componentref";
+
+                        let childID = this.reader.getString(child, "id");
+                        if(childID == null) {
+                            this.onXMLError("componentref in component " + componentID + " doesn't have an ID");
+                            continue;
+                        }
+                        else if(allComponents[childID] != null) {
+                            object = allComponents[childID];
+                        }
+                        else {
+                            allComponents[childID] = new MyComponent(false);
+                            object = allComponents[childID];
+                        }
+                        /*else {
+                            this.onXMLError("componentref child in component " + componentID + " with ID '" + compID + "' doesn't exist");
+                            continue;
+                        }*/
+
+                        break;
+                    case 'primitiveref':
+                        type = "primitiveref";
+
+                        let id = this.reader.getString(child, "id");
+                        if(id == null) {
+                            this.onXMLError("primitiveref child in component " + componentID + " doesn't have an ID");
+                            continue;
+                        }
+                        else if(this.primitives[id] != null) {
+                            object = this.primitives[id];
+                        }
+                        else {
+                            this.onXMLError("primitiveref child in component " + componentID + " with ID '" + id + "' doesn't exist");
+                            continue;
+                        }
+                        break;
+                    default:
+                        this.onXMLMinorError("unknown tag <" + child.nodeName + ">");
+                        break;
+                }
+
+                children.push({type: type, object: object});
+            }
+
+            if(allComponents[componentID] == null) {
+                let newComponent = new MyComponent(true, matrix, materials, texture, children);
+                allComponents[componentID] = newComponent;
+            }
+            else
+                allComponents[componentID].initialize(matrix, materials, texture, children);
+
+            if(componentID === this.idRoot) {
+                this.rootComponent = allComponents[componentID];
+            }
         }
     }
 
@@ -973,6 +1157,6 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['test'].display();
+        this.rootComponent.display(this.scene);
     }
 }
