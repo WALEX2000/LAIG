@@ -24,6 +24,8 @@ class MyComponent{
     display(scene) {
         if(!this.loaded) return;
         scene.multMatrix(this.transformation);
+        this.materials.materials[this.materials.current].apply(); //applying the current material
+        this.texture
         for(let i = 0; i < this.children.length; i++) {
             scene.pushMatrix();
             this.children[i].display();
