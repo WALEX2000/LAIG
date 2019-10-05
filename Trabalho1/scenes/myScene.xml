@@ -44,10 +44,17 @@
     </transformations>
 
     <primitives>
-        <primitive id="test">
-            <!--<sphere radius="1" slices="100" stacks="100" />-->
-            <!--<cylinder top="0" base="3" height="3" slices="30" stacks="30" />-->
-            <torus inner = "3" outter = "1" slices="100" loops="100" />
+        <primitive id="sphere">
+            <sphere radius="1" slices="100" stacks="100" />
+        </primitive>
+        <primitive id="cylinder">
+            <cylinder top="3" base="3" height="3" slices="15" stacks="30" />
+        </primitive>
+        <primitive id="torus">
+            <torus inner = "0.5" outter = "0.1" slices="100" loops="100" />
+        </primitive>
+        <primitive id="triangle">
+            <triangle x1="1" y1="5" z1="2" x2="-3" y2="4" z2="7" x3="9" y3="1" z3="-2" />
         </primitive>
     </primitives>
 
@@ -62,7 +69,7 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="test" />
+                <primitiveref id="sphere" />
             </children>
         </component>
     </components>
