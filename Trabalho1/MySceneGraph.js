@@ -517,7 +517,7 @@ class MySceneGraph {
             }
 
             //add texture to array
-            this.textures[id] = new CGFtexture(path, this.scenne);
+            this.textures[id] = new CGFtexture(this.scene, path);
         }
         return null;
     }
@@ -983,32 +983,39 @@ class MySceneGraph {
             // TEXTURE
             let textureNode = grandChildren[textureIndex];
 
-            let length_s = 1.0, length_t = 1.0;
-            let type;
             let tex = "";
+
+            let length_s = this.reader.getFloat(textureNode, "length_s");
+            let length_t = this.reader.getFloat(textureNode, "length_t");
+            if(length_s == null) {
+                this.onXMLMinorError("length_s not provided in texture for component " + componentID);
+                length_s = 1.0;
+            }
+            if(length_t == null) {
+                this.onXMLMinorError("length_t not provided in texture for component " + componentID);
+                length_t = 1.0;
+            }
 
             let texID = this.reader.getString(textureNode, "id");
             if(texID == null) {
                 this.onXMLError("No texture ID in component " + componentID);
-                type = "none";
+                return null;
             }
             else if(texID == "inherit") {
-                type = "inherit";
+                //dunno
             }
             else if(texID == "none") {
-                type = "none";
+                tex = null;
             }
             else if(this.textures[texID] == null) {
-                this.onXMLMinorError("Texture with ID " + matID + " in component: " + componentID + " doesn't exist");
-                type = "none";
+                this.onXMLError("Texture with ID " + matID + " in component: " + componentID + " doesn't exist");
+                return null;
             }
             else {
-                type = "texture";
                 tex = this.textures[texID];
             }
 
-            //Falta ler length
-            let texture = {type: type, texture: tex, length_s: length_s, length_t: length_t};
+            let texture = {texture: tex, length_s: length_s, length_t: length_t};
 
             // CHILDREN
             grandgrandChildren = grandChildren[childrenIndex].children;
