@@ -3,8 +3,8 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+            <from x="15" y="15" z="15" />
+            <to x="0" y="0" z="0" />
         </perspective>
     </views>
 
@@ -23,8 +23,8 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="textures/testTexture.jpg" />
-        <texture id="pyramidBricks" file="textures/pyramidBricks.jpg" />
+        <texture id="demoTexture" file="scenes/images/futuristic_blue.png" />
+        <texture id="pyramidBricks" file="scenes/images/futuristic_red.jpg" />
     </textures>
 
     <materials>
@@ -72,7 +72,6 @@
         <component id="root">
             <transformation>
                 <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
@@ -82,12 +81,13 @@
                 <componentref id="pyramid" />
             </children>
         </component>
+
         <component id="pyramid">
             <transformation>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
-            <materials />
+            </materials>
             <texture id="pyramidBricks" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="pyramidFront" />

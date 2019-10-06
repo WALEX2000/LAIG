@@ -7,6 +7,8 @@ class MyMaterial extends CGFappearance {
     constructor(scene, shine, emission, ambient, diffuse, specular) {
         super(scene);
 
+        if(shine === undefined) return;
+
         this.setShininess(shine);
         this.setEmission(...emission);
 

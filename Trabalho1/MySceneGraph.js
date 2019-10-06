@@ -898,10 +898,6 @@ class MySceneGraph {
             if (componentID == null)
                 return "no ID defined for componentID";
 
-            // Checks for repeated IDs.
-            if (allComponents[componentID] != null)
-                return "ID must be unique for each component (conflict: ID = " + componentID + ")";
-
             grandChildren = XMLcomponents[i].children;
 
             nodeNames = [];
@@ -1066,11 +1062,11 @@ class MySceneGraph {
             }
 
             if(allComponents[componentID] == null) {
-                let newComponent = new MyComponent(true, matrix, materials, texture, children);
+                let newComponent = new MyComponent(true, matrix, materials, texture, children, this.scene);
                 allComponents[componentID] = newComponent;
             }
             else
-                allComponents[componentID].initialize(matrix, materials, texture, children);
+                allComponents[componentID].initialize(matrix, materials, texture, children, this.scene);
 
             if(componentID === this.idRoot) {
                 this.rootComponent = allComponents[componentID];
@@ -1083,6 +1079,8 @@ class MySceneGraph {
                 this.onXMLMinorError("Compoenent with id '" + component + "' has been referenced but doesn't exist");
             }
         }
+
+        //TODO Check for repeated IDs
     }
 
 
