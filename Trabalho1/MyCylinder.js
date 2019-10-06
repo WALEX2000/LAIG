@@ -27,7 +27,7 @@ class MyCylinder extends CGFobject {
         let angleStep = 2*Math.PI/this.slices;
 
 		for(let i = 0, currHeight = 0; i <= this.stacks; i++, currHeight += heightInterval) {
-			let currRadius = this.base + i*(this.top-this.base)/this.slices;
+			let currRadius = this.base + i*(this.top-this.base)/this.stacks;
             for(let j = 0, currAngle = 0; j <= this.slices; j++, currAngle += angleStep) {
                 this.vertices.push(currRadius*Math.cos(currAngle),
                 				   currRadius*Math.sin(currAngle), 

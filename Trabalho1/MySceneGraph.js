@@ -678,15 +678,15 @@ class MySceneGraph {
         switch(axis) {
             case "X":
             case "x":
-                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle*DEGREE_TO_RAD);
                 break;
             case "y":
             case "Y":
-                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle*DEGREE_TO_RAD);
                 break;
             case "z":
             case "Z":
-                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle*DEGREE_TO_RAD);
                 break;
             default:
                 this.onXMLError("Unexpected axis '" + axis + "' in rotation " + transformationID);
@@ -941,9 +941,6 @@ class MySceneGraph {
                         break;
                 }
             }
-            //check if there were no valid transformations loaded
-            if(numberOfTransformations == 0)
-                this.onXMLMinorError("No transformations in component " + componentID);
             
             // MATERIALS
             grandgrandChildren = grandChildren[materialsIndex].children;
