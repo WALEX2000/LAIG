@@ -3,7 +3,7 @@ var DEGREE_TO_RAD = Math.PI / 180;
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
 var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
+var GLOBALS_INDEX = 2;
 var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
@@ -113,14 +113,14 @@ class MySceneGraph {
         }
 
         // <ambient>
-        if ((index = nodeNames.indexOf("ambient")) == -1)
-            return "tag <ambient> missing";
+        if ((index = nodeNames.indexOf("globals")) == -1)
+            return "tag <globals> missing";
         else {
-            if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <ambient> out of order");
+            if (index != GLOBALS_INDEX)
+                this.onXMLMinorError("tag <globals> out of order");
 
             //Parse ambient block
-            if ((error = this.parseAmbient(nodes[index])) != null)
+            if ((error = this.parseGlobals(nodes[index])) != null)
                 return error;
         }
 
@@ -333,12 +333,12 @@ class MySceneGraph {
     }
 
     /**
-     * Parses the <ambient> node.
-     * @param {ambient block element} ambientsNode
+     * Parses the <globals> node.
+     * @param {globals block element} globalsNode
      */
-    parseAmbient(ambientsNode) {
+    parseGlobals(globalsNode) {
 
-        var children = ambientsNode.children;
+        var children = globalsNode.children;
 
         this.ambient = [];
         this.background = [];
@@ -363,7 +363,7 @@ class MySceneGraph {
         else
             this.background = color;
 
-        this.log("Parsed ambient");
+        this.log("Parsed globals");
 
         return null;
     }
@@ -509,6 +509,7 @@ class MySceneGraph {
             }
             
             let path = this.reader.getString(tex, "file");
+            console.log(path);
             let format = path.substring(path.length -4);
             //check if file format is supported
             if(format != ".png" && format != ".jpg") {
@@ -846,9 +847,9 @@ class MySceneGraph {
                 if (!(inner != null && !isNaN(inner)))
                     return "unable to parse inner of the primitive coordinates for ID = " + primitiveId;
 
-                let outter = this.reader.getFloat(grandChildren[0], 'outter');
-                if (!(outter != null && !isNaN(outter)))
-                    return "unable to parse outter of the primitive coordinates for ID = " + primitiveId;
+                let outer = this.reader.getFloat(grandChildren[0], 'outer');
+                if (!(outer != null && !isNaN(outer)))
+                    return "unable to parse outer of the primitive coordinates for ID = " + primitiveId;
 
                 let slices = this.reader.getFloat(grandChildren[0], 'slices');
                 if (!(slices != null && !isNaN(slices)))
@@ -858,7 +859,7 @@ class MySceneGraph {
                 if (!(loops != null && !isNaN(loops)))
                     return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
 
-                let torus = new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);
+                let torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
                 
                 this.primitives[primitiveId] = torus;
             } else {

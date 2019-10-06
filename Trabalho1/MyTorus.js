@@ -4,11 +4,11 @@
  * @param scene - Reference to MyScene object
  */
 class MyTorus extends CGFobject {
-	constructor(scene, id, inner, outter, slices, loops) {
+	constructor(scene, id, inner, outer, slices, loops) {
 	    super(scene);
 		this.id = id;
 		this.inner = inner;
-		this.outter = outter;
+		this.outer = outer;
 		this.slices = slices;
 		this.loops = loops;
 
@@ -21,17 +21,17 @@ class MyTorus extends CGFobject {
 		this.normals = [];
 		this.texCoords = [];
 
-		let outterDiff = 2*Math.PI/this.slices;
+		let outerDiff = 2*Math.PI/this.slices;
 		let innerDiff = 2*Math.PI/this.loops;
 
-		for(let i = 0, outterAngle = 0; i <= this.slices; i++, outterAngle += outterDiff) {
+		for(let i = 0, outerAngle = 0; i <= this.slices; i++, outerAngle += outerDiff) {
 			for (let j = 0, innerAngle = 0; j <= this.loops; j++, innerAngle += innerDiff) {
-				this.vertices.push((this.inner+this.outter*Math.cos(outterAngle))*Math.sin(innerAngle),
-								   (this.inner+this.outter*Math.cos(outterAngle))*Math.cos(innerAngle),
-								   this.outter*Math.sin(outterAngle));
-				this.normals.push(Math.cos(outterAngle)*Math.sin(innerAngle),
-								  Math.cos(outterAngle)*Math.cos(innerAngle),
-								  Math.sin(outterAngle));
+				this.vertices.push((this.inner+this.outer*Math.cos(outerAngle))*Math.sin(innerAngle),
+								   (this.inner+this.outer*Math.cos(outerAngle))*Math.cos(innerAngle),
+								   this.outer*Math.sin(outerAngle));
+				this.normals.push(Math.cos(outerAngle)*Math.sin(innerAngle),
+								  Math.cos(outerAngle)*Math.cos(innerAngle),
+								  Math.sin(outerAngle));
 			}
 		}
 

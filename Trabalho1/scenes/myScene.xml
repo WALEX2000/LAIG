@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="root" axis_length="5"/>
+    <scene root="root" axis_length="0"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -8,13 +8,13 @@
         </perspective>
     </views>
 
-    <ambient>
+    <globals>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
         <background r="0.0" g="0.0" b="0.0" a="1.0" />
-    </ambient>
+    </globals>
 
     <lights>
-        <omni id="demoLight" enabled="1">
+        <omni id="mainLight" enabled="1">
             <location x="9.8" y="11.9" z="10" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -23,15 +23,16 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="demoTexture" file="textures/testTexture.jpg" />
+        <texture id="pyramidBricks" file="textures/pyramidBricks.jpg" />
     </textures>
 
     <materials>
-        <material id="demoMaterial" shininess="10">
+        <material id="whiteDiffuse" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.7" g="0.7" b="0.7" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
     </materials>
 
@@ -51,10 +52,19 @@
             <cylinder top="3" base="3" height="3" slices="15" stacks="30" />
         </primitive>
         <primitive id="torus">
-            <torus inner = "0.5" outter = "0.1" slices="100" loops="100" />
+            <torus inner = "0.5" outer = "0.1" slices="100" loops="100" />
         </primitive>
-        <primitive id="triangle">
-            <triangle x1="1" y1="5" z1="2" x2="-3" y2="4" z2="7" x3="9" y3="1" z3="-2" />
+        <primitive id="pyramidFront">
+            <triangle x1="-2" y1="0" z1="2" x2="2" y2="0" z2="2" x3="0" y3="2" z3="0" />
+        </primitive>
+        <primitive id="pyramidBack">
+            <triangle x1="-2" y1="0" z1="-2" x2="2" y2="0" z2="-2" x3="0" y3="2" z3="0" />
+        </primitive>
+        <primitive id="pyramidLeft">
+            <triangle x1="-2" y1="0" z1="2" x2="-2" y2="0" z2="-2" x3="0" y3="2" z3="0" />
+        </primitive>
+        <primitive id="pyramidRight">
+            <triangle x1="2" y1="0" z1="2" x2="2" y2="0" z2="-2" x3="0" y3="2" z3="0" />
         </primitive>
     </primitives>
 
@@ -65,11 +75,25 @@
                 <scale x="2" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="whiteDiffuse" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="sphere" />
+                <componentref id="pyramid" />
+            </children>
+        </component>
+        <component id="pyramid">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            <materials />
+            <texture id="pyramidBricks" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="pyramidFront" />
+                <primitiveref id="pyramidBack" />
+                <primitiveref id="pyramidLeft" />
+                <primitiveref id="pyramidRight" />
             </children>
         </component>
     </components>
