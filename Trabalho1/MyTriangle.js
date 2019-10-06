@@ -25,15 +25,29 @@ class MyTriangle extends CGFobject {
         
 		let v1 = subtractVector(this.p3, this.p1);
 		let v2 = subtractVector(this.p2, this.p1);
-		let normal1 = crossProduct(v1,v2);
-		let normal2 = reverseVector(normal1);
+		let normal2 = crossProduct(v1,v2);
+		let normal1 = reverseVector(normal2);
 
 		this.normals.push(...normal1, ...normal1, ...normal1);
 		this.normals.push(...normal2, ...normal2, ...normal2);
 
+		let a = Math.sqrt(Math.pow(this.p1[0]-this.p3[0], 2) + Math.pow(this.p1[1]-this.p3[1]) + Math.pow(this.p1[2]-this.p3[2]));
+		let b = Math.sqrt(Math.pow(this.p1[0]-this.p2[0], 2) + Math.pow(this.p1[1]-this.p2[1]) + Math.pow(this.p1[2]-this.p2[2]));
+		let c = Math.sqrt(Math.pow(this.p2[0]-this.p3[0], 2) + Math.pow(this.p2[1]-this.p3[1]) + Math.pow(this.p2[2]-this.p3[2]));
+		let beta = Math.acos((a*a-b*b+c*c)/2*a*c);
+
+		this.texCoords.push(
+			0, 0,
+			a, 0,
+			c*Math.cos(beta), c*Math.sin(beta),
+			0, 0,
+			a, 0,
+			c*Math.cos(beta), c*Math.sin(beta)
+		);
+
         this.indices.push(0, 1, 2);
         this.indices.push(3, 5, 4);
-
+        
 		this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
 	}

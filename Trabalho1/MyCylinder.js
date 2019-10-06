@@ -34,6 +34,7 @@ class MyCylinder extends CGFobject {
                 				   currHeight);
                 let normal = normalizeVector(Math.cos(currAngle), Math.sin(currAngle), this.base-this.top);
                 this.normals.push(...normal);
+                this.texCoords.push(j/this.stacks, currHeight/this.height);
             }
 		}
 		
