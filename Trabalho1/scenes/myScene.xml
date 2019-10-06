@@ -24,8 +24,9 @@
 
     <textures>
         <texture id="demoTexture" file="scenes/images/futuristic_blue.png" />
-        <texture id="pyramidBricks" file="scenes/images/futuristic_red.jpg" />
-        <texture id="leaves" file="scenes/images/leaves.jpg" />
+        <texture id="pyramidBricks" file="scenes/images/pyramidBricks.jpg" />
+        <texture id="sky" file="scenes/images/sky.jpg" />
+        <texture id="desert" file="scenes/images/desert.jpg" />
     </textures>
 
     <materials>
@@ -50,7 +51,7 @@
             <sphere radius="1" slices="100" stacks="100" />
         </primitive>
         <primitive id="cylinder">
-            <cylinder top="3" base="3" height="3" slices="15" stacks="30" />
+            <cylinder top="3" base="1" height="5" slices="15" stacks="30" />
         </primitive>
         <primitive id="torus">
             <torus inner = "0.5" outer = "0.1" slices="100" loops="100" />
@@ -67,6 +68,9 @@
         <primitive id="pyramidRight">
             <triangle x1="1" y1="0" z1="1" x2="1" y2="0" z2="-1" x3="0" y3="1" z3="0" />
         </primitive>
+        <primitive id="skyboxRectangle">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
     </primitives>
 
     <components>
@@ -78,17 +82,21 @@
             </materials>
             <texture id="pyramidBricks" length_s="1" length_t="1" />
             <children>
-                <componentref id="pyramid" />
+                <componentref id="SmallPyramid"/>
+                <componentref id="MediumPyramid"/>
+                <componentref id="BigPyramid"/>
+                <componentref id="SkyBox"/>
+                <componentref id="Floor"/>
             </children>
         </component>
 
-        <component id="pyramid">
+        <component id="Pyramid">
             <transformation>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="leaves" length_s="1" length_t="1" />
+            <texture id="pyramidBricks" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="pyramidFront" />
                 <primitiveref id="pyramidBack" />
@@ -96,5 +104,162 @@
                 <primitiveref id="pyramidRight" />
             </children>
         </component>
+
+        <component id="SmallPyramid">
+            <transformation>
+                <translate x="-1" y="0" z="-3"/>
+                <scale x="2" y="2" z="2"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="pyramidBricks" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="pyramidFront" />
+                <primitiveref id="pyramidBack" />
+                <primitiveref id="pyramidLeft" />
+                <primitiveref id="pyramidRight" />
+            </children>
+        </component>
+
+        <component id="MediumPyramid">
+            <transformation>
+                <translate x="-7" y="0" z="-8"/>
+                <scale x="3" y="3" z="3"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="pyramidBricks" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="pyramidFront" />
+                <primitiveref id="pyramidBack" />
+                <primitiveref id="pyramidLeft" />
+                <primitiveref id="pyramidRight" />
+            </children>
+        </component>
+
+        <component id="BigPyramid">
+            <transformation>
+                <translate x="-9" y="0" z="2"/>
+                <scale x="5" y="5" z="5"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="pyramidBricks" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="pyramidFront" />
+                <primitiveref id="pyramidBack" />
+                <primitiveref id="pyramidLeft" />
+                <primitiveref id="pyramidRight" />
+            </children>
+        </component>
+
+        <component id="SkyBox">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="sky" length_s="1" length_t="1" />
+            <children>
+                <componentref id="SkyBoxTop" />
+                <componentref id="SkyBoxLeft" />
+                <componentref id="SkyBoxRight" />
+                <componentref id="SkyBoxBack" />
+                <componentref id="SkyBoxFront" />
+            </children>
+        </component>
+
+        <component id="SkyBoxTop">
+            <transformation>
+                <translate x="0" y="100" z="0" />
+                <rotate axis="x" angle="1.5708" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="sky" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skyboxRectangle" />
+            </children>
+        </component>
+
+        <component id="SkyBoxLeft">
+            <transformation>
+                <translate x="-50" y="50" z="0" />
+                <rotate axis="y" angle="1.5708" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="sky" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skyboxRectangle" />
+            </children>
+        </component>
+
+        <component id="SkyBoxRight">
+            <transformation>
+                <translate x="50" y="50" z="0" />
+                <rotate axis="y" angle="-1.5708" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="sky" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skyboxRectangle" />
+            </children>
+        </component>
+
+        <component id="SkyBoxBack">
+            <transformation>
+                <translate x="0" y="50" z="50" />
+                <rotate axis="y" angle="3.14159" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="sky" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skyboxRectangle" />
+            </children>
+        </component>
+
+        <component id="SkyBoxFront">
+            <transformation>
+                <translate x="0" y="50" z="-50" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="sky" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skyboxRectangle" />
+            </children>
+        </component>
+
+        <component id="Floor">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <rotate axis="x" angle="-1.5708" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="desert" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skyboxRectangle" />
+            </children>
+        </component>
+
     </components>
 </lxs>
