@@ -132,6 +132,9 @@
 
         <component id="spaceship">
             <transformation>
+                <translate x="0" y="0" z="7" />
+                <rotate axis="x" angle="10" />
+                <rotate axis="y" angle="15" />
             </transformation>
             <materials>
                 <material id="blueGlass" />
