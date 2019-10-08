@@ -583,7 +583,7 @@ class MySceneGraph {
                 specular = this.parseColor(specular[0], "specular in " + materialID + "has an incorrect format");
 
             // build final material with all attributes
-            let material = new MyMaterial(this.scene, shininess, emission, ambient, diffuse, specular);
+            let material = new MyMaterial(shininess, emission, ambient, diffuse, specular);
 
             this.materials[materialID] = material;
         }
@@ -960,7 +960,7 @@ class MySceneGraph {
                     continue;
                 }
                 else if(matID == "inherit") {
-                    componentMaterials.push(new MyMaterialInherit(this.scene));
+                    componentMaterials.push(new MyMaterialInherit());
                 }
                 else if(!this.materials[matID]) {
                     this.onXMLMinorError("material with ID " + matID + " in component: " + componentID + " doesn't exist");
@@ -996,7 +996,7 @@ class MySceneGraph {
                 return null;
             }
             else if(texID == "inherit") {
-                //dunno
+                tex = "inherit";
             }
             else if(texID == "none") {
                 tex = null;

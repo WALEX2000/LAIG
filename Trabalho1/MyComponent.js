@@ -29,8 +29,12 @@ class MyComponent{
         if(!this.loaded) return;
         this.scene.multMatrix(this.transformation);
         let mat = this.materials.materials[this.materials.current]; //applying the current material
-        mat.setTexture(this.texture.texture);
-        mat.apply();
+        if(this.texture.texture != "inherit") {
+            //this.scene.appearance.setTexture(this.texture.texture);   
+        }
+        mat.apply(this.scene.appearance);
+
+        this.scene.appearance.apply();
         for(let i = 0; i < this.children.length; i++) {
             this.scene.pushMatrix();
             this.children[i].display();
