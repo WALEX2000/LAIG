@@ -26,12 +26,13 @@ class MyTorus extends CGFobject {
 
 		for(let i = 0, outerAngle = 0; i <= this.slices; i++, outerAngle += outerDiff) {
 			for (let j = 0, innerAngle = 0; j <= this.loops; j++, innerAngle += innerDiff) {
-				this.vertices.push((this.inner+this.outer*Math.cos(outerAngle))*Math.sin(innerAngle),
-								   (this.inner+this.outer*Math.cos(outerAngle))*Math.cos(innerAngle),
-								   this.outer*Math.sin(outerAngle));
+				this.vertices.push((this.outer+this.inner*Math.cos(outerAngle))*Math.sin(innerAngle),
+								   (this.outer+this.inner*Math.cos(outerAngle))*Math.cos(innerAngle),
+								   this.inner*Math.sin(outerAngle));
 				this.normals.push(Math.cos(outerAngle)*Math.sin(innerAngle),
 								  Math.cos(outerAngle)*Math.cos(innerAngle),
 								  Math.sin(outerAngle));
+				this.texCoords.push(i/this.slices, j/this.loops);
 			}
 		}
 
