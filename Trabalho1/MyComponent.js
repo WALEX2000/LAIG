@@ -30,7 +30,7 @@ class MyComponent{
         this.scene.multMatrix(this.transformation);
         let mat = this.materials.materials[this.materials.current]; //applying the current material
         if(this.texture.texture != "inherit") {
-            //this.scene.appearance.setTexture(this.texture.texture);   
+            this.scene.appearance.setTexture(this.texture.texture);   
         }
         mat.apply(this.scene.appearance);
 

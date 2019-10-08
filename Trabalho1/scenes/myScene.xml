@@ -19,7 +19,6 @@
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-            <attenuation constant="0" linear="0" quadratic="0" />
         </omni>
     </lights>
 
@@ -67,7 +66,7 @@
             <cylinder top=".15" base=".15" height="1" slices="15" stacks="30" />
         </primitive>
         <primitive id="spaceShipBorder">
-            <torus inner = "2.5" outer = "0.1" slices="100" loops="100" />
+            <torus inner = "0.1" outer = "2.5" slices="100" loops="100" />
         </primitive>
         <primitive id="cone">
             <cylinder base="2.5" top="0" height="2.0" slices="15" stacks="30" />
@@ -180,7 +179,7 @@
 
         <component id="shipBottom">
             <transformation>
-                <scale x="2.5" y="2.5" z="0.25" />
+                <scale x="2.5" y="2.5" z="0.10" />
             </transformation>
             <materials>
                 <material id="inherit" />
