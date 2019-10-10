@@ -8,10 +8,10 @@
         </perspective>
     </views>
 
-    <ambient>
+    <globals>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
         <background r="0.0" g="0.0" b="0.0" a="1.0" />
-    </ambient>
+    </globals>
 
     <lights>
         <omni id="demoLight" enabled="1">
@@ -48,6 +48,9 @@
         <primitive id="demoRectangle">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
+        <primitive id="torus">
+            <torus inner = "0.1" outer = "0.5" slices="20" loops="40" />
+        </primitive>
     </primitives>
 
     <components>
@@ -61,7 +64,7 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="demoRectangle" />
+                <primitiveref id="torus" />
             </children>
         </component>
     </components>

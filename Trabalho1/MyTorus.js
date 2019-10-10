@@ -38,8 +38,8 @@ class MyTorus extends CGFobject {
 
 		for (let i = 0; i < this.slices; i++) {
 			for (let j = 0; j < this.loops; j++) {
-				this.indices.push(i*(this.slices+1)+j+1, i*(this.slices+1)+j, (i+1)*(this.slices+1)+j);
-				this.indices.push((i+1)*(this.slices+1)+j+1, i*(this.slices+1)+j+1, (i+1)*(this.slices+1)+j);
+				this.indices.push(i*(this.loops+1)+j+1, i*(this.loops+1)+j, (i+1)*(this.loops+1)+j);
+				this.indices.push((i+1)*(this.loops+1)+j+1, i*(this.loops+1)+j+1, (i+1)*(this.loops+1)+j);
 			}
 		}
 		
