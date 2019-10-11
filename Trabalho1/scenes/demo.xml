@@ -45,8 +45,8 @@
     </transformations>
 
     <primitives>
-        <primitive id="demoRectangle">
-            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+        <primitive id="Y-spaceship-torus">
+            <torus inner="0.15" outer="0.85" slices="100" loops="100"/>
         </primitive>
         <primitive id="torus">
             <torus inner = "0.1" outer = "0.5" slices="20" loops="40" />
@@ -56,8 +56,7 @@
     <components>
         <component id="demoRoot">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <transformationref id="demoTransform" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />

@@ -583,7 +583,12 @@ class MySceneGraph {
                 specular = this.parseColor(specular[0], "specular in " + materialID + "has an incorrect format");
 
             // build final material with all attributes
-            let material = new MyMaterial(shininess, emission, ambient, diffuse, specular);
+            let material = new CGFappearance(this.scene);
+            material.setAmbient(...ambient);
+            material.setDiffuse(...diffuse);
+            material.setSpecular(...specular);
+            material.setShininess(shininess);
+            material.setEmission(...emission);
 
             this.materials[materialID] = material;
         }
@@ -960,7 +965,7 @@ class MySceneGraph {
                     continue;
                 }
                 else if(matID == "inherit") {
-                    componentMaterials.push(new MyMaterialInherit());
+                    componentMaterials.push("inherit");
                 }
                 else if(!this.materials[matID]) {
                     this.onXMLMinorError("material with ID " + matID + " in component: " + componentID + " doesn't exist");
@@ -978,17 +983,7 @@ class MySceneGraph {
             let textureNode = grandChildren[textureIndex];
 
             let tex = "";
-
-            let length_s = this.reader.getFloat(textureNode, "length_s");
-            let length_t = this.reader.getFloat(textureNode, "length_t");
-            if(length_s == null) {
-                this.onXMLMinorError("length_s not provided in texture for component " + componentID);
-                length_s = 1.0;
-            }
-            if(length_t == null) {
-                this.onXMLMinorError("length_t not provided in texture for component " + componentID);
-                length_t = 1.0;
-            }
+            let texture;
 
             let texID = this.reader.getString(textureNode, "id");
             if(texID == null) {
@@ -997,9 +992,11 @@ class MySceneGraph {
             }
             else if(texID == "inherit") {
                 tex = "inherit";
+                texture = {texture: tex};
             }
             else if(texID == "none") {
                 tex = null;
+                texture = {texture: tex};
             }
             else if(this.textures[texID] == null) {
                 this.onXMLError("Texture with ID " + matID + " in component: " + componentID + " doesn't exist");
@@ -1007,9 +1004,20 @@ class MySceneGraph {
             }
             else {
                 tex = this.textures[texID];
-            }
 
-            let texture = {texture: tex, length_s: length_s, length_t: length_t};
+                let length_s = this.reader.getFloat(textureNode, "length_s");
+                let length_t = this.reader.getFloat(textureNode, "length_t");
+                if(length_s == null) {
+                    this.onXMLMinorError("length_s not provided in texture for component " + componentID);
+                    length_s = 1.0;
+                }
+                if(length_t == null) {
+                    this.onXMLMinorError("length_t not provided in texture for component " + componentID);
+                    length_t = 1.0;
+                }
+
+                texture = {texture: tex, length_s: length_s, length_t: length_t};
+            }
 
             // CHILDREN
             grandgrandChildren = grandChildren[childrenIndex].children;

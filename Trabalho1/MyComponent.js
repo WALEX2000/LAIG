@@ -25,19 +25,27 @@ class MyComponent{
         this.scene = scene;
     }
 
-    display() {
+    display(fatherMat, fatherTex, fatherLs, fatherLt) {
         if(!this.loaded) return;
         this.scene.multMatrix(this.transformation);
         let mat = this.materials.materials[this.materials.current]; //applying the current material
-        if(this.texture.texture != "inherit") {
-            this.scene.appearance.setTexture(this.texture.texture);   
+        let tex = this.texture.texture;
+        if(mat == "inherit") {
+            mat = fatherMat;
         }
-        mat.apply(this.scene.appearance);
+        if(tex == "inherit") {
+            tex = fatherTex;
+        }
+        else if(tex != null) {
+                //aplicar length_s e length_t
+        }
 
-        this.scene.appearance.apply();
+        mat.setTexture(tex);
+        mat.apply();
+        
         for(let i = 0; i < this.children.length; i++) {
             this.scene.pushMatrix();
-            this.children[i].display();
+            this.children[i].display(mat, tex);
             this.scene.popMatrix();
         }
     }
