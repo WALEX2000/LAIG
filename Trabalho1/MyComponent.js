@@ -37,15 +37,20 @@ class MyComponent{
             tex = fatherTex;
         }
         else if(tex != null) {
-                //aplicar length_s e length_t
+            fatherLs = this.texture.length_s;
+            fatherLt = this.texture.length_t;
         }
 
         mat.setTexture(tex);
         mat.apply();
-        
+
         for(let i = 0; i < this.children.length; i++) {
             this.scene.pushMatrix();
-            this.children[i].display(mat, tex);
+            let child = this.children[i];
+            if(child.children == undefined) { //if the next one is a primitive
+                let coords = this.children[i].texCoords;
+            }
+            this.children[i].display(mat, tex, fatherLs, fatherLt);
             this.scene.popMatrix();
         }
     }
