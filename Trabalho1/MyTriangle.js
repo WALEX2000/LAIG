@@ -31,30 +31,22 @@ class MyTriangle extends CGFobject {
 		this.normals.push(...normal1, ...normal1, ...normal1);
 		this.normals.push(...normal2, ...normal2, ...normal2);
 
-		let a = Math.sqrt(Math.pow(this.p2[0]-this.p1[0], 2) + Math.pow(this.p2[1]-this.p1[1]) + Math.pow(this.p2[2]-this.p1[2]));
-		let b = Math.sqrt(Math.pow(this.p2[0]-this.p3[0], 2) + Math.pow(this.p2[1]-this.p3[1]) + Math.pow(this.p2[2]-this.p3[2]));
-		let c = Math.sqrt(Math.pow(this.p1[0]-this.p3[0], 2) + Math.pow(this.p1[1]-this.p3[1]) + Math.pow(this.p1[2]-this.p3[2]));
+		let a = Math.sqrt(Math.pow(this.p2[0]-this.p1[0], 2) + Math.pow(this.p2[1]-this.p1[1], 2) + Math.pow(this.p2[2]-this.p1[2], 2));
+		let b = Math.sqrt(Math.pow(this.p2[0]-this.p3[0], 2) + Math.pow(this.p2[1]-this.p3[1], 2) + Math.pow(this.p2[2]-this.p3[2], 2));
+		let c = Math.sqrt(Math.pow(this.p1[0]-this.p3[0], 2) + Math.pow(this.p1[1]-this.p3[1], 2) + Math.pow(this.p1[2]-this.p3[2], 2));
 		
-		let beta = Math.acos((a*a-b*b+c*c)/(2*a*c));
-		let cos = ((a*a) - (b*b) + (c*c)) / (2*a*c);
-		let sin = Math.sqrt(1-cos*cos);
+		let cosine = ((a*a) - (b*b) + (c*c)) / (2*a*c);
+		let sine = Math.sqrt(1-cosine*cosine);
 
-		/*this.texCoords.push(
+		let len = Math.max(a, c*cosine, c*sine);
+		this.texCoords.push(
 			0, 0,
-			c, 0,
-			a*cos, a*sin,
+			a/len, 0,
+			c*cosine/len, c*sine/len,
 			0, 0,
-			c, 0,
-			a*cos, a*sin
-		);*/
-		this.texCoords = [
-			0, 1,
-			c, 1,
-			c-a*Math.cos(beta), 1-a*Math.sin(beta),
-			0, 1,
-			c, 1,
-			c-a*Math.cos(beta), 1-a*Math.sin(beta),
-		]
+			a/len, 0,
+			c*cosine/len, c*sine/len,
+		);
 
         this.indices.push(0, 1, 2);
         this.indices.push(3, 5, 4);
