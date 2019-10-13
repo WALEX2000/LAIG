@@ -6,6 +6,11 @@
             <from x="15" y="15" z="15" />
             <to x="0" y="0" z="0" />
         </perspective>
+
+        <perspective id="birdsEyeView" near="0.1" far="1500" angle="90">
+            <from x="0" y="100" z="0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
     </views>
 
     <globals>
@@ -15,6 +20,14 @@
 
     <lights>
         <omni id="mainLight" enabled="1">
+            <location x="0" y="400" z="0" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="0" linear="0" quadratic="0" />
+        </omni>
+
+        <omni id="mainLight2" enabled="0">
             <location x="0" y="400" z="0" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -429,7 +442,7 @@
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="desert" length_s="1" length_t="1" />
+            <texture id="desert" length_s="30" length_t="30" />
             <children>
                 <primitiveref id="skyboxRectangle" />
             </children>

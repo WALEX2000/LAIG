@@ -295,7 +295,7 @@ class MySceneGraph {
 
             //create object with currentView to add to our views array
             let currentView = {id:viewId, near:viewNear, far:viewFar, from: vec3.fromValues(fromX,fromY,fromZ), to: vec3.fromValues(toX,toY,toZ)}
-
+            
             //complete currentView object with appropriate information depending on the view type
             if(name = "perspective") {
                 let viewAngle = parseFloat(child.getAttribute("angle"));
@@ -411,10 +411,10 @@ class MySceneGraph {
             // Light enable/disable
             var enableLight = true;
             var aux = this.reader.getBoolean(children[i], 'enabled');
-            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
+            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false))) {
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
-
-            enableLight = aux || 1;
+                enabledLight = true;
+            } else enableLight = aux;
 
             //Add enabled boolean and type name to light info
             global.push(enableLight);
