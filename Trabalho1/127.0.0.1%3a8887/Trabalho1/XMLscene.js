@@ -54,7 +54,6 @@ class XMLscene extends CGFscene {
             if(view.id == this.graph.defaultView) {
                 selectedView = view;
                 this.selectedViewIndex = i;
-                debugger;
             }
         }
         //In case there's an error with the camera do nothing.
