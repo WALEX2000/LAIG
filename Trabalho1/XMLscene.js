@@ -54,7 +54,6 @@ class XMLscene extends CGFscene {
             if(view.id == this.graph.defaultView) {
                 selectedView = view;
                 this.selectedViewIndex = i;
-                debugger;
             }
         }
         //In case there's an error with the camera do nothing.
@@ -144,6 +143,10 @@ class XMLscene extends CGFscene {
         }
 
         this.interface.setActiveCamera(this.camera);
+    }
+
+    nextMaterial() {
+        for(let comp in this.graph.allComponents) this.graph.nextMat(this.graph.allComponents[comp]);
     }
 
     /**

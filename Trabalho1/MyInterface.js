@@ -34,6 +34,8 @@ class MyInterface extends CGFinterface {
         this.scene.gui=this;
         this.processKeyboard=function(){};
         this.activeKeys={};
+
+        this.Mpress = false;
     }
 
     processKeyDown(event) {
@@ -57,5 +59,14 @@ class MyInterface extends CGFinterface {
         for (let key in this.scene.graph.lights) {
             lightsDropdownFolder.add(this.scene.graph.lights[key], '0').name(key);
         }
+    }
+
+    update() {
+        if(!this.pressM && this.isKeyPressed('KeyM')) {
+            this.scene.nextMaterial();
+            this.pressM = true;
+        }
+        else if(!this.isKeyPressed('KeyM'))
+            this.pressM = false;
     }
 }

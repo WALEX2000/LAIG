@@ -74,11 +74,11 @@
             <transformation>
             </transformation>
             <materials>
+                <material id="demoMaterial2" />
                 <material id="demoMaterial" />
             </materials>
-                <texture id="tubeTexture" length_s="0.5" length_t="0.5"/>
+                <texture id="none" length_s="0.5" length_t="0.5"/>
             <children>
-                
                 <primitiveref id="rampTriangle"/>
             </children>
         </component>

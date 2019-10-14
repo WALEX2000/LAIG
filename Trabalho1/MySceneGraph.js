@@ -884,7 +884,7 @@ class MySceneGraph {
         let XMLcomponents = componentsNode.children;
 
         this.rootComponent;
-        let allComponents = [];
+        this.allComponents = [];
 
         var grandChildren = [];
         var grandgrandChildren = [];
@@ -1035,12 +1035,12 @@ class MySceneGraph {
                             this.onXMLError("componentref in component " + componentID + " doesn't have an ID");
                             continue;
                         }
-                        else if(allComponents[childID] != null) {
-                            object = allComponents[childID];
+                        else if(this.allComponents[childID] != null) {
+                            object = this.allComponents[childID];
                         }
                         else {
-                            allComponents[childID] = new MyComponent(false);
-                            object = allComponents[childID];
+                            this.allComponents[childID] = new MyComponent(false);
+                            object = this.allComponents[childID];
                         }
 
                         break;
@@ -1066,26 +1066,24 @@ class MySceneGraph {
                 children.push(object);
             }
 
-            if(allComponents[componentID] == null) {
+            if(this.allComponents[componentID] == null) {
                 let newComponent = new MyComponent(true, matrix, materials, texture, children, this.scene);
-                allComponents[componentID] = newComponent;
+                this.allComponents[componentID] = newComponent;
             }
             else
-                allComponents[componentID].initialize(matrix, materials, texture, children, this.scene);
+                this.allComponents[componentID].initialize(matrix, materials, texture, children, this.scene);
 
             if(componentID === this.idRoot) {
-                this.rootComponent = allComponents[componentID];
+                this.rootComponent = this.allComponents[componentID];
             }
         }
         
         //check if any component is not loaded.
-        for(let component in allComponents) {
-            if(!allComponents[component].isLoaded()) {
+        for(let component in this.allComponents) {
+            if(!this.allComponents[component].isLoaded()) {
                 this.onXMLMinorError("Compoenent with id '" + component + "' has been referenced but doesn't exist");
             }
         }
-
-        //TODO Check for repeated IDs
     }
 
 
@@ -1208,5 +1206,12 @@ class MySceneGraph {
 
         //To test the parsing/creation of the primitives, call the display function directly
         this.rootComponent.display(this.scene);
+    }
+
+    nextMat(component) {
+        let length = component.materials.materials.length;
+        let number = component.materials.current + 1;
+        if(number >= length) number = 0;
+        component.materials.current = number;
     }
 }
