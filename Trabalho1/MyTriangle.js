@@ -10,6 +10,7 @@ class MyTriangle extends CGFobject {
 		this.p1 = p1;
 		this.p2 = p2;
 		this.p3 = p3;
+		this.type = "triangle";
 
 		this.initBuffers();
 	}
@@ -53,5 +54,15 @@ class MyTriangle extends CGFobject {
         
 		this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
+	}
+
+	/**
+	 * @method updateTexCoords
+	 * Updates the list of texture coordinates of the rectangle
+	 * @param {Array} coords - Array of texture coordinates
+	 */
+	updateTexCoords(coords) {
+		this.texCoords = [...coords];
+		this.updateTexCoordsGLBuffers();
 	}
 }

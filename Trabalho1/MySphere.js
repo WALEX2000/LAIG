@@ -10,6 +10,7 @@ class MySphere extends CGFobject {
 		this.radius = radius;
 		this.slices = slices;
 		this.stacks = stacks;
+		this.type = "sphere";
 
 		this.initBuffers();
 	}

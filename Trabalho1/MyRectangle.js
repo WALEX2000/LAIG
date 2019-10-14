@@ -12,6 +12,7 @@ class MyRectangle extends CGFobject {
 		this.x2 = x2;
 		this.y1 = y1;
 		this.y2 = y2;
+		this.type = "rectangle";
 
 		this.initBuffers();
 	}

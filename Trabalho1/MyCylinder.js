@@ -13,6 +13,7 @@ class MyCylinder extends CGFobject {
 		this.height = height;
 		this.slices = slices;
 		this.stacks = stacks;
+		this.type = "cylinder";
 
 		this.initBuffers();
 	}

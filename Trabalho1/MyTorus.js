@@ -11,6 +11,7 @@ class MyTorus extends CGFobject {
 		this.outer = outer;
 		this.slices = slices;
 		this.loops = loops;
+		this.type = "torus";
 
 		this.initBuffers();
 	}
