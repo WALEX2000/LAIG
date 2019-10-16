@@ -235,6 +235,7 @@ class MySceneGraph {
         this.defaultView = defaultViewID;
 
         let defaultViewExists = false;
+        let nViews = 0;
         
         //get all views inside views element
         let children = viewsNode.children;
@@ -324,10 +325,11 @@ class MySceneGraph {
                 currentView.up = vec3.fromValues(upX, upY, upZ);
             }
 
-            this.views.push(currentView);
+            this.views[viewId] = currentView;
+            nViews++;
         }
-        if(this.views.length == 0) this.onXMLError("No Views successfully loaded!");
-        if(!defaultViewExists) this.onXMLMinorError("Default View doesn't exist");
+        if(nViews == 0) this.onXMLError("No Views successfully loaded!");
+        if(!defaultViewExists) this.onXMLError("Default View doesn't exist");
 
         return null;
     }
