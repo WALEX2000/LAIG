@@ -298,26 +298,28 @@ class MySceneGraph {
             let currentView = {id:viewId, near:viewNear, far:viewFar, from: vec3.fromValues(fromX,fromY,fromZ), to: vec3.fromValues(toX,toY,toZ)}
             
             //complete currentView object with appropriate information depending on the view type
-            if(name = "perspective") {
+            if(name == "perspective") {
                 let viewAngle = parseFloat(child.getAttribute("angle"));
                 if(viewAngle == null) this.onXMLMinorError("no angle attribute for " + name + " view provided!");
                 currentView.type = "perspective";
 
                 currentView.angle = viewAngle;
             }
-            else if(name = "ortho") {
-                let viewTop = child.getAttribute("top");
-                let viewBottom = child.getAttribute("bottom");
-                let viewLeft = child.getAttribute("left");
-                let viewRight = child.getAttribute("right");
+            else if(name == "ortho") {
+                let viewTop = parseFloat(child.getAttribute("top"));
+                let viewBottom = parseFloat(child.getAttribute("bottom"));
+                let viewLeft = parseFloat(child.getAttribute("left"));
+                let viewRight = parseFloat(child.getAttribute("right"));
 
-                let upList = child.child.getElementsByTagName("up");
-                let upX = parseFloat(upList[0].getAttribute("x"));
-                let upY = parseFloat(upList[0].getAttribute("y"));
-                let upZ = parseFloat(upList[0].getAttribute("z"));
+                let upList = child.getElementsByTagName("up");
+                let upX = 0, upY = 1, upZ = 0;
+                if(upList.length != 0) {
+                    let upX = parseFloat(upList[0].getAttribute("x"));
+                    let upY = parseFloat(upList[0].getAttribute("y"));
+                    let upZ = parseFloat(upList[0].getAttribute("z"));    
+                }
 
                 currentView.type = "ortho";
-                currentView.angle = viewAngle;
                 currentView.top = viewTop;
                 currentView.bottom = viewBottom;
                 currentView.left = viewLeft;

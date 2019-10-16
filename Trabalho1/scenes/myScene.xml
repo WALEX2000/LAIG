@@ -12,10 +12,15 @@
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="birdsEyeView" near="0.1" far="1500" angle="90">
-            <from x="0" y="100" z="0" />
+        <perspective id="birdsEyeView" near="0.1" far="1500" angle="100">
+            <from x="0" y="50" z="1" />
             <to x="0" y="0" z="0" />
         </perspective>
+
+        <ortho id="orto_view" near="0.1" far="1500" left="-10.0" right="10.0" top="10.0" bottom="-10.0">
+            <from x="5" y="20" z="5" />
+            <to x="5" y="5" z="0" />
+        </ortho>
     </views>
 
     <globals>

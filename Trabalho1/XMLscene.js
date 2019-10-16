@@ -54,7 +54,7 @@ class XMLscene extends CGFscene {
         //In case there's an error with the camera do nothing.
         if(selectedView == null) return null;
         else if(selectedView.type == "perspective"){
-            this.camera = new CGFcamera(selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);  
+            this.camera = new CGFcamera(DEGREE_TO_RAD*selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);  
         }
         else if(selectedView.type = "ortho"){
             this.camera = new CGFcameraOrtho(selectedView.left, selectedView.right, selectedView.bottom, selectedView.top, selectedView.near, selectedView.far, selectedView.from, selectedView.to, selectedView.up);
@@ -131,9 +131,9 @@ class XMLscene extends CGFscene {
 
         if(selectedView == null) return null;
         else if(selectedView.type == "perspective"){
-            this.camera = new CGFcamera(selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);
+            this.camera = new CGFcamera(DEGREE_TO_RAD*selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);
         }
-        else if(selectedView.type = "ortho"){
+        else if(selectedView.type == "ortho"){
             this.camera = new CGFcameraOrtho(selectedView.left, selectedView.right, selectedView.bottom, selectedView.top, selectedView.near, selectedView.far, selectedView.from, selectedView.to, selectedView.up);
         }
 
