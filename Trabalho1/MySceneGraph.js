@@ -60,6 +60,8 @@ class MySceneGraph {
             return;
         }
 
+        if(!this.loadedOK) return;
+
         this.loadedOk = true;
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
@@ -973,7 +975,7 @@ class MySceneGraph {
                 }
                 else if(!this.materials[matID]) {
                     this.onXMLError("material with ID " + matID + " in component: " + componentID + " doesn't exist");
-                    continue;
+                    return null;
                 }
                 else componentMaterials.push(this.materials[matID]);
             }
@@ -1206,9 +1208,6 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //To do: Create display loop for transversing the scene graph
-
-        //To test the parsing/creation of the primitives, call the display function directly
         this.rootComponent.display(this.scene);
     }
 
