@@ -972,7 +972,7 @@ class MySceneGraph {
                     componentMaterials.push("inherit");
                 }
                 else if(!this.materials[matID]) {
-                    this.onXMLMinorError("material with ID " + matID + " in component: " + componentID + " doesn't exist");
+                    this.onXMLError("material with ID " + matID + " in component: " + componentID + " doesn't exist");
                     continue;
                 }
                 else componentMaterials.push(this.materials[matID]);
