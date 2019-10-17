@@ -19,7 +19,7 @@ class MySceneGraph {
      * @constructor
      */
     constructor(filename, scene) {
-        this.loadedOk = null;
+        this.loadedOk = true;
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
@@ -60,7 +60,7 @@ class MySceneGraph {
             return;
         }
 
-        if(!this.loadedOK) return;
+        if(!this.loadedOk) return;
 
         this.loadedOk = true;
 
