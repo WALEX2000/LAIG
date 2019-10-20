@@ -174,7 +174,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pyramidBricks" length_s="2.1" length_t="2.1" />
+            <texture id="pyramidBricks" length_s=".67" length_t=".6" />
             <children>
                 <primitiveref id="pyramidFront" />
                 <primitiveref id="pyramidBack" />
@@ -191,7 +191,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pyramidBricks" length_s="2" length_t="1" />
+            <texture id="pyramidBricks" length_s="2" length_t="1.1" />
             <children>
                 <primitiveref id="pyramidFront" />
                 <primitiveref id="pyramidBack" />
@@ -208,7 +208,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pyramidBricks" length_s="2" length_t="1" />
+            <texture id="pyramidBricks" length_s="2" length_t="1.1" />
             <children>
                 <primitiveref id="pyramidFront" />
                 <primitiveref id="pyramidBack" />

@@ -43,10 +43,10 @@ class MyTriangle extends CGFobject {
 		this.texCoords.push(
 			0, 0,
 			a, 0,
-			c*cosine, c*sine,
+			c*cosine, -c*sine,
 			0, 0,
 			a, 0,
-			c*cosine, c*sine,
+			c*cosine, -c*sine,
 		);
 
         this.indices.push(0, 1, 2);
