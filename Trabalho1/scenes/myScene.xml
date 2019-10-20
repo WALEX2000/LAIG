@@ -7,6 +7,11 @@
             <to x="0" y="5" z="0" />
         </perspective>
 
+        <perspective id="closeUp" near="0.1" far="1500" angle="60">
+            <from x="10" y="8" z="-10" />
+            <to x="-10" y="3" z="-10" />
+        </perspective>
+
         <ortho id="layout" near="0.1" far="1500" left="-40.0" right="40.0" top="20" bottom="-40">
             <from x="5" y="30" z="5" />
             <to x="5" y="0" z="5" />
@@ -276,7 +281,7 @@
                 <translate x="0" y="2.1" z="0" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="camelFur" length_s="1" length_t="1" />
             <children>
@@ -390,7 +395,7 @@
                 <scale x="1.4" y="0.8" z="1" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -406,7 +411,7 @@
                 <scale x="0.4" y="0.9" z="0.5" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -420,7 +425,7 @@
                 <scale x="0.4" y="0.9" z="0.5" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -435,7 +440,7 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -451,7 +456,7 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -467,7 +472,7 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -483,7 +488,7 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -498,7 +503,7 @@
                 <scale x="0.7" y="0.7" z="0.05" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="camelToe" length_s="1" length_t="1" />
             <children>
@@ -517,6 +522,7 @@
             <materials>
                 <material id="blueGlass" />
                 <material id="pinkGoodness" />
+                <material id="greenEmission" />
             </materials>
             <texture id="none" />
             <children>
@@ -720,6 +726,8 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="pinkGoodness" />
+                <material id="greenEmission" />
             </materials>
             <texture id="none"/>
             <children>
