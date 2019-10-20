@@ -45,7 +45,7 @@
             <attenuation constant="0" linear="0" quadratic="0" />
         </omni>
 
-        <spot id="alienLight" enabled="1" angle="5" exponent="5">
+        <spot id="alienLight" enabled="1" angle="5" exponent="2">
             <location x="-10" y="15" z="-5" w="1"/>
             <target x="3" y="-10" z="2" />
             <ambient r="0" g="0" b="0" a="1" />
@@ -540,6 +540,7 @@
                 <primitiveref id="sphere" />
                 <componentref id="ShipBase" />
                 <componentref id="greenRays"/>
+                <componentref id="AbductedCamel" />
             </children>
         </component>
 
@@ -725,6 +726,21 @@
             <texture id="none"/>
             <children>
                 <primitiveref id="torus" />
+            </children>
+        </component>
+
+        <component id="AbductedCamel">
+            <transformation>
+                <translate x="0" y="-0.2" z="-5" />
+                <rotate axis="x" angle="30" />
+                <scale x="0.4" y="0.4" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="Camel" />
             </children>
         </component>
 
