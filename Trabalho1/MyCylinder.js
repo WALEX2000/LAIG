@@ -24,7 +24,9 @@ class MyCylinder extends CGFobject {
 		this.normals = [];
 		this.texCoords = [];
 
+		//height of each stack
         let heightInterval = this.height/this.stacks;
+        //angle variation per slice
         let angleStep = 2*Math.PI/this.slices;
 
 		for(let i = 0, currHeight = 0; i <= this.stacks; i++, currHeight += heightInterval) {
@@ -41,12 +43,13 @@ class MyCylinder extends CGFobject {
 		
 		for(let i = 0; i < this.stacks; ++i) {
 			for(let j = 0; j < this.slices; j++) {
-				this.indices.push(i*(this.slices+1)+j,
-				                  i*(this.slices+1)+j+1, 
-				                  (i+1)*(this.slices+1)+j);
-                this.indices.push(i*(this.slices+1)+j+1,
-                				  (i+1)*(this.slices+1)+j+1,
-                				  (i+1)*(this.slices+1)+j);
+				this.indices.push(i*(this.slices+1)+j,		//	[x] [ ]
+				                  i*(this.slices+1)+j+1, 	//
+				                  (i+1)*(this.slices+1)+j);	//	[x]	[x]
+				                  
+                this.indices.push(i*(this.slices+1)+j+1,	//	[x] [x]
+                				  (i+1)*(this.slices+1)+j+1,//
+                				  (i+1)*(this.slices+1)+j);	//	[ ] [x]
 			}
 		}
 

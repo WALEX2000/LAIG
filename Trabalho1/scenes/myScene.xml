@@ -40,7 +40,6 @@
 
     <textures>
         <texture id="shipHull" file="scenes/images/futuristic_blue.png" />
-        <texture id="demoTexture" file="scenes/images/futuristic_blue.png" />
         <texture id="pyramidBricks" file="scenes/images/pyramidBricks.png" />
         <texture id="sky" file="scenes/images/sky.jpg" />
         <texture id="desert" file="scenes/images/desert.jpg" />

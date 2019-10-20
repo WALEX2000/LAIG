@@ -22,7 +22,9 @@ class MyTorus extends CGFobject {
 		this.normals = [];
 		this.texCoords = [];
 
+		//Outter angle variation 
 		let outerDiff = 2*Math.PI/this.slices;
+		//Inner angle variation 
 		let innerDiff = 2*Math.PI/this.loops;
 
 		for(let i = 0, outerAngle = 0; i <= this.slices; i++, outerAngle += outerDiff) {
@@ -39,8 +41,13 @@ class MyTorus extends CGFobject {
 
 		for (let i = 0; i < this.slices; i++) {
 			for (let j = 0; j < this.loops; j++) {
-				this.indices.push(i*(this.loops+1)+j+1, i*(this.loops+1)+j, (i+1)*(this.loops+1)+j);
-				this.indices.push((i+1)*(this.loops+1)+j+1, i*(this.loops+1)+j+1, (i+1)*(this.loops+1)+j);
+				this.indices.push(i*(this.loops+1)+j+1,			//	[x]	[ ]
+								  i*(this.loops+1)+j, 			//
+								  (i+1)*(this.loops+1)+j);		//	[x]	[x]
+
+				this.indices.push((i+1)*(this.loops+1)+j+1,		//	[x] [x]
+								  i*(this.loops+1)+j+1,			//
+								  (i+1)*(this.loops+1)+j);		//	[ ]	[x]
 			}
 		}
 		
