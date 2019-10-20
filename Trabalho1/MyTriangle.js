@@ -42,11 +42,11 @@ class MyTriangle extends CGFobject {
 		let len = Math.max(a, c*cosine, c*sine);
 		this.texCoords.push(
 			0, 0,
-			a/len, 0,
-			c*cosine/len, c*sine/len,
+			a, 0,
+			c*cosine, c*sine,
 			0, 0,
-			a/len, 0,
-			c*cosine/len, c*sine/len,
+			a, 0,
+			c*cosine, c*sine,
 		);
 
         this.indices.push(0, 1, 2);
