@@ -896,7 +896,7 @@ class MySceneGraph {
         var grandgrandChildren = [];
         var nodeNames = [];
 
-        function checkIfLengthsProvided(textureNode) {
+        function checkIfLengthsProvided(textureNode) { //Checks if there are any length_S and length_t attributes where there shouldn't be
             for(let i = 0; i < textureNode.attributes.length; i++) {
                 let att = textureNode.attributes[i];
                 if(att.nodeName == "length_s")
@@ -932,11 +932,11 @@ class MySceneGraph {
             var childrenIndex = nodeNames.indexOf("children");
 
             // TRANSFORMATIONS
-            let matrix = mat4.create();
+            let matrix = mat4.create(); //matrix where the transformatiosn are stored
 
             grandgrandChildren = grandChildren[transformationIndex].children;
-            let numberOfTransformations = grandgrandChildren.length;
-            
+
+            //creates transformation matrix
             for (let j = 0; j < grandgrandChildren.length; j++) {
                 let transformation = grandgrandChildren[j];
                 switch (transformation.nodeName) {
@@ -957,12 +957,11 @@ class MySceneGraph {
                         matrix = mat4.multiply(matrix, matrix, this.transformations[transID]);
                         break;
                     default:
-                        numberOfTransformations--;
                         this.onXMLMinorError("unknown transformation <" + transformation.nodeName + ">");
                         break;
                 }
             }
-            
+
             // MATERIALS
             grandgrandChildren = grandChildren[materialsIndex].children;
 

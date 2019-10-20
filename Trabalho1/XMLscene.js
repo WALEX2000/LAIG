@@ -126,21 +126,22 @@ class XMLscene extends CGFscene {
         this.sceneInited = true;
     }
 
+    //function triggered by changing view in interface
     onSelectedViewChanged() {
         let selectedView = this.graph.views[this.selectedViewIndex];
 
         if(selectedView == null) return null;
-        else if(selectedView.type == "perspective"){
+        else if(selectedView.type == "perspective"){ //creates perspective camera
             this.camera = new CGFcamera(DEGREE_TO_RAD*selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);
         }
-        else if(selectedView.type == "ortho"){
+        else if(selectedView.type == "ortho"){ //creates ortographic camera
             this.camera = new CGFcameraOrtho(selectedView.left, selectedView.right, selectedView.bottom, selectedView.top, selectedView.near, selectedView.far, selectedView.from, selectedView.to, selectedView.up);
         }
 
         this.interface.setActiveCamera(this.camera);
     }
 
-    nextMaterial() {
+    nextMaterial() { //function called upon pressing M (to change material in all componenets)
         for(let comp in this.graph.allComponents) this.graph.nextMat(this.graph.allComponents[comp]);
     }
 

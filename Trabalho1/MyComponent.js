@@ -25,9 +25,10 @@ class MyComponent{
         this.scene = scene;
     }
 
-    display(fatherMat, fatherTex, fatherLs, fatherLt) {
-        if(!this.loaded) return;
-        this.scene.multMatrix(this.transformation);
+    display(fatherMat, fatherTex, fatherLs, fatherLt) { //Recursive display loop
+        if(!this.loaded) return; //In case there was some kind of error in the XML
+
+        this.scene.multMatrix(this.transformation); //apply transformations
         let mat = this.materials.materials[this.materials.current]; //applying the current material
         let tex = this.texture.texture;
         if(mat == "inherit") {
@@ -36,13 +37,14 @@ class MyComponent{
         if(tex == "inherit") {
             tex = fatherTex;
         }
-        else if(tex != null) {
+        else if(tex != null) { //pass on the length_S and length_t attributes
             fatherLs = this.texture.length_s;
             fatherLt = this.texture.length_t;
         }
 
-        mat.setTexture(tex);
+        mat.setTexture(tex); //apply texture to material
         mat.setTextureWrap('REPEAT','REPEAT');
+        
         mat.apply();
 
         for(let i = 0; i < this.children.length; i++) {
@@ -50,7 +52,7 @@ class MyComponent{
             let child = this.children[i];
             if(child.children == undefined) { //if the next one is a primitive
                 let oldCoords = [...child.texCoords];
-                switch(child.type) {
+                switch(child.type) { //Change the texCoords in accordance to the length_s and length_t attributes in rectangle and triangles
                     case "rectangle":
                         let coords = child.texCoords;
                         coords[0] = coords[0]/fatherLs;
@@ -90,7 +92,7 @@ class MyComponent{
                 child.display();
                 child.texCoords = oldCoords;
             }
-            else {
+            else { //if next object is not a primitive go deeper into the graph
                 child.display(mat, tex, fatherLs, fatherLt);   
             }
             this.scene.popMatrix();
