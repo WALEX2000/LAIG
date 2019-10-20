@@ -172,7 +172,6 @@ class XMLscene extends CGFscene {
             else
                 this.lights[i].disable();
                 
-            this.lights[i].setVisible(true);
             this.lights[i].update();
 
             i++;
