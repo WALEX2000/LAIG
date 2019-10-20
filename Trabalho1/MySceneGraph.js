@@ -316,9 +316,9 @@ class MySceneGraph {
                 let upList = child.getElementsByTagName("up");
                 let upX = 0, upY = 1, upZ = 0;
                 if(upList.length != 0) {
-                    let upX = parseFloat(upList[0].getAttribute("x"));
-                    let upY = parseFloat(upList[0].getAttribute("y"));
-                    let upZ = parseFloat(upList[0].getAttribute("z"));    
+                    upX = parseFloat(upList[0].getAttribute("x"));
+                    upY = parseFloat(upList[0].getAttribute("y"));
+                    upZ = parseFloat(upList[0].getAttribute("z"));    
                 }
 
                 currentView.type = "ortho";
@@ -896,6 +896,16 @@ class MySceneGraph {
         var grandgrandChildren = [];
         var nodeNames = [];
 
+        function checkIfLengthsProvided(textureNode) {
+            for(let i = 0; i < textureNode.attributes.length; i++) {
+                let att = textureNode.attributes[i];
+                if(att.nodeName == "length_s")
+                    this.onXMLMinorError("length_s not supposed to exist in inherit texture for component " + componentID);
+                else if(att.nodeName == "length_t")
+                    this.onXMLMinorError("length_t not supposed to exist in inherit texture for component " + componentID);
+            }
+        }
+
         // Any number of components.
         for (var i = 0; i < XMLcomponents.length; i++) {
 
@@ -999,10 +1009,16 @@ class MySceneGraph {
             else if(texID == "inherit") {
                 tex = "inherit";
                 texture = {texture: tex};
+
+                //Testing fot unecessary length_s and length_t
+                checkIfLengthsProvided.call(this, textureNode);
             }
             else if(texID == "none") {
                 tex = null;
                 texture = {texture: tex};
+
+                //Testing fot unecessary length_s and length_t
+                checkIfLengthsProvided.call(this, textureNode);
             }
             else if(this.textures[texID] == null) {
                 this.onXMLError("Texture with ID " + matID + " in component: " + componentID + " doesn't exist");
