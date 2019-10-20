@@ -41,7 +41,7 @@
     <textures>
         <texture id="shipHull" file="scenes/images/futuristic_blue.png" />
         <texture id="demoTexture" file="scenes/images/futuristic_blue.png" />
-        <texture id="pyramidBricks" file="scenes/images/pyramidBricks.jpg" />
+        <texture id="pyramidBricks" file="scenes/images/pyramidBricks.png" />
         <texture id="sky" file="scenes/images/sky.jpg" />
         <texture id="desert" file="scenes/images/desert.jpg" />
         <texture id="camelFur" file="scenes/images/camelFur.jpg" />
@@ -174,7 +174,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="pyramidBricks" length_s="2" length_t="1" />
+            <texture id="pyramidBricks" length_s="2.1" length_t="2.1" />
             <children>
                 <primitiveref id="pyramidFront" />
                 <primitiveref id="pyramidBack" />
