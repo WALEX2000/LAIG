@@ -12,6 +12,11 @@
             <to x="-10" y="3" z="-10" />
         </perspective>
 
+        <perspective id="victimPOV" near="0.1" far="1500" angle="60">
+            <from x="-10" y="1" z="-6" />
+            <to x="-11" y="20" z="-5" />
+        </perspective>
+
         <ortho id="layout" near="0.1" far="1500" left="-40.0" right="40.0" top="20" bottom="-40">
             <from x="5" y="30" z="5" />
             <to x="5" y="0" z="5" />
