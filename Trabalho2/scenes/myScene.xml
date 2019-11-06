@@ -122,6 +122,7 @@
         <!--    <rotate axis="x" angle="angle_x" />   -->
         <!--    <rotate axis="y" angle="angle_y" />   -->
         <!--    <rotate axis="z" angle="angle_z" />   -->
+        <!-- WHYY are u liek this -->
                         <translate x="1" y="1" z="1" />
                         <rotate angle_x="45" angle_y="45" angle_z="45" />
                         <scale x="2" y="2" z="2" />

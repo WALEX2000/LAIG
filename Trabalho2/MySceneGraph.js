@@ -647,30 +647,35 @@ class MySceneGraph {
             grandChildren = children[i].children;
             // Specifications for the current transformation.
 
-            var transfMatrix = mat4.create();
+            let transfMatrix = mat4.create();
 
-            for (var j = 0; j < grandChildren.length; j++) {
-                let transformation = grandChildren[j];
-                switch (transformation.nodeName) {
-                    case 'translate':
-                        transfMatrix = this.parseTranslate(transfMatrix, transformation, transformationID);
-                        break;
-                    case 'scale':
-                        transfMatrix = this.parseScale(transfMatrix, transformation, transformationID);
-                        break;
-                    case 'rotate':
-                        transfMatrix = this.parseRotation(transfMatrix, transformation, transformationID);
-                        break;
-                    default:
-                        this.onXMLMinorError("unknown transformation <" + transformation.nodeName + ">");
-                        break;
-                }
-            }
+            transfMatrix = this.getTransformations(grandChildren, transfMatrix, transformationID);
             this.transformations[transformationID] = transfMatrix;
         }
 
         this.log("Parsed transformations");
         return null;
+    }
+
+    getTransformations(listOfTransformations, transfMatrix, transformationID) {
+        for (var j = 0; j < listOfTransformations.length; j++) {
+            let transformation = listOfTransformations[j];
+            switch (transformation.nodeName) {
+                case 'translate':
+                    transfMatrix = this.parseTranslate(transfMatrix, transformation, transformationID);
+                    break;
+                case 'scale':
+                    transfMatrix = this.parseScale(transfMatrix, transformation, transformationID);
+                    break;
+                case 'rotate':
+                    transfMatrix = this.parseRotation(transfMatrix, transformation, transformationID);
+                    break;
+                default:
+                    this.onXMLMinorError("unknown transformation <" + transformation.nodeName + ">");
+                    break;
+            }
+        }
+        return transfMatrix;
     }
 
     parseTranslate(transfMatrix, transformation, transformationID) {
@@ -712,6 +717,20 @@ class MySceneGraph {
             case "Z":
                 transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle*DEGREE_TO_RAD);
                 break;
+            case null:
+                //Check if it's the special animation keyframe and rotate accordingly if it's not then return error
+                let angle_x = this.reader.getFloat(transformation, "angle_x");
+                let angle_y = this.reader.getFloat(transformation, "angle_y");
+                let angle_z = this.reader.getFloat(transformation, "angle_z");
+                if(angle_x == null || angle_y == null || angle_z == null) {
+                    this.onXMLError("Wrong axis type '" + axis + "' in rotation " + transformationID);
+                    break;
+                }
+                
+                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle_x*DEGREE_TO_RAD);
+                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle_y*DEGREE_TO_RAD);
+                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle_z*DEGREE_TO_RAD);
+                break;   
             default:
                 this.onXMLError("Unexpected axis '" + axis + "' in rotation " + transformationID);
                 break;
@@ -1124,22 +1143,38 @@ class MySceneGraph {
     *
     */
     parseAnimations(animationsNode) {
-        this.animations = []; //List of all animations
-        //Each animation is composed of an ID and a list of keyframes
-        //Each keyframe is composed of an instant and a matrix
+        this.animations = []; //List of all animations (can be empty)
+                              //Each animation is composed of an ID and a list of keyframes
+                              //Each keyframe is composed of an instant and a matrix
 
         let animationsList = animationsNode.children;
         for(let i = 0; i < animationsList.length; i++) {
             let animation = animationsList[i];
-            let animationID = this.reader.getString(animation, "id");
-
-            let keyframes = animation.children;
-            for(let j = 0; j < keyframes.length; j++) {
-                let transformations = keyframes.children;
-                let transfMatrix = new mat4.create(); //maybe? ja n me lembro
-                //parse da transformações
-            }
+            this.animations.push(this.parseAnimation(animation));
         }
+    }
+
+    parseAnimation(animation) {
+        let animationID = this.reader.getString(animation, "id");
+        let keyframes = animation.children;
+        if(keyframes.length < 1); //throw error There needs to be at least one keyframe
+
+        let keyframeList = [];
+        for(let j = 0; j < keyframes.length; j++) {
+            let keyframe = keyframes[j];
+
+            let keyframeInstant = this.reader.getFloat(keyframe, "instant");
+
+            let transformations = keyframe.children;
+            let transfMatrix = new mat4.create(); //maybe? ja n me lembro
+            transfMatrix = this.getTransformations(transformations, transfMatrix, "Animation keyframe nº" + j);
+
+            let keyframeObj = {instant: keyframeInstant, matrix: transfMatrix};
+            keyframeList.push(keyframeObj);            
+        }
+
+        let animObj = {id: animationID, keyframes: keyframeList};
+        return animObj;
     }
 
 
