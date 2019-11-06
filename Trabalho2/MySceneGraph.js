@@ -962,6 +962,7 @@ class MySceneGraph {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
+            let animationRefIndex = nodeNames.indexOf("animationref");
 
             // TRANSFORMATIONS
             let matrix = mat4.create(); //matrix where the transformatiosn are stored
@@ -993,6 +994,11 @@ class MySceneGraph {
                         break;
                 }
             }
+
+            //ANIMATION_REF
+            let animRef = grandChildren[animationRefIndex];
+            let animation = null;
+            if(animRef !== undefined) animation = this.animations[animRef];
 
             // MATERIALS
             grandgrandChildren = grandChildren[materialsIndex].children;
@@ -1120,11 +1126,11 @@ class MySceneGraph {
             }
 
             if(this.allComponents[componentID] == null) {
-                let newComponent = new MyComponent(true, matrix, materials, texture, children, this.scene);
+                let newComponent = new MyComponent(true, matrix, materials, texture, children, this.scene, animation);
                 this.allComponents[componentID] = newComponent;
             }
             else
-                this.allComponents[componentID].initialize(matrix, materials, texture, children, this.scene);
+                this.allComponents[componentID].initialize(matrix, materials, texture, children, this.scene, animation);
 
             if(componentID === this.idRoot) {
                 this.rootComponent = this.allComponents[componentID];
@@ -1150,7 +1156,8 @@ class MySceneGraph {
         let animationsList = animationsNode.children;
         for(let i = 0; i < animationsList.length; i++) {
             let animation = animationsList[i];
-            this.animations.push(this.parseAnimation(animation));
+            let animObj = this.parseAnimation(animation);
+            this.animations[animObj.id] = animObj;
         }
     }
 

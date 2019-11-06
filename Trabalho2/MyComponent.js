@@ -6,29 +6,43 @@ class MyComponent{
     loaded;
     scene;
 
-    constructor(isLoaded, transformation, materials, texture, children, scene) {
+    constructor(isLoaded, transformation, materials, texture, children, scene, animation) {
         this.transformation = transformation;
         this.materials = materials;
         this.texture = texture;
         this.children = children;
         this.loaded = isLoaded;
         this.scene = scene;
-
+        this.animation = animation;
     }
 
-    initialize(transformation, materials, texture, children, scene) {
+    initialize(transformation, materials, texture, children, scene, animation) {
         this.transformation = transformation;
         this.materials = materials;
         this.texture = texture;
         this.children = children;
         this.loaded = true;
         this.scene = scene;
+        this.animation = animation;
+    }
+
+    //get ID and associate the animation to this component (ideally when display I'll just need to call animation.play())
+    //A função animation.play vai pegar na animação, ver o tempo em que está e interpolar entre o keyframe anterior e o proximo
+
+    playAnimation(animation) {
+        //get current time
+        //determine the next and previous keyframe
+        //interpolate between the 2 according to the current time
+        //create the transformation matrix
+        //this.scene.multMatrix(transfMatrix);
     }
 
     display(fatherMat, fatherTex, fatherLs, fatherLt) { //Recursive display loop
         if(!this.loaded) return; //In case there was some kind of error in the XML
 
         this.scene.multMatrix(this.transformation); //apply transformations
+        if(this.animation != null) this.playAnimation(this.animation); //apply animation transformation
+
         let mat = this.materials.materials[this.materials.current]; //applying the current material
         let tex = this.texture.texture;
         if(mat == "inherit") {
