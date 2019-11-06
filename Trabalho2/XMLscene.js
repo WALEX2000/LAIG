@@ -122,6 +122,8 @@ class XMLscene extends CGFscene {
         this.interface.createLightsDropdown(this.graph.lights);
 
         this.sceneInited = true;
+
+        this.time0 = performance.now();
     }
 
     //function triggered by changing view in interface

@@ -31,10 +31,46 @@ class MyComponent{
 
     playAnimation(animation) {
         //get current time
+        let currTimeStamp = performance.now();
+        let currentTime = (currTimeStamp - this.scene.time0)*0.001;
+
         //determine the next and previous keyframe
+        let prevKeyFrameStartTime = 0;
+        let prevKeyFrame = null;
+        let nextKeyFrame = null;
+        for(let i = 0; i < animation.keyframes.length; i++) {
+            let keyframe = animation.keyframes[i];
+            if(keyframe.instant < currentTime) {
+                prevKeyFrame = keyframe;
+                prevKeyFrameStartTime = keyframe.instant;
+            }
+            else {
+                nextKeyFrame = keyframe;
+                break;
+            }
+        }
+
+        if(nextKeyFrame == null) {
+            this.scene.multMatrix(animation.keyframes[animation.keyframes.length - 1].matrix);
+            return; //if animation has ended, but can't just return has to mulMatrix the last keyframe
+        }
+
+        let matrix1 = (prevKeyFrame == null) ? mat4.create() : prevKeyFrame.matrix;
+        let matrix2 = nextKeyFrame.matrix;
+        let ammountOfLerp = (currentTime - prevKeyFrameStartTime) / (nextKeyFrame.instant - prevKeyFrameStartTime);
+
         //interpolate between the 2 according to the current time
-        //create the transformation matrix
-        //this.scene.multMatrix(transfMatrix);
+        function lerpMatrix(matrix1, matrix2, ammountOfLerp) {
+            let newMatrix = mat4.create();
+            for(let i = 0; i < 16; i++) {
+                newMatrix[i] = (1 - ammountOfLerp) * matrix1[i] + ammountOfLerp * matrix2[i];
+            }
+            return newMatrix;
+        }
+        let transfMatrix = lerpMatrix(matrix1, matrix2, ammountOfLerp);
+
+        //apply new matrix
+        this.scene.multMatrix(transfMatrix);
     }
 
     display(fatherMat, fatherTex, fatherLs, fatherLt) { //Recursive display loop
