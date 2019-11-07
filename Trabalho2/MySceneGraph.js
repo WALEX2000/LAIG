@@ -1164,19 +1164,53 @@ class MySceneGraph {
     parseAnimation(animation) {
         let animationID = this.reader.getString(animation, "id");
         let keyframes = animation.children;
-        if(keyframes.length < 1); //throw error There needs to be at least one keyframe
+        if(keyframes.length < 1) this.onXMLError("No keuframes in animation: " + animationID); //throw error There needs to be at least one keyframe
 
         let keyframeList = [];
+
+        function getTransObj(listOfTransformations, obj) {
+            let transObj = {};
+
+            for (let j = 0; j < listOfTransformations.length; j++) {
+                let transformation = listOfTransformations[j];
+                switch (transformation.nodeName) {
+                    case 'translate':
+                        let transX = obj.reader.getFloat(transformation, "x");
+                        let transY = obj.reader.getFloat(transformation, "y");
+                        let transZ = obj.reader.getFloat(transformation, "z");
+                        transObj.translate = {x: transX, y: transY, z: transZ};
+                        break;
+                    case 'scale':
+                        let scaleX = obj.reader.getFloat(transformation, "x");
+                        let scaleY = obj.reader.getFloat(transformation, "y");
+                        let scaleZ = obj.reader.getFloat(transformation, "z");
+                        transObj.scale = {x: scaleX, y: scaleY, z: scaleZ};
+                        break;
+                    case 'rotate':
+                        let angX = obj.reader.getFloat(transformation, "angle_x");
+                        let angY = obj.reader.getFloat(transformation, "angle_y");
+                        let angZ = obj.reader.getFloat(transformation, "angle_z");
+                        transObj.rotate = {x: angX, y: angY, z: angZ};
+                        break;
+                    default:
+                        obj.onXMLMinorError("unknown transformation '" + transformation.nodeName + "' in keyframe!");
+                        break;
+                }
+            }
+
+            return transObj;
+        }
+
         for(let j = 0; j < keyframes.length; j++) {
             let keyframe = keyframes[j];
 
             let keyframeInstant = this.reader.getFloat(keyframe, "instant");
 
             let transformations = keyframe.children;
-            let transfMatrix = new mat4.create(); //maybe? ja n me lembro
-            transfMatrix = this.getTransformations(transformations, transfMatrix, "Animation keyframe nº" + j);
 
-            let keyframeObj = {instant: keyframeInstant, matrix: transfMatrix};
+            let transObj = getTransObj(transformations, this);
+
+            let keyframeObj = {instant: keyframeInstant, transforms: transObj};
             keyframeList.push(keyframeObj);            
         }
 
