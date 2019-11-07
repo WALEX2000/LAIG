@@ -996,9 +996,11 @@ class MySceneGraph {
             }
 
             //ANIMATION_REF
-            let animRef = this.reader.getString(grandChildren[animationRefIndex], "id");
             let animation = null;
-            if(animRef !== null) animation = this.animations[animRef];
+            if(animationRefIndex != -1) {
+                let animRef = this.reader.getString(grandChildren[animationRefIndex], "id");
+                animation = this.animations[animRef];
+            }
 
             // MATERIALS
             grandgrandChildren = grandChildren[materialsIndex].children;
