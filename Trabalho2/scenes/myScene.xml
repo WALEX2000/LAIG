@@ -30,7 +30,7 @@
     </globals>
 
     <lights>
-        <omni id="mainLight" enabled="0">
+        <omni id="mainLight" enabled="1">
             <location x="0" y="400" z="0" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -104,29 +104,50 @@
     </transformations>
         
     <animations>
-        <!-- O bloco animations pode ser vazio, isto é, pode -->
-        <!-- não ser declarada qualquer animação -->
         <animation id="boobJob" >
-        <!-- Deve existir pelo menos 1 elemento keyframe. -->
-        <!-- instant e’ o tempo expresso em segundos -->
-        <!-- desde o inicio da animação. -->
                 <keyframe instant= "10">
-        <!-- translate, rotate e scale representam as -->
-        <!-- quantidades das transformações -->
-        <!-- correspondentes, medidas em relação à -->
-        <!-- situação inicial (instante zero) --> -->
-        <!-- Para uma mesma keyframe, os elementos -->
-        <!-- translate, rotate e scale sao obrigatorios -->
-        <!-- e fornecidos por esta ordem -->
-        <!-- a instrução rotação corresponde a:       -->
-        <!--    <rotate axis="x" angle="angle_x" />   -->
-        <!--    <rotate axis="y" angle="angle_y" />   -->
-        <!--    <rotate axis="z" angle="angle_z" />   -->
-        <!-- WHYY are u liek this -->
-                        <translate x="1" y="1" z="1" />
+                        <translate x="0" y="0" z="0" />
                         <rotate angle_x="0" angle_y="0" angle_z="0" />
-                        <scale x="10" y="10" z="10" />
+                        <scale x="1" y="1" z="1" />
                 </keyframe>
+        </animation>
+
+        <animation id="spinning" >
+            <keyframe instant= "2">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="20" angle_y="20" angle_z="45" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "4">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="-20" angle_y="-20" angle_z="90" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "6">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="20" angle_y="20" angle_z="135" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="-20" angle_y="-20" angle_z="175" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "10">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="20" angle_y="20" angle_z="220" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "12">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="265" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
         </animation>
     </animations>
 
@@ -552,6 +573,7 @@
                 <rotate axis="x" angle="-90" />
                 <scale x="3" y="3" z="3" />
             </transformation>
+            <animationref id="spinning" />
             <materials>
                 <material id="blueGlass" />
                 <material id="pinkGoodness" />
