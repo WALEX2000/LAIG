@@ -4,55 +4,42 @@
  * @param scene - Reference to MyScene object
  */
 class MyPlane extends CGFobject {
-    constructor(scene, id, base, top, height, slices, stacks) {
+    constructor(scene, id, npartsU, npartsV) {
         super(scene);
         this.id = id;
-        this.base = base;
-        this.top = top;
-        this.height = height;
-        this.slices = slices;
-        this.stacks = stacks;
-        this.type = "cylinder";
+        this.npartsU = npartsU;
+        this.npartsV = npartsV;
+        this.type = "plane";
 
-        this.initBuffers();
+        let controlPoints = [
+                            [
+                                [-0.5, 0.0, 0.5, 1],
+                                [-0.5, 0.0, -0.5, 1]
+                            ],
+                            [
+                                [0.5, 0.0, 0.5, 1],
+                                [0.5, 0.0, -0.5, 1]
+                            ]
+                        ];
+
+        /*for(let i = 0; i < npartsU; i++) {
+            v_list = [];
+            for (let j = 0; j < npartsV; j++) {
+                v_list.push([-0.5+i/npartsU, -0.5+j/npartsV, 0.0]);
+            }
+            controlPoints.push(v_list);
+        }*/
+
+        this.makeSurface(npartsU, npartsV, controlPoints);
     }
 
-    initBuffers() {
-        this.vertices = [];
-        this.indices = [];
-        this.normals = [];
-        this.texCoords = [];
+    makeSurface(npartsU, npartsV, controlPoints) {
+        let planeSurface = new CGFnurbsSurface(1, 1, controlPoints);
+        this.surface = new CGFnurbsObject(this.scene, npartsU, npartsV, planeSurface);
+        this.texCoords = this.surface.texCoords;
+    }
 
-        //height of each stack
-        let heightInterval = this.height/this.stacks;
-        //angle variation per slice
-        let angleStep = 2*Math.PI/this.slices;
-
-        for(let i = 0, currHeight = 0; i <= this.stacks; i++, currHeight += heightInterval) {
-            let currRadius = this.base + i*(this.top-this.base)/this.stacks;
-            for(let j = 0, currAngle = 0; j <= this.slices; j++, currAngle += angleStep) {
-                this.vertices.push(currRadius*Math.cos(currAngle),
-                    currRadius*Math.sin(currAngle),
-                    currHeight);
-                let normal = normalizeVector(Math.cos(currAngle), Math.sin(currAngle), this.base-this.top);
-                this.normals.push(...normal);
-                this.texCoords.push(j/this.stacks, currHeight/this.height);
-            }
-        }
-
-        for(let i = 0; i < this.stacks; ++i) {
-            for(let j = 0; j < this.slices; j++) {
-                this.indices.push(i*(this.slices+1)+j,		//	[x] [ ]
-                    i*(this.slices+1)+j+1, 	//
-                    (i+1)*(this.slices+1)+j);	//	[x]	[x]
-
-                this.indices.push(i*(this.slices+1)+j+1,	//	[x] [x]
-                    (i+1)*(this.slices+1)+j+1,//
-                    (i+1)*(this.slices+1)+j);	//	[ ] [x]
-            }
-        }
-
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
+    display() {
+        this.surface.display();
     }
 }

@@ -112,7 +112,7 @@ class XMLscene extends CGFscene {
      */
     onGraphLoaded() {
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
-
+        this.axis = new CGFaxis(this,this.graph.referenceLength);
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
         this.initCameras();
@@ -180,7 +180,7 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
-
+            this.axis.display();
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
         }
