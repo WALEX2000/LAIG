@@ -92,11 +92,14 @@
             <patch npointsU="3" npointsV="2" npartsU="4" npartsV="4">
                 <controlpoint xx="0.5" yy="0" zz="-0.5" />
                 <controlpoint xx="0.5" yy="0" zz="0.5" />
-                <controlpoint xx="0" yy="0.5" zz="-0.5" />
-                <controlpoint xx="0" yy="0.5" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0" zz="-0.5" />
+                <controlpoint xx="0" yy="3.0" zz="-0.5" />
+                <controlpoint xx="3" yy="0.5" zz="0.5" />
+                <controlpoint xx="-0.5" yy="0.5" zz="-0.5" />
                 <controlpoint xx="-0.5" yy="0" zz="0.5" />
             </patch>
+        </primitive>
+        <primitive id="cylinder2">
+            <cylinder2 base="1" top="2" height="4" slices="16" stacks="16" />
         </primitive>
     </primitives>
 
@@ -109,7 +112,7 @@
             </materials>
             <texture id="hi" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="patch" />
+                <primitiveref id="cylinder2" />
             </children>
         </component>
     </components>

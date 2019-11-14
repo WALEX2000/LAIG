@@ -13,15 +13,6 @@ class MyPatch extends CGFobject {
         this.npartsV = npartsV;
         this.controlPoints = controlPoints;
         this.type = "patch";
-
-        /*for(let i = 0; i < npartsU; i++) {
-            v_list = [];
-            for (let j = 0; j < npartsV; j++) {
-                v_list.push([-0.5+i/npartsU, -0.5+j/npartsV, 0.0]);
-            }
-            controlPoints.push(v_list);
-        }*/
-
         this.makeSurface(npointsU, npointsV, npartsU, npartsV, controlPoints);
     }
 
