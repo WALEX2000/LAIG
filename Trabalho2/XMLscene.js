@@ -36,6 +36,10 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
     }
 
+    update(t) {
+        this.securityCamera.updateTimeFactor(t / 200 % 1000);
+    }
+
     /**
      * Initializes the scene cameras.
      */
