@@ -148,9 +148,9 @@ class XMLscene extends CGFscene {
 
     display() {
         this.textureRTT.attachToFrameBuffer();    
-        this.render(this.security);
+        this.render(this.cameras[this.securityViewIndex]);
         this.textureRTT.detachFromFrameBuffer();
-        this.render(this.camera);
+        this.render(this.cameras[this.selectedViewIndex]);
 
         this.gl.disable(this.gl.DEPTH_TEST);
         this.securityCamera.display();
@@ -164,7 +164,7 @@ class XMLscene extends CGFscene {
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-        //this.camera = camera;
+        this.camera = camera;
         this.interface.setActiveCamera(camera);
 
         // Initialize Model-View matrix as identity (no transformation
