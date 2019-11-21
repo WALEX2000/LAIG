@@ -23,7 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.textureRTT = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
+        this.textureRTT = new CGFtextureRTT(this, this.gl.canvas.width*2, this.gl.canvas.height*2);
         this.securityCamera = new MySecurityCamera(this, this.textureRTT);
 
         this.enableTextures(true);
@@ -32,8 +32,7 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
-
-        this.axis = new CGFaxis(this);
+        
         this.setUpdatePeriod(100);
     }
 
@@ -113,7 +112,6 @@ class XMLscene extends CGFscene {
      */
     onGraphLoaded() {
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
-        this.axis = new CGFaxis(this,this.graph.referenceLength);
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
         this.initCameras();
@@ -147,6 +145,9 @@ class XMLscene extends CGFscene {
      */
 
     display() {
+        if(!this.sceneInited)
+            return;
+
         this.textureRTT.attachToFrameBuffer();    
         this.render(this.cameras[this.securityViewIndex]);
         this.textureRTT.detachFromFrameBuffer();
@@ -192,7 +193,6 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
-            this.axis.display();
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
         }
