@@ -23,7 +23,8 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.textureRTT = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
+        this.securityCamera = new MySecurityCamera(this, this.textureRTT);
 
         this.enableTextures(true);
 
@@ -42,24 +43,24 @@ class XMLscene extends CGFscene {
     initCameras() {
         //Choose the camera with the appropriate default ID in case it exists.
         this.viewIds = [];
-        let selectedView = null;
+        this.cameras = [];
         for(let viewNode in this.graph.views) {
             let view = this.graph.views[viewNode];
+            if(view.type == "perspective"){
+                this.cameras[view.id] = new CGFcamera(DEGREE_TO_RAD*view.angle, view.near, view.far, view.from, view.to);
+            } else if(view.type == "ortho"){
+                this.cameras[view.id] = new CGFcameraOrtho(view.left, view.right, view.bottom, view.top, view.near, view.far, view.from, view.to, view.up);
+            }
             this.viewIds.push(viewNode);
             if(view.id == this.graph.defaultView) {
                 this.selectedViewIndex = view.id;
-                selectedView = view;
+                this.securityViewIndex = view.id;
             }
         }
         //In case there's an error with the camera do nothing.
-        if(selectedView == null) return null;
-        else if(selectedView.type == "perspective"){
-            this.camera = new CGFcamera(DEGREE_TO_RAD*selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);  
-        }
-        else if(selectedView.type == "ortho"){
-            this.camera = new CGFcameraOrtho(selectedView.left, selectedView.right, selectedView.bottom, selectedView.top, selectedView.near, selectedView.far, selectedView.from, selectedView.to, selectedView.up);
-        }
-
+        if(this.selectedViewIndex == null) return null;
+        this.camera = this.cameras[this.selectedViewIndex];
+        this.security = this.cameras[this.securityViewIndex];
         this.interface.setActiveCamera(this.camera);
     }
     /**
@@ -117,6 +118,7 @@ class XMLscene extends CGFscene {
 
         this.initCameras();
         this.interface.createCameraDropdown(this.graph.views);
+        this.interface.createSecurityDropdown(this.graph.views);
 
         this.initLights();
         this.interface.createLightsDropdown(this.graph.lights);
@@ -128,17 +130,12 @@ class XMLscene extends CGFscene {
 
     //function triggered by changing view in interface
     onSelectedViewChanged() {
-        let selectedView = this.graph.views[this.selectedViewIndex];
-
-        if(selectedView == null) return null;
-        else if(selectedView.type == "perspective"){ //creates perspective camera
-            this.camera = new CGFcamera(DEGREE_TO_RAD*selectedView.angle, selectedView.near, selectedView.far, selectedView.from, selectedView.to);
-        }
-        else if(selectedView.type == "ortho"){ //creates ortographic camera
-            this.camera = new CGFcameraOrtho(selectedView.left, selectedView.right, selectedView.bottom, selectedView.top, selectedView.near, selectedView.far, selectedView.from, selectedView.to, selectedView.up);
-        }
-
+        this.camera = this.cameras[this.selectedViewIndex];
         this.interface.setActiveCamera(this.camera);
+    }
+    
+    onSecurityViewChanged() {
+        this.security = this.cameras[this.securityViewIndex];
     }
 
     nextMaterial() { //function called upon pressing M (to change material in all componenets)
@@ -148,12 +145,27 @@ class XMLscene extends CGFscene {
     /**
      * Displays the scene.
      */
+
     display() {
+        this.textureRTT.attachToFrameBuffer();    
+        this.render(this.security);
+        this.textureRTT.detachFromFrameBuffer();
+        this.render(this.camera);
+
+        this.gl.disable(this.gl.DEPTH_TEST);
+        this.securityCamera.display();
+        this.gl.enable(this.gl.DEPTH_TEST);
+    }
+
+    render(camera) {
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+        //this.camera = camera;
+        this.interface.setActiveCamera(camera);
 
         // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();

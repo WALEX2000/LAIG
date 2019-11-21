@@ -54,6 +54,10 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'selectedViewIndex', this.scene.viewIds).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View');
     }
 
+    createSecurityDropdown() {
+        this.gui.add(this.scene, 'securityViewIndex', this.scene.viewIds).onChange(this.scene.onSecurityViewChanged.bind(this.scene)).name('Security Camera');
+    }
+
     createLightsDropdown() {
         let lightsDropdownFolder = this.gui.addFolder("Lights");
         for (let key in this.scene.graph.lights) {
