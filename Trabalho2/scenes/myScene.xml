@@ -56,6 +56,7 @@
         <texture id="camelFur" file="scenes/images/camelFur.jpg" />
         <texture id="camelToe" file="scenes/images/camelToe.png" />
         <texture id="eye" file="scenes/images/eyeTexture.png" />
+        <texture id="rugTex" file="scenes/images/rug.jpg" />
     </textures>
 
     <materials>
@@ -188,38 +189,33 @@
         <primitive id="skyboxRectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
-        <primitive id="desertFloor">
-            <patch npointsU="3" npointsV="10" npartsU="20" npartsV="20">
-                <controlpoint xx="0.5" yy="0.5" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.3" zz="0.5" />
-                <controlpoint xx="0.5" yy="0.2" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.1" zz="0.5" />
-                <controlpoint xx="0.5" yy="0.1" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.0" zz="0.5" />
-                <controlpoint xx="0.5" yy="0.1" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.2" zz="0.5" />
-                <controlpoint xx="0.5" yy="0.3" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.5" zz="0.5" />
-                <controlpoint xx="0" yy="0.5" zz="-0.5" />
-                <controlpoint xx="0" yy="0.3" zz="0.5" />
-                <controlpoint xx="0" yy="0.2" zz="-0.5" />
-                <controlpoint xx="0" yy="0.1" zz="0.5" />
-                <controlpoint xx="0" yy="0.1" zz="-0.5" />
-                <controlpoint xx="0" yy="0.0" zz="0.5" />
-                <controlpoint xx="0" yy="0.1" zz="-0.5" />
-                <controlpoint xx="0" yy="0.2" zz="0.5" />
-                <controlpoint xx="0" yy="0.3" zz="-0.5" />
-                <controlpoint xx="0" yy="0.5" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.5" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.3" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.2" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.1" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.1" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.0" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.1" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.2" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.3" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.5" zz="0.5" />
+        <primitive id="rugPatch">
+            <patch npointsU="4" npointsV="2" npartsU="8" npartsV="8">
+                <controlpoint xx="1" yy="0.5" zz="-0.5" />
+                <controlpoint xx="1" yy="0.5" zz="0.5" />
+                <controlpoint xx="0.6" yy="-0.5" zz="-0.5" />
+                <controlpoint xx="0.6" yy="-0.5" zz="0.5" />
+                <controlpoint xx="0.2" yy="0.5" zz="-0.5" />
+                <controlpoint xx="0.2" yy="0.5" zz="0.5" />
+                <controlpoint xx="0" yy="-.25" zz="-0.5" />
+                <controlpoint xx="0" yy="-.25" zz="0.5" />
+            </patch>
+        </primitive>
+        <primitive id="desertFloor1">
+            <plane npartsU="20" npartsV="20" />
+        </primitive>
+        <primitive id="rug">
+            <patch npointsU="5" npointsV="2" npartsU="40" npartsV="40">
+                <controlpoint xx="2.5" yy="0" zz="-2.50" />
+                <controlpoint xx="2.5" yy="0" zz="-2.50" />
+                <controlpoint xx="1.25" yy="-12.5" zz="-2.50" />
+                <controlpoint xx="1.25" yy="-12.5" zz="2.50" />
+                <controlpoint xx="0" yy="25.0" zz="-2.50" />
+                <controlpoint xx="0" yy="25.0" zz="2.50" />
+                <controlpoint xx="-1.25" yy="-12.5" zz="-2.50" />
+                <controlpoint xx="-1.25" yy="-12.5" zz="2.50" />
+                <controlpoint xx="-2.50" yy="0" zz="-2.50" />
+                <controlpoint xx="-2.50" yy="0" zz="2.50" />
             </patch>
         </primitive>
     </primitives>
@@ -236,8 +232,9 @@
                 <componentref id="Spaceship" />
                 <componentref id="Pyramids" />
                 <componentref id="CamelPack" />
-                <!--<componentref id="SkyBox"/>-->
+                <componentref id="SkyBox"/>
                 <componentref id="Floor"/>
+                <componentref id="Camelrug"/>
             </children>
         </component>
 
@@ -310,7 +307,7 @@
 
         <component id="CamelPack">
             <transformation>
-                <translate x="15" y="0" z="10" />
+                <translate x="15" y="0.5" z="10" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -918,7 +915,7 @@
 
         <component id="Floor">
             <transformation>
-                <scale x="500" y="2" z="500" />
+                <scale x="500" y="1" z="500" />
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
@@ -926,7 +923,35 @@
             </materials>
             <texture id="desert" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="desertFloor" />
+                <primitiveref id="desertFloor1" />
+            </children>
+        </component>
+
+        <component id="rug">
+            <transformation>
+                <scale x="6" y="1" z="3" />
+                <translate x="-.55" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="rugTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="rugPatch" />
+            </children>
+        </component>
+
+        <component id="Camelrug">
+            <transformation>
+                <translate x="10" y="5" z="0" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="rug" />
+                <componentref id="Camel" />
             </children>
         </component>
 
