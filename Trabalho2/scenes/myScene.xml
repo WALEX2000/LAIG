@@ -57,6 +57,8 @@
         <texture id="camelToe" file="scenes/images/camelToe.png" />
         <texture id="eye" file="scenes/images/eyeTexture.png" />
         <texture id="rugTex" file="scenes/images/rug.jpg" />
+        <texture id="palmTex" file="scenes/images/palmTree.jpg" />
+        <texture id="leavesTex" file="scenes/images/leaves.jpg" />
     </textures>
 
     <materials>
@@ -105,6 +107,14 @@
     </transformations>
         
     <animations>
+        <animation id="pyramidFlight" >
+            <keyframe instant= "6">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="3" y="3" z="3" />
+            </keyframe>
+        </animation>
+
         <animation id="boobJob" >
                 <keyframe instant= "10">
                         <translate x="0" y="0" z="0" />
@@ -153,6 +163,41 @@
     </animations>
 
     <primitives>
+        <primitive id="trunk">
+            <cylinder2 base=".75" top=".25" height="8" slices="16" stacks="16" />
+        </primitive>
+
+        <primitive id="leaf">
+            <patch npointsU="3" npointsV="3" npartsU="20" npartsV="20">
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+
+                <controlpoint xx="0.5" yy="0" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.5" zz="0" />
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+            </patch>
+        </primitive>
+
+        <primitive id="leafBack">
+            <patch npointsU="3" npointsV="3" npartsU="20" npartsV="20">
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+
+                <controlpoint xx="0.5" yy="0" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.5" zz="0" />
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+            </patch>
+        </primitive>
         <primitive id="thinCylinder">
             <cylinder top=".15" base=".15" height="1" slices="15" stacks="30" />
         </primitive>
@@ -199,6 +244,19 @@
                 <controlpoint xx="0.2" yy="0.5" zz="0.5" />
                 <controlpoint xx="0" yy="-.25" zz="-0.5" />
                 <controlpoint xx="0" yy="-.25" zz="0.5" />
+            </patch>
+        </primitive>
+
+        <primitive id="rugPatchBack">
+            <patch npointsU="4" npointsV="2" npartsU="8" npartsV="8">
+                <controlpoint xx="0" yy="-.25" zz="-0.5" />
+                <controlpoint xx="0" yy="-.25" zz="0.5" />
+                <controlpoint xx="0.2" yy="0.5" zz="-0.5" />
+                <controlpoint xx="0.2" yy="0.5" zz="0.5" />
+                <controlpoint xx="0.6" yy="-0.5" zz="-0.5" />
+                <controlpoint xx="0.6" yy="-0.5" zz="0.5" />
+                <controlpoint xx="1" yy="0.5" zz="-0.5" />
+                <controlpoint xx="1" yy="0.5" zz="0.5" />
             </patch>
         </primitive>
         <primitive id="desertFloor">
@@ -263,12 +321,13 @@
                 <componentref id="SkyBox"/>
                 <componentref id="Floor"/>
                 <componentref id="Camelrug"/>
+                <componentref id="palmTrees"/>
             </children>
         </component>
 
         <component id="Pyramids">
             <transformation>
-                <scale x="3" y="3" z="3" />
+                <scale x="8" y="8" z="8" />
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
@@ -335,7 +394,7 @@
 
         <component id="CamelPack">
             <transformation>
-                <translate x="15" y="0.5" z="10" />
+                <translate x="15" y="0" z="10" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -409,7 +468,6 @@
         <component id="CamelNeck">
         <transformation>
                 <translate x="1.1" y="0.6" z="0" />
-                <rotate axis="z" angle="30" />
                 <scale x="2" y="0.8" z="0.8" />
                 <rotate axis="y" angle="-90" />
             </transformation>
@@ -967,6 +1025,7 @@
             <texture id="rugTex" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="rugPatch" />
+                <primitiveref id="rugPatchBack" />
             </children>
         </component>
 
@@ -981,6 +1040,179 @@
             <children>
                 <componentref id="rug" />
                 <componentref id="Camel" />
+            </children>
+        </component>
+
+        <component id="palmTrees">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="palmTree1" />
+                <componentref id="palmTree2" />
+                <componentref id="palmTree3" />
+            </children>
+        </component>
+
+        <component id="palmTree3">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="-23" y="7" z="0"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="palmTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="trunk" />
+                <componentref id="Leaves" />
+            </children>
+        </component>
+
+        <component id="palmTree2">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="12" y="-15" z="0"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="palmTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="trunk" />
+                <componentref id="Leaves" />
+            </children>
+        </component>
+
+        <component id="palmTree1">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="10" y="15" z="0"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="palmTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="trunk" />
+                <componentref id="Leaves" />
+            </children>
+        </component>
+
+        <component id="Leaves">
+            <transformation>
+                <rotate axis="x" angle="90" />
+                <translate x="0" y="8.3" z="0" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="Leaf1" />
+                <componentref id="Leaf2" />
+                <componentref id="Leaf3" />
+                <componentref id="Leaf4" />
+                <componentref id="Leaf5" />
+                <componentref id="Leaf6" />
+            </children>
+        </component>
+
+        <component id="Leaf1">
+            <transformation>
+                <rotate axis="y" angle="60" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf2">
+            <transformation>
+                <rotate axis="y" angle="120" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf3">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf4">
+            <transformation>
+                <rotate axis="y" angle="240" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf5">
+            <transformation>
+                <rotate axis="y" angle="300" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf6">
+            <transformation>
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
             </children>
         </component>
 

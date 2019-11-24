@@ -24,7 +24,8 @@
     </lights>
 
     <textures>
-        <texture id="hi" file="scenes/images/wood.jpg" />
+        <texture id="hi" file="scenes/images/palmTree.jpg" />
+        <texture id="leavesTex" file="scenes/images/leaves.jpg" />
     </textures>
 
     <materials>
@@ -133,28 +134,61 @@
                 <controlpoint xx="0.5" yy="0.2" zz="0.5" />
             </patch>
         </primitive>
+
         <primitive id="trunk">
-            <cylinder2 base="2" top="1.5" height="4" slices="16" stacks="16" />
+            <cylinder2 base="1" top=".5" height="8" slices="16" stacks="16" />
+        </primitive>
+
+        <primitive id="leaf">
+            <patch npointsU="3" npointsV="3" npartsU="20" npartsV="20">
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+
+                <controlpoint xx="0.5" yy="0" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.5" zz="0" />
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+            </patch>
+        </primitive>
+
+        <primitive id="leafBack">
+            <patch npointsU="3" npointsV="3" npartsU="20" npartsV="20">
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+
+                <controlpoint xx="0.5" yy="0" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.5" zz="0" />
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+            </patch>
         </primitive>
     </primitives>
 
     <components>
         <component id="root">
             <transformation>
-                <scale x="3" y="3" z="3"/>
+                <scale x="1" y="1" z="1"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
             <texture id="hi" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="patch" />
+                <componentref id="palmTree" />
             </children>
         </component>
 
-        <component id="palmeira">
+        <component id="palmTree">
             <transformation>
-                <scale x="2" y="2" z="2" />
+                <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
@@ -162,7 +196,124 @@
             <texture id="hi" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="trunk" />
+                <componentref id="Leaves" />
             </children>
         </component>
+
+        <component id="Leaves">
+            <transformation>
+                <rotate axis="x" angle="90" />
+                <translate x="0" y="8.3" z="0" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="hi" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="Leaf1" />
+                <componentref id="Leaf2" />
+                <componentref id="Leaf3" />
+                <componentref id="Leaf4" />
+                <componentref id="Leaf5" />
+                <componentref id="Leaf6" />
+            </children>
+        </component>
+
+        <component id="Leaf1">
+            <transformation>
+                <rotate axis="y" angle="60" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf2">
+            <transformation>
+                <rotate axis="y" angle="120" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf3">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf4">
+            <transformation>
+                <rotate axis="y" angle="240" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf5">
+            <transformation>
+                <rotate axis="y" angle="300" />
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+        <component id="Leaf6">
+            <transformation>
+                <rotate axis="z" angle="-30" />
+                <scale x="4" y="4" z="4"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="leavesTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="leaf" />
+                <primitiveref id="leafBack" />
+            </children>
+        </component>
+
+
     </components>
 </lxs>
