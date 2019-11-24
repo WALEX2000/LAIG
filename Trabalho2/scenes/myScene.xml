@@ -199,6 +199,8 @@
                 <controlpoint xx="0.2" yy="0.5" zz="0.5" />
                 <controlpoint xx="0" yy="-.25" zz="-0.5" />
                 <controlpoint xx="0" yy="-.25" zz="0.5" />
+            </patch>
+        </primitive>
         <primitive id="desertFloor">
             <patch npointsU="6" npointsV="6" npartsU="15" npartsV="15">
                 <controlpoint xx="-0.5" yy="0.2" zz="-0.5" />
@@ -242,23 +244,6 @@
                 <controlpoint xx="0.1" yy="0.2" zz="0.5" />
                 <controlpoint xx="0.3" yy="0.1" zz="0.5" />
                 <controlpoint xx="0.5" yy="0.2" zz="0.5" />
-            </patch>
-        </primitive>
-        <primitive id="desertFloor1">
-            <plane npartsU="20" npartsV="20" />
-        </primitive>
-        <primitive id="rug">
-            <patch npointsU="5" npointsV="2" npartsU="40" npartsV="40">
-                <controlpoint xx="2.5" yy="0" zz="-2.50" />
-                <controlpoint xx="2.5" yy="0" zz="-2.50" />
-                <controlpoint xx="1.25" yy="-12.5" zz="-2.50" />
-                <controlpoint xx="1.25" yy="-12.5" zz="2.50" />
-                <controlpoint xx="0" yy="25.0" zz="-2.50" />
-                <controlpoint xx="0" yy="25.0" zz="2.50" />
-                <controlpoint xx="-1.25" yy="-12.5" zz="-2.50" />
-                <controlpoint xx="-1.25" yy="-12.5" zz="2.50" />
-                <controlpoint xx="-2.50" yy="0" zz="-2.50" />
-                <controlpoint xx="-2.50" yy="0" zz="2.50" />
             </patch>
         </primitive>
     </primitives>
@@ -967,7 +952,7 @@
             </materials>
             <texture id="desert" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="desertFloor1" />
+                <primitiveref id="desertFloor" />
             </children>
         </component>
 
