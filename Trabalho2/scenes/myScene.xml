@@ -114,6 +114,14 @@
     </transformations>
         
     <animations>
+        <animation id="FlyingCamel">
+            <keyframe instant= "7.5">
+                <translate x="30" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+
         <animation id="Burst" >
             <keyframe instant= "5">
                 <translate x="0" y="0" z="0" />
@@ -1251,8 +1259,9 @@
 
         <component id="Camelrug">
             <transformation>
-                <translate x="10" y="5" z="0" />
+                <translate x="-20" y="5" z="10" />
             </transformation>
+            <animationref id="FlyingCamel"/>
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
