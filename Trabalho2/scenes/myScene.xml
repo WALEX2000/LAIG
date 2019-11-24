@@ -76,6 +76,13 @@
             <specular r="0.607" g="0.886" b="0.949" a=".8" />
         </material>
 
+        <material id="blueFire" shininess="1">
+            <emission r="0.189" g="0.592" b="0.949" a="1" />
+            <ambient r="0.189" g="0.592" b="0.949" a=".8" />
+            <diffuse r="0.189" g="0.592" b="0.949" a=".8" />
+            <specular r="0.189" g="0.592" b="0.949" a=".8" />
+        </material>
+
         <material id="greyDiffuse" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.26" g="0.29" b="0.30" a="1.0" />
@@ -107,13 +114,117 @@
     </transformations>
         
     <animations>
+        <animation id="Burst" >
+            <keyframe instant= "5">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8">
+                <translate x="0" y="-.25" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1.25" y="1.25" z="1.25" />
+            </keyframe>
+
+            <keyframe instant= "8.5">
+                <translate x="0" y="-.25" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1.5" z="1" />
+            </keyframe>
+        </animation>
+
+        <animation id="BurstFail" >
+            <keyframe instant= "5">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8">
+                <translate x="0" y="-.25" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1.25" y="1.25" z="1.25" />
+            </keyframe>
+
+            <keyframe instant= "8.5">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x=".1" y=".1" z=".1" />
+            </keyframe>
+        </animation>
+
         <animation id="pyramidFlight" >
+            <keyframe instant= "5">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8">
+                <translate x="0" y="1" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+
+        <animation id="pyramidSpin" >
             <keyframe instant= "6">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
-                <scale x="3" y="3" z="3" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="360" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "17">
+                <translate x="0" y="60" z="0" />
+                <rotate angle_x="0" angle_y="360" angle_z="0" />
+                <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>
+
+        <animation id="pyramidSpinFail" >
+            <keyframe instant= "6">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="360" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8.2">
+                <translate x="0" y="-.25" z="0" />
+                <rotate angle_x="-5" angle_y="360" angle_z="8" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8.4">
+                <translate x="0" y="-.5" z="0" />
+                <rotate angle_x="3" angle_y="360" angle_z="4" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "8.6">
+                <translate x="0" y="-.5" z="0" />
+                <rotate angle_x="0" angle_y="360" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+
+        <keyframe instant= "8">
+            <translate x="0" y="2" z="0" />
+            <rotate angle_x="0" angle_y="360" angle_z="0" />
+            <scale x="1" y="1" z="1" />
+        </keyframe>
 
         <animation id="boobJob" >
                 <keyframe instant= "10">
@@ -231,6 +342,9 @@
         <primitive id="pyramidRight">
             <triangle x1="1" y1="0" z1="1" x2="1" y2="0" z2="-1" x3="0" y3="1" z3="0" />
         </primitive>
+        <primitive id="pyramidBottom">
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
         <primitive id="skyboxRectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
@@ -315,9 +429,9 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="Spaceship" />
-                <componentref id="Pyramids" />
-                <componentref id="CamelPack" />
+                <componentref id="Spaceship"/>
+                <componentref id="Pyramids"/>
+                <componentref id="CamelPack"/>
                 <componentref id="SkyBox"/>
                 <componentref id="Floor"/>
                 <componentref id="Camelrug"/>
@@ -325,10 +439,103 @@
             </children>
         </component>
 
+        <component id="FailedPropellers">
+            <transformation>
+            </transformation>
+            <animationref id="BurstFail" />
+            <materials>
+                <material id="blueFire" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="Propeller1"/>
+                <componentref id="Propeller2"/>
+                <componentref id="Propeller3"/>
+                <componentref id="Propeller4"/>
+            </children>
+        </component>
+
+        <component id="Propellers">
+            <transformation>
+            </transformation>
+            <animationref id="Burst" />
+            <materials>
+                <material id="blueFire" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="Propeller1"/>
+                <componentref id="Propeller2"/>
+                <componentref id="Propeller3"/>
+                <componentref id="Propeller4"/>
+            </children>
+        </component>
+
+        <component id="Propeller1">
+            <transformation>
+                <translate x="-.6" y="0" z="-.6" />
+                <scale x=".1" y=".3" z=".1" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="sphere"/>
+            </children>
+        </component>
+
+        <component id="Propeller2">
+            <transformation>
+                <translate x=".6" y="0" z="-.6" />
+                <scale x=".1" y=".3" z=".1" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="sphere"/>
+            </children>
+        </component>
+
+        <component id="Propeller3">
+            <transformation>
+                <translate x="-.6" y="0" z=".6" />
+                <scale x=".1" y=".3" z=".1" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="sphere"/>
+            </children>
+        </component>
+
+        <component id="Propeller4">
+            <transformation>
+                <translate x=".6" y="0" z=".6" />
+                <scale x=".1" y=".3" z=".1" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="sphere"/>
+            </children>
+        </component>
+
         <component id="Pyramids">
             <transformation>
                 <scale x="8" y="8" z="8" />
             </transformation>
+            <animationref id="pyramidFlight"/>
             <materials>
                 <material id="whiteDiffuse" />
                 <material id="pinkGoodness" />
@@ -343,9 +550,10 @@
 
         <component id="SmallPyramid">
             <transformation>
-                <translate x="-1" y="0" z="-3"/>
+                <translate x="-1" y="0" z="-4"/>
                 <scale x="2" y="2" z="2"/>
             </transformation>
+            <animationref id="pyramidSpinFail"/>
             <materials>
                 <material id="inherit" />
             </materials>
@@ -355,6 +563,21 @@
                 <primitiveref id="pyramidBack" />
                 <primitiveref id="pyramidLeft" />
                 <primitiveref id="pyramidRight" />
+                <componentref id="pyramidBottom" />
+                <componentref id="FailedPropellers"/>
+            </children>
+        </component>
+
+        <component id="pyramidBottom">
+            <transformation>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="pyramidBottom" />
             </children>
         </component>
 
@@ -363,6 +586,7 @@
                 <translate x="-7" y="0" z="-8"/>
                 <scale x="3" y="3" z="3"/>
             </transformation>
+            <animationref id="pyramidSpin"/>
             <materials>
                 <material id="inherit" />
             </materials>
@@ -372,6 +596,8 @@
                 <primitiveref id="pyramidBack" />
                 <primitiveref id="pyramidLeft" />
                 <primitiveref id="pyramidRight" />
+                <componentref id="pyramidBottom" />
+                <componentref id="Propellers"/>
             </children>
         </component>
 
@@ -380,6 +606,7 @@
                 <translate x="-9" y="0" z="2"/>
                 <scale x="5" y="5" z="5"/>
             </transformation>
+            <animationref id="pyramidSpin"/>
             <materials>
                 <material id="inherit" />
             </materials>
@@ -389,6 +616,8 @@
                 <primitiveref id="pyramidBack" />
                 <primitiveref id="pyramidLeft" />
                 <primitiveref id="pyramidRight" />
+                <componentref id="pyramidBottom" />
+                <componentref id="Propellers"/>
             </children>
         </component>
 
