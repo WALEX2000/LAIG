@@ -189,37 +189,48 @@
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
         <primitive id="desertFloor">
-            <patch npointsU="3" npointsV="10" npartsU="20" npartsV="20">
-                <controlpoint xx="0.5" yy="0.5" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.3" zz="0.5" />
-                <controlpoint xx="0.5" yy="0.2" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.1" zz="0.5" />
-                <controlpoint xx="0.5" yy="0.1" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.0" zz="0.5" />
-                <controlpoint xx="0.5" yy="0.1" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.2" zz="0.5" />
-                <controlpoint xx="0.5" yy="0.3" zz="-0.5" />
-                <controlpoint xx="0.5" yy="0.5" zz="0.5" />
-                <controlpoint xx="0" yy="0.5" zz="-0.5" />
-                <controlpoint xx="0" yy="0.3" zz="0.5" />
-                <controlpoint xx="0" yy="0.2" zz="-0.5" />
-                <controlpoint xx="0" yy="0.1" zz="0.5" />
-                <controlpoint xx="0" yy="0.1" zz="-0.5" />
-                <controlpoint xx="0" yy="0.0" zz="0.5" />
-                <controlpoint xx="0" yy="0.1" zz="-0.5" />
-                <controlpoint xx="0" yy="0.2" zz="0.5" />
-                <controlpoint xx="0" yy="0.3" zz="-0.5" />
-                <controlpoint xx="0" yy="0.5" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.5" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.3" zz="0.5" />
+            <patch npointsU="6" npointsV="6" npartsU="15" npartsV="15">
                 <controlpoint xx="-0.5" yy="0.2" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.1" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.1" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.0" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.1" zz="-0.5" />
+                <controlpoint xx="-0.3" yy="0.3" zz="-0.5" />
+                <controlpoint xx="-0.1" yy="0.2" zz="-0.5" />
+                <controlpoint xx="0.1" yy="0.2" zz="-0.5" />
+                <controlpoint xx="0.3" yy="0.1" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.2" zz="-0.5" />
+
+                <controlpoint xx="-0.5" yy="0.1" zz="-0.3" />
+                <controlpoint xx="-0.3" yy="0.1" zz="-0.3" />
+                <controlpoint xx="-0.1" yy="0" zz="-0.3" />
+                <controlpoint xx="0.1" yy="0" zz="-0.3" />
+                <controlpoint xx="0.3" yy="0" zz="-0.3" />
+                <controlpoint xx="0.5" yy="0.1" zz="-0.3" />
+
+                <controlpoint xx="-0.5" yy="0" zz="-0.1" />
+                <controlpoint xx="-0.3" yy="0" zz="-0.1" />
+                <controlpoint xx="-0.1" yy="0" zz="-0.1" />
+                <controlpoint xx="0.1" yy="0" zz="-0.1" />
+                <controlpoint xx="0.3" yy="0" zz="-0.1" />
+                <controlpoint xx="0.5" yy="0" zz="-0.1" />
+
+                <controlpoint xx="-0.5" yy="0" zz="0.1" />
+                <controlpoint xx="-0.3" yy="0.1" zz="0.1" />
+                <controlpoint xx="-0.1" yy="0" zz="0.1" />
+                <controlpoint xx="0.1" yy="0" zz="0.1" />
+                <controlpoint xx="0.3" yy="0" zz="0.1" />
+                <controlpoint xx="0.5" yy="0" zz="0.1" />
+
+                <controlpoint xx="-0.5" yy="0.1" zz="0.3" />
+                <controlpoint xx="-0.3" yy="0" zz="0.3" />
+                <controlpoint xx="-0.1" yy="0" zz="0.3" />
+                <controlpoint xx="0.1" yy="0" zz="0.3" />
+                <controlpoint xx="0.3" yy="0" zz="0.3" />
+                <controlpoint xx="0.5" yy="0.1" zz="0.3" />
+
                 <controlpoint xx="-0.5" yy="0.2" zz="0.5" />
-                <controlpoint xx="-0.5" yy="0.3" zz="-0.5" />
-                <controlpoint xx="-0.5" yy="0.5" zz="0.5" />
+                <controlpoint xx="-0.3" yy="0.1" zz="0.5" />
+                <controlpoint xx="-0.1" yy="0.2" zz="0.5" />
+                <controlpoint xx="0.1" yy="0.2" zz="0.5" />
+                <controlpoint xx="0.3" yy="0.1" zz="0.5" />
+                <controlpoint xx="0.5" yy="0.2" zz="0.5" />
             </patch>
         </primitive>
     </primitives>
@@ -236,7 +247,7 @@
                 <componentref id="Spaceship" />
                 <componentref id="Pyramids" />
                 <componentref id="CamelPack" />
-                <!--<componentref id="SkyBox"/>-->
+                <componentref id="SkyBox"/>
                 <componentref id="Floor"/>
             </children>
         </component>
@@ -918,7 +929,8 @@
 
         <component id="Floor">
             <transformation>
-                <scale x="500" y="2" z="500" />
+                <translate x="0" y="-4" z="0"/>
+                <scale x="500" y="200" z="500" />
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
