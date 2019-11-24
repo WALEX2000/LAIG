@@ -50,6 +50,7 @@ class MyCylinder2 extends CGFobject {
                 [-this.top, 0, this.height, 1]
             ]
         ];
+        
         this.texCoords=[];
         this.patch1 = new MyPatch(this.scene,this.id,2,4,this.slices/2,this.stacks,controlCoords1);
         this.patch2 = new MyPatch(this.scene,this.id,2,4,this.slices/2,this.stacks,controlCoords2);

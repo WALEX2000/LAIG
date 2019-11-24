@@ -199,6 +199,49 @@
                 <controlpoint xx="0.2" yy="0.5" zz="0.5" />
                 <controlpoint xx="0" yy="-.25" zz="-0.5" />
                 <controlpoint xx="0" yy="-.25" zz="0.5" />
+        <primitive id="desertFloor">
+            <patch npointsU="6" npointsV="6" npartsU="15" npartsV="15">
+                <controlpoint xx="-0.5" yy="0.2" zz="-0.5" />
+                <controlpoint xx="-0.3" yy="0.3" zz="-0.5" />
+                <controlpoint xx="-0.1" yy="0.2" zz="-0.5" />
+                <controlpoint xx="0.1" yy="0.2" zz="-0.5" />
+                <controlpoint xx="0.3" yy="0.1" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.2" zz="-0.5" />
+
+                <controlpoint xx="-0.5" yy="0.1" zz="-0.3" />
+                <controlpoint xx="-0.3" yy="0.1" zz="-0.3" />
+                <controlpoint xx="-0.1" yy="0" zz="-0.3" />
+                <controlpoint xx="0.1" yy="0" zz="-0.3" />
+                <controlpoint xx="0.3" yy="0" zz="-0.3" />
+                <controlpoint xx="0.5" yy="0.1" zz="-0.3" />
+
+                <controlpoint xx="-0.5" yy="0" zz="-0.1" />
+                <controlpoint xx="-0.3" yy="0" zz="-0.1" />
+                <controlpoint xx="-0.1" yy="0" zz="-0.1" />
+                <controlpoint xx="0.1" yy="0" zz="-0.1" />
+                <controlpoint xx="0.3" yy="0" zz="-0.1" />
+                <controlpoint xx="0.5" yy="0" zz="-0.1" />
+
+                <controlpoint xx="-0.5" yy="0" zz="0.1" />
+                <controlpoint xx="-0.3" yy="0.1" zz="0.1" />
+                <controlpoint xx="-0.1" yy="0" zz="0.1" />
+                <controlpoint xx="0.1" yy="0" zz="0.1" />
+                <controlpoint xx="0.3" yy="0" zz="0.1" />
+                <controlpoint xx="0.5" yy="0" zz="0.1" />
+
+                <controlpoint xx="-0.5" yy="0.1" zz="0.3" />
+                <controlpoint xx="-0.3" yy="0" zz="0.3" />
+                <controlpoint xx="-0.1" yy="0" zz="0.3" />
+                <controlpoint xx="0.1" yy="0" zz="0.3" />
+                <controlpoint xx="0.3" yy="0" zz="0.3" />
+                <controlpoint xx="0.5" yy="0.1" zz="0.3" />
+
+                <controlpoint xx="-0.5" yy="0.2" zz="0.5" />
+                <controlpoint xx="-0.3" yy="0.1" zz="0.5" />
+                <controlpoint xx="-0.1" yy="0.2" zz="0.5" />
+                <controlpoint xx="0.1" yy="0.2" zz="0.5" />
+                <controlpoint xx="0.3" yy="0.1" zz="0.5" />
+                <controlpoint xx="0.5" yy="0.2" zz="0.5" />
             </patch>
         </primitive>
         <primitive id="desertFloor1">
@@ -915,7 +958,8 @@
 
         <component id="Floor">
             <transformation>
-                <scale x="500" y="1" z="500" />
+                <translate x="0" y="-4" z="0"/>
+                <scale x="500" y="200" z="500" />
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />

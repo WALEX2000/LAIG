@@ -89,15 +89,48 @@
             <plane npartsU="4" npartsV="4"/>
         </primitive>
         <primitive id="patch">
-            <patch npointsU="4" npointsV="2" npartsU="8" npartsV="8">
-                <controlpoint xx="1" yy="0.5" zz="-0.5" />
-                <controlpoint xx="1" yy="0.5" zz="0.5" />
-                <controlpoint xx="0.6" yy="-0.5" zz="-0.5" />
-                <controlpoint xx="0.6" yy="-0.5" zz="0.5" />
-                <controlpoint xx="0.2" yy="0.5" zz="-0.5" />
-                <controlpoint xx="0.2" yy="0.5" zz="0.5" />
-                <controlpoint xx="0" yy="-.25" zz="-0.5" />
-                <controlpoint xx="0" yy="-.25" zz="0.5" />
+            <patch npointsU="6" npointsV="6" npartsU="20" npartsV="20">
+                <controlpoint xx="-0.5" yy="0.2" zz="-0.5" />
+                <controlpoint xx="-0.3" yy="0.3" zz="-0.5" />
+                <controlpoint xx="-0.1" yy="0.2" zz="-0.5" />
+                <controlpoint xx="0.1" yy="0.2" zz="-0.5" />
+                <controlpoint xx="0.3" yy="0.1" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.2" zz="-0.5" />
+
+                <controlpoint xx="-0.5" yy="0.1" zz="-0.3" />
+                <controlpoint xx="-0.3" yy="0.1" zz="-0.3" />
+                <controlpoint xx="-0.1" yy="0" zz="-0.3" />
+                <controlpoint xx="0.1" yy="0" zz="-0.3" />
+                <controlpoint xx="0.3" yy="0" zz="-0.3" />
+                <controlpoint xx="0.5" yy="0.1" zz="-0.3" />
+
+                <controlpoint xx="-0.5" yy="0" zz="-0.1" />
+                <controlpoint xx="-0.3" yy="0" zz="-0.1" />
+                <controlpoint xx="-0.1" yy="0" zz="-0.1" />
+                <controlpoint xx="0.1" yy="0" zz="-0.1" />
+                <controlpoint xx="0.3" yy="0" zz="-0.1" />
+                <controlpoint xx="0.5" yy="0" zz="-0.1" />
+
+                <controlpoint xx="-0.5" yy="0" zz="0.1" />
+                <controlpoint xx="-0.3" yy="0.1" zz="0.1" />
+                <controlpoint xx="-0.1" yy="0" zz="0.1" />
+                <controlpoint xx="0.1" yy="0" zz="0.1" />
+                <controlpoint xx="0.3" yy="0" zz="0.1" />
+                <controlpoint xx="0.5" yy="0" zz="0.1" />
+
+                <controlpoint xx="-0.5" yy="0.1" zz="0.3" />
+                <controlpoint xx="-0.3" yy="0" zz="0.3" />
+                <controlpoint xx="-0.1" yy="0" zz="0.3" />
+                <controlpoint xx="0.1" yy="0" zz="0.3" />
+                <controlpoint xx="0.3" yy="0" zz="0.3" />
+                <controlpoint xx="0.5" yy="0.1" zz="0.3" />
+
+                <controlpoint xx="-0.5" yy="0.2" zz="0.5" />
+                <controlpoint xx="-0.3" yy="0.1" zz="0.5" />
+                <controlpoint xx="-0.1" yy="0.2" zz="0.5" />
+                <controlpoint xx="0.1" yy="0.2" zz="0.5" />
+                <controlpoint xx="0.3" yy="0.1" zz="0.5" />
+                <controlpoint xx="0.5" yy="0.2" zz="0.5" />
             </patch>
         </primitive>
         <primitive id="trunk">
@@ -108,13 +141,14 @@
     <components>
         <component id="root">
             <transformation>
+                <scale x="3" y="3" z="3"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
             <texture id="hi" length_s="1" length_t="1"/>
             <children>
-                <componentref id="palmeira" />
+                <primitiveref id="patch" />
             </children>
         </component>
 

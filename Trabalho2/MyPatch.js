@@ -13,13 +13,13 @@ class MyPatch extends CGFobject {
         this.npartsV = npartsV;
         this.controlPoints = controlPoints;
         this.type = "patch";
-        this.makeSurface(npointsU, npointsV, npartsU, npartsV, controlPoints);
+        this.makeSurface();
     }
 
-    makeSurface(npointsU, npointsV, npartsU, npartsV, controlPoints) {
-        let planeSurface = new CGFnurbsSurface(npointsU-1, npointsV-1, controlPoints);
-        this.surface = new CGFnurbsObject(this.scene, npartsU, npartsV, planeSurface);
-        this.texCoords = this.surface.texCoords;
+    makeSurface() {
+        this.texCoords = [];
+        let planeSurface = new CGFnurbsSurface(this.npointsU-1, this.npointsV-1, this.controlPoints);
+        this.surface = new CGFnurbsObject(this.scene, this.npartsU, this.npartsV, planeSurface);
     }
 
     display() {
