@@ -115,7 +115,13 @@
         
     <animations>
         <animation id="Inflate" >
-            <keyframe instant= "10">
+            <keyframe instant= "12">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
+            <keyframe instant= "12.4">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="3" y="3" z="3" />
@@ -123,27 +129,27 @@
         </animation>
 
         <animation id="FlyingCamel">
-            <keyframe instant= "7.5">
-                <translate x="30" y="0" z="0" />
+            <keyframe instant= "12">
+                <translate x="45" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>
 
         <animation id="Burst" >
-            <keyframe instant= "5">
+            <keyframe instant= "8.5">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "8">
+            <keyframe instant= "11.5">
                 <translate x="0" y="-.25" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1.25" y="1.25" z="1.25" />
             </keyframe>
 
-            <keyframe instant= "8.5">
+            <keyframe instant= "12">
                 <translate x="0" y="-.25" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1.5" z="1" />
@@ -151,19 +157,19 @@
         </animation>
 
         <animation id="BurstFail" >
-            <keyframe instant= "5">
+            <keyframe instant= "8.5">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "8">
+            <keyframe instant= "11.5">
                 <translate x="0" y="-.25" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1.25" y="1.25" z="1.25" />
             </keyframe>
 
-            <keyframe instant= "8.5">
+            <keyframe instant= "12">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x=".1" y=".1" z=".1" />
@@ -171,13 +177,13 @@
         </animation>
 
         <animation id="pyramidFlight" >
-            <keyframe instant= "5">
+            <keyframe instant= "8.5">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "8">
+            <keyframe instant= "12">
                 <translate x="0" y="1" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
@@ -185,19 +191,19 @@
         </animation>
 
         <animation id="pyramidSpin" >
-            <keyframe instant= "6">
+            <keyframe instant= "9.5">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "8">
+            <keyframe instant= "11.5">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="360" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "17">
+            <keyframe instant= "19">
                 <translate x="0" y="60" z="0" />
                 <rotate angle_x="0" angle_y="360" angle_z="0" />
                 <scale x="1" y="1" z="1" />
@@ -205,42 +211,36 @@
         </animation>
 
         <animation id="pyramidSpinFail" >
-            <keyframe instant= "6">
+            <keyframe instant= "9.5">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "8">
+            <keyframe instant= "11.4">
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="360" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "8.2">
+            <keyframe instant= "11.6">
                 <translate x="0" y="-.25" z="0" />
                 <rotate angle_x="-5" angle_y="360" angle_z="8" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "8.4">
+            <keyframe instant= "11.8">
                 <translate x="0" y="-.5" z="0" />
                 <rotate angle_x="3" angle_y="360" angle_z="4" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
 
-            <keyframe instant= "8.6">
+            <keyframe instant= "12">
                 <translate x="0" y="-.5" z="0" />
                 <rotate angle_x="0" angle_y="360" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>
-
-        <keyframe instant= "8">
-            <translate x="0" y="2" z="0" />
-            <rotate angle_x="0" angle_y="360" angle_z="0" />
-            <scale x="1" y="1" z="1" />
-        </keyframe>
 
         <animation id="spinning" >
             <keyframe instant= "2">
