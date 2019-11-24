@@ -114,6 +114,14 @@
     </transformations>
         
     <animations>
+        <animation id="Inflate" >
+            <keyframe instant= "10">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="3" y="3" z="3" />
+            </keyframe>
+        </animation>
+
         <animation id="FlyingCamel">
             <keyframe instant= "7.5">
                 <translate x="30" y="0" z="0" />
@@ -809,6 +817,7 @@
                 <translate x="0.3" y="0.6" z="0" />
                 <scale x="0.4" y="0.9" z="0.5" />
             </transformation>
+            <animationref id="Inflate" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -823,6 +832,7 @@
                 <translate x="-0.4" y="0.6" z="0" />
                 <scale x="0.4" y="0.9" z="0.5" />
             </transformation>
+            <animationref id="Inflate" />
             <materials>
                 <material id="inherit" />
             </materials>
