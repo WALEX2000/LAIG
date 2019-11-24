@@ -226,14 +226,6 @@
             <scale x="1" y="1" z="1" />
         </keyframe>
 
-        <animation id="boobJob" >
-                <keyframe instant= "10">
-                        <translate x="0" y="0" z="0" />
-                        <rotate angle_x="0" angle_y="0" angle_z="0" />
-                        <scale x="3" y="3" z="3" />
-                </keyframe>
-        </animation>
-
         <animation id="spinning" >
             <keyframe instant= "2">
                 <translate x="0" y="0" z="0" />
@@ -697,6 +689,7 @@
         <component id="CamelNeck">
         <transformation>
                 <translate x="1.1" y="0.6" z="0" />
+                <rotate axis="z" angle="30" />
                 <scale x="2" y="0.8" z="0.8" />
                 <rotate axis="y" angle="-90" />
             </transformation>
@@ -808,7 +801,6 @@
                 <translate x="0.3" y="0.6" z="0" />
                 <scale x="0.4" y="0.9" z="0.5" />
             </transformation>
-            <animationref id="boobJob" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -823,7 +815,6 @@
                 <translate x="-0.4" y="0.6" z="0" />
                 <scale x="0.4" y="0.9" z="0.5" />
             </transformation>
-            <animationref id="boobJob" />
             <materials>
                 <material id="inherit" />
             </materials>
