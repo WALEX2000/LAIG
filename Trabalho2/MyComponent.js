@@ -29,96 +29,15 @@ class MyComponent{
     //get ID and associate the animation to this component (ideally when display I'll just need to call animation.play())
     //A função animation.play vai pegar na animação, ver o tempo em que está e interpolar entre o keyframe anterior e o proximo
 
-    playAnimation(animation) {
-        //get current time
-        let currTimeStamp = performance.now();
-        let currentTime = (currTimeStamp - this.scene.time0)*0.001;
-
-        //determine the next and previous keyframe
-        let prevKeyFrameStartTime = 0;
-        let prevKeyFrame = null;
-        let nextKeyFrame = null;
-        for(let i = 0; i < animation.keyframes.length; i++) {
-            let keyframe = animation.keyframes[i];
-            if(keyframe.instant < currentTime) {
-                prevKeyFrame = keyframe;
-                prevKeyFrameStartTime = keyframe.instant;
-            }
-            else {
-                nextKeyFrame = keyframe;
-                break;
-            }
-        }
-
-        function getMatrix(transObj) {
-            let transfMatrix = mat4.create();
-
-            let translate = transObj.translate;
-            transfMatrix = mat4.translate(transfMatrix, transfMatrix, [translate.x, translate.y, translate.z]);
-
-            let scale = transObj.scale;
-            transfMatrix = mat4.scale(transfMatrix, transfMatrix, [scale.x, scale.y, scale.z]);
-
-            let rotation = transObj.rotate;
-            transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, rotation.x*DEGREE_TO_RAD);
-            transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, rotation.y*DEGREE_TO_RAD);
-            transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, rotation.z*DEGREE_TO_RAD);
-
-            return transfMatrix;
-        }
-
-        //Everywhere where matrices are being used I needs to replace it with a function that calculates a matrix based on the transformation values
-        //on the lerp I need to first lerp the transformation values and then calculate the matrix
-
-        if(nextKeyFrame == null) { //if animation has already ended
-            let animationKeyframe = animation.keyframes[animation.keyframes.length - 1];
-            this.scene.multMatrix(getMatrix(animationKeyframe.transforms));
-            return;
-        }
-
-        let defTranslate = {x: 0, y: 0, z: 0};
-        let defScale = {x: 1, y: 1, z: 1};
-        let defRotate = {x: 0, y: 0, z: 0};
-        let defaultTransform = {translate: defTranslate, scale: defScale, rotate: defRotate};
-        let transObj1 = (prevKeyFrame == null) ? defaultTransform : prevKeyFrame.transforms;
-        let transObj2 = nextKeyFrame.transforms;
-        let ammountOfLerp = (currentTime - prevKeyFrameStartTime) / (nextKeyFrame.instant - prevKeyFrameStartTime);
-
-        //interpolate between the 2 according to the current time
-        function lerpTransforms(transObj1, transObj2, ammountOfLerp) {
-            let newTransObj = {};
-
-            //Lerp translates
-            let translateX = (1 - ammountOfLerp) * transObj1.translate.x + ammountOfLerp * transObj2.translate.x;
-            let translateY = (1 - ammountOfLerp) * transObj1.translate.y + ammountOfLerp * transObj2.translate.y;
-            let translateZ = (1 - ammountOfLerp) * transObj1.translate.z + ammountOfLerp * transObj2.translate.z;
-            newTransObj.translate = {x: translateX, y: translateY, z: translateZ};
-
-            //Lerp Scale
-            let scaleX = (1 - ammountOfLerp) * transObj1.scale.x + ammountOfLerp * transObj2.scale.x;
-            let scaleY = (1 - ammountOfLerp) * transObj1.scale.y + ammountOfLerp * transObj2.scale.y;
-            let scaleZ = (1 - ammountOfLerp) * transObj1.scale.z + ammountOfLerp * transObj2.scale.z;
-            newTransObj.scale = {x: scaleX, y: scaleY, z: scaleZ};
-
-            //Lerp Rotate
-            let rotateX = (1 - ammountOfLerp) * transObj1.rotate.x + ammountOfLerp * transObj2.rotate.x;
-            let rotateY = (1 - ammountOfLerp) * transObj1.rotate.y + ammountOfLerp * transObj2.rotate.y;
-            let rotateZ = (1 - ammountOfLerp) * transObj1.rotate.z + ammountOfLerp * transObj2.rotate.z;
-            newTransObj.rotate = {x: rotateX, y: rotateY, z: rotateZ};
-
-            return getMatrix(newTransObj);
-        }
-        let transfMatrix = lerpTransforms(transObj1, transObj2, ammountOfLerp);
-
-        //apply new matrix
-        this.scene.multMatrix(transfMatrix);
-    }
-
     display(fatherMat, fatherTex, fatherLs, fatherLt) { //Recursive display loop
         if(!this.loaded) return; //In case there was some kind of error in the XML
 
         this.scene.multMatrix(this.transformation); //apply transformations
-        if(this.animation != null) this.playAnimation(this.animation); //apply animation transformation
+        if(this.animation != null) {
+            this.animation.update();
+            this.animation.apply();
+            //this.playAnimation(this.animation);
+        } //apply animation transformation
 
         let mat = this.materials.materials[this.materials.current]; //applying the current material
         let tex = this.texture.texture;

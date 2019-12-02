@@ -1228,7 +1228,7 @@ class MySceneGraph {
         for(let i = 0; i < animationsList.length; i++) {
             let animation = animationsList[i];
             let animObj = this.parseAnimation(animation);
-            this.animations[animObj.id] = animObj;
+            this.animations[animObj.getID()] = animObj;
         }
     }
 
@@ -1286,7 +1286,7 @@ class MySceneGraph {
         }
 
         let animObj = {id: animationID, keyframes: keyframeList};
-        return animObj;
+        return new KeyframeAnimation(this.scene, animObj);
     }
 
 
