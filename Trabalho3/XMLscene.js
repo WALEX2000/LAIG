@@ -12,6 +12,7 @@ class XMLscene extends CGFscene {
         super();
 
         this.interface = myinterface;
+        this.board;
     }
 
     /**
@@ -216,10 +217,12 @@ class XMLscene extends CGFscene {
             // Draw axis
             this.setDefaultAppearance();
             // Displays the scene (MySceneGraph function).
-            //this.graph.displayScene();
+            this.graph.displayScene();
+            this.board.display();
         }
 
         this.defaultMaterial.apply();
+        /*
         for (let y = 0; y < 2; y++) {
             for (let x = 0; x < 2; x++) {
                 this.defaultMaterial.setTexture(this.blackTileTexture);
@@ -249,6 +252,7 @@ class XMLscene extends CGFscene {
                 }
             }
         }
+        */
 
         this.logPicking();
         this.clearPickRegistration();

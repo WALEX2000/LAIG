@@ -1017,8 +1017,7 @@ class MySceneGraph {
 
             // Get id of the current component.
             var componentID = this.reader.getString(XMLcomponents[i], 'id');
-            if (componentID == null)
-                return "no ID defined for componentID";
+            if (componentID == null) return "no ID defined for componentID";
 
             grandChildren = XMLcomponents[i].children;
 
@@ -1206,7 +1205,19 @@ class MySceneGraph {
             if(componentID === this.idRoot) {
                 this.rootComponent = this.allComponents[componentID];
             }
+            else if(componentID == "whitePiece") {
+                this.whitePiece = this.allComponents[componentID];
+            } else if(componentID == "blackPiece") {
+                this.blackPiece = this.allComponents[componentID];
+            } else if(componentID == "whiteTile") {
+                this.whiteTile = this.allComponents[componentID];
+            } else if(componentID == "blackTile") {
+                this.blackTile = this.allComponents[componentID];
+            } else if(componentID == "divider") {
+                this.divider = this.allComponents[componentID];
+            }
         }
+        this.scene.board = new MyBoard(this.scene, this.whiteTile, this.blackTile, this.whitePiece, this.blackPiece, this.divider);
         
         //check if any component is not loaded.
         for(let component in this.allComponents) {

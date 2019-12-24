@@ -59,6 +59,13 @@
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
+
+        <material id="blackDiffuse" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
+            <specular r="0.3" g="0.3" b="0.3" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -75,10 +82,6 @@
     <primitives>
         <primitive id="plane">
             <plane npartsU="4" npartsV="4"/>
-        </primitive>
-
-        <primitive id="stone">
-            <sphere .../>
         </primitive>
     </primitives>
 
@@ -138,6 +141,7 @@
             </materials>
             <texture id="none" />
             <children>
+                <primitiveref id="plane"/>
             </children>
         </component>
 
@@ -145,10 +149,11 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="blackDiffuse" />
             </materials>
             <texture id="none" />
             <children>
+                <primitiveref id="plane"/>
             </children>
         </component>
 
@@ -163,4 +168,4 @@
             </children>
         </component>
     </components>
-<lxs>
+</lxs>
