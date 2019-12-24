@@ -38,6 +38,7 @@ class MyBoard {
             for(let col = 0; col < this.size; col++) {
                 this.scene.pushMatrix();
                 this.scene.translate(row, 0, col); //apply row on x and col on y TODO needs to account for tileSize..
+                this.scene.registerForPick(boardPos[1]*32+boardPos[0]*16+row*4+col, tile);
                 tile.display();
                 this.scene.popMatrix();
             }
