@@ -225,16 +225,19 @@ class XMLscene extends CGFscene {
         /*
         for (let y = 0; y < 2; y++) {
             for (let x = 0; x < 2; x++) {
-                this.defaultMaterial.setTexture(this.blackTileTexture);
                 for (let i = 0; i < 2; i++) {
                     for (let j = 0; j < 4; j++) {
+                        if(i)
+                            this.defaultMaterial.setTexture(this.blackTileTexture);
+                        else
+                            this.defaultMaterial.setTexture(this.whiteTileTexture);
+                        this.defaultMaterial.apply();
                         this.pushMatrix();
                         this.translate(x*6+i*3, 0.5, y*6+j);
                         this.registerForPick(64+y*16+x*8+i*4+j, this.piece);
                         this.piece.display();
                         this.popMatrix();
                     }
-                    this.defaultMaterial.setTexture(this.whiteTileTexture);
                 }
                 for (let i = 0; i < 4; i++) {
                     for (let j = 0; j < 4; j++) {
@@ -245,7 +248,7 @@ class XMLscene extends CGFscene {
                         this.defaultMaterial.apply();
                         this.pushMatrix();
                         this.translate(x*6+i, 0, y*6+j);
-                        this.registerForPick(y*32+x*16+i*4+j, this.tile);
+                        this.registerForPick(y*32+x*16+j*4+i, this.tile);
                         this.tile.display();
                         this.popMatrix();
                     }
