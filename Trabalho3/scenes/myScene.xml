@@ -37,19 +37,10 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-
-        <spot id="alienLight(Spot)" enabled="1" angle="5" exponent="2">
-            <location x="-10" y="15" z="-5" w="1"/>
-            <target x="3" y="-10" z="2" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r=".3" g="1" b=".3" a="1" />
-            <specular r=".2" g=".8" b=".2" a="1" />
-            <attenuation constant="0" linear="1" quadratic="0" />
-        </spot>
     </lights>
 
     <textures>
-        <texture id="shipHull" file="scenes/images/futuristic_blue.png" />
+        <texture id="ropeTex" file="scenes/images/ropeTex.jpg" />
     </textures>
 
     <materials>
@@ -65,6 +56,13 @@
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
             <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="greyDiffuse" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.26" g="0.29" b="0.30" a="1.0" />
+            <diffuse r=".26" g=".29" b=".30" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
     </materials>
 
@@ -82,6 +80,10 @@
     <primitives>
         <primitive id="plane">
             <plane npartsU="4" npartsV="4"/>
+        </primitive>
+
+        <primitive id="cylinder">
+            <cylinder base="1" top="1" height="1.0" slices="15" stacks="15" />
         </primitive>
     </primitives>
 
@@ -107,13 +109,14 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="tile"/>
             </children>
         </component>
 
         <!-- A partir daqui são especificações de como se fazem as peças e tiles do board-->
+
         <component id="tile">
             <transformation>
+                <translate x="0" y="1" z="0"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -122,6 +125,7 @@
             <children>
                 <componentref id="tileTop"/>
                 <componentref id="tileSides"/>
+                <componentref id="tileBorders"/>
                 <componentref id="tileBottom"/>
             </children>
         </component>
@@ -142,7 +146,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="greyDiffuse" />
             </materials>
             <texture id="none" />
             <children>
@@ -153,11 +157,80 @@
             </children>
         </component>
 
+        <component id="tileBorders">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="tileBorder1"/>
+                <componentref id="tileBorder2"/>
+                <componentref id="tileBorder3"/>
+                <componentref id="tileBorder4"/>
+            </children>
+        </component>
+
+        <component id="tileBorder1">
+            <transformation>
+                <translate x="0" y="-0.25" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="tileBorder"/>
+            </children>
+        </component>
+
+        <component id="tileBorder2">
+            <transformation>
+                <rotate axis="y" angle="90"/>
+                <translate x="0" y="-0.25" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="tileBorder"/>
+            </children>
+        </component>
+
+        <component id="tileBorder3">
+            <transformation>
+                <rotate axis="y" angle="180"/>
+                <translate x="0" y="-0.25" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="tileBorder"/>
+            </children>
+        </component>
+
+        <component id="tileBorder4">
+            <transformation>
+                <rotate axis="y" angle="270"/>
+                <translate x="0" y="-0.25" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="tileBorder"/>
+            </children>
+        </component>
+
         <component id="tileBorder">
             <transformation>
                 <rotate angle="90" axis="x"/>
-                <translate x="0" y="-1" z="0"/>
-                <scale x="1" y="0.5" z="1"/>
+                <scale x="1" y="1" z="0.5"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
@@ -174,12 +247,11 @@
                 <scale x="1" y="1" z="0.1"/>
             </transformation>
             <materials>
-                <material id="blackDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="none" />
             <children>
                 <primitiveref id="plane"/>
-                <componentref id="tileBorder"/>
             </children>
         </component>
 
@@ -189,12 +261,11 @@
                 <scale x="1" y="1" z="0.1"/>
             </transformation>
             <materials>
-                <material id="blackDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="none" />
             <children>
                 <primitiveref id="plane"/>
-                <componentref id="tileBorder"/>
             </children>
         </component>
 
@@ -204,12 +275,11 @@
                 <scale x="0.1" y="1" z="1"/>
             </transformation>
             <materials>
-                <material id="blackDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="none" />
             <children>
                 <primitiveref id="plane"/>
-                <componentref id="tileBorder"/>
             </children>
         </component>
 
@@ -219,12 +289,11 @@
                 <scale x="0.1" y="1" z="1"/>
             </transformation>
             <materials>
-                <material id="blackDiffuse" />
+                <material id="inherit" />
             </materials>
             <texture id="none" />
             <children>
                 <primitiveref id="plane"/>
-                <componentref id="tileBorder"/>
             </children>
         </component>
 
@@ -291,13 +360,17 @@
 
         <component id="divider">
             <transformation>
+                <translate x="-0.5" y="0.5" z="-0.5"/>
+                <scale x="0.25" y="0.25" z="10"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="none" />
+            <texture id="ropeTex" length_s="1" length_t="1"/>
             <children>
+                <primitiveref id="cylinder"/>
             </children>
         </component>
+
     </components>
 </lxs>

@@ -9,7 +9,7 @@ class MyBoard {
         this.scene = scene;
 
         this.size = 4; //Size of boards, to get from PROLOG App
-        this.spacing = 1; //Spacing between boards
+        this.spacing = 2; //Spacing between boards
     }
 
     //Dar display das Tiles e divider em posições corretas 
@@ -25,7 +25,7 @@ class MyBoard {
         this.drawBoard(this.whiteTile, [0,0]);
         this.drawBoard(this.blackTile, [1,0]);
         this.scene.pushMatrix();
-        this.scene.translate(0, this.size + this.spacing/2, 0);
+        this.scene.translate(this.size + this.spacing/2, 0, 0);
         this.divider.display();
         this.scene.popMatrix();
         this.drawBoard(this.whiteTile, [0,1]);

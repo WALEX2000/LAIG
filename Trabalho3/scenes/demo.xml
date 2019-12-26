@@ -1655,7 +1655,6 @@
             <texture id="none" />
             <children>
                 <primitiveref id="plane"/>
-                <!-- <componentref id="tileBorder"/> -->
             </children>
         </component>
 
