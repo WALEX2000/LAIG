@@ -16,6 +16,12 @@ class MyBoard {
     //Dar display das pieces em número e posição corretas
     display() {
         //Display 2 boards, a rope and a 2 other boards
+
+        /*
+        this.scene.pushMatrix();
+        this.scene.scale(4, 4, 4);
+        */
+
         this.drawBoard(this.whiteTile, [0,0]);
         this.drawBoard(this.blackTile, [1,0]);
         this.scene.pushMatrix();
@@ -25,10 +31,11 @@ class MyBoard {
         this.drawBoard(this.whiteTile, [0,1]);
         this.drawBoard(this.blackTile, [1,1]);
 
-        /* //TODO display pieces in appropriate locations
-        this.whitePiece.display();
-        this.blackPiece.display();
-        */
+        //this.scene.popMatrix();
+
+        //TODO display pieces in appropriate locations
+
+        //TODO display fallen pieces in appropriate locations
     }
 
     drawBoard(tile, boardPos) {
