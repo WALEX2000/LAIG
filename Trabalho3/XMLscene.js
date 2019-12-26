@@ -162,7 +162,7 @@ class XMLscene extends CGFscene {
 				for (var i = 0; i < this.pickResults.length; i++) {
                     let obj = this.pickResults[i][0];
                     let customId = this.pickResults[i][1];
-                    if(obj==this.tile) {
+                    if(obj==this.board.blackTile || obj==this.board.whiteTile) {
                         let BoardX = Math.floor(customId/32);
                         customId = customId % 32;
                         let BoardY = Math.floor(customId/16);
@@ -171,7 +171,7 @@ class XMLscene extends CGFscene {
                         customId = customId % 4;
                         let BoardColumn = customId;
                         console.log("Picked tile: Board ["+BoardX+","+BoardY+"], tile ["+BoardLine+","+BoardColumn+"].");
-                    } else if(obj==this.piece) {
+                    } else if(obj==this.board.whitePiece || obj == this.board.blackPiece) {
                         customId -= 64;
                         console.log("Picked piece "+customId+".");
                     }

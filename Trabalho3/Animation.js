@@ -41,15 +41,18 @@ class KeyframeAnimation extends Animation {
         let currentTime = (currTimeStamp - this.scene.time0)*0.001;
 
         //determine the next and previous keyframe
-        if(this.nextKeyframeIndex === this.keyframes.length) { //if animation has already ended
-            let animationKeyframe = this.keyframes[this.keyframes.length - 1];
-            this.animationMartix = getMatrix(animationKeyframe.transforms);
-            return;
-        }
 
         if(currentTime > this.keyframes[this.nextKeyframeIndex].instant) {
             this.currentKeyframeIndex++;
             this.nextKeyframeIndex++;
+        }
+
+        if(this.nextKeyframeIndex == this.keyframes.length) { //if animation has already ended
+            let animationKeyframe = this.keyframes[this.keyframes.length - 1];
+            this.animationMartix = getMatrix(animationKeyframe.transforms);
+            this.nextKeyframeIndex--;
+            this.currentKeyframeIndex--;
+            return;
         }
 
         function getMatrix(transObj) {
