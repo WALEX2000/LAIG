@@ -1222,7 +1222,7 @@ class MySceneGraph {
         //check if any component is not loaded.
         for(let component in this.allComponents) {
             if(!this.allComponents[component].isLoaded()) {
-                this.onXMLMinorError("Compoenent with id '" + component + "' has been referenced but doesn't exist");
+                this.onXMLMinorError("Component with id '" + component + "' has been referenced but doesn't exist");
             }
         }
     }

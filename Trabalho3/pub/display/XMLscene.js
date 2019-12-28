@@ -21,20 +21,12 @@ class XMLscene extends CGFscene {
      */
     init(application) {
         super.init(application);
+        //TEMP
+        postGameRequest("[start_game,0,pvp]", test);
 
         this.sceneInited = false;
         this.enableTextures(true);
         this.setPickEnabled(true);
-
-        this.defaultMaterial = new CGFappearance(this);
-        this.defaultMaterial.setAmbient(0.2, 0.2, 0.2, 1.0);
-        this.defaultMaterial.setDiffuse(0.5, 0.5, 0.5, 1.0);
-        this.defaultMaterial.setSpecular(0.5, 0.5, 0.5, 1.0);
-        this.defaultMaterial.setShininess(10.0);
-        this.whiteTileTexture = new CGFtexture(this, 'scenes/images/white_tile.jpg');
-        this.blackTileTexture = new CGFtexture(this, 'scenes/images/black_tile.jpg');
-        this.tile = new MyPlane(this, "tile", 4, 4);
-        this.piece = new MySphere(this, "sphere", 0.5, 10, 10);
 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -163,6 +155,7 @@ class XMLscene extends CGFscene {
                     let obj = this.pickResults[i][0];
                     let customId = this.pickResults[i][1];
                     if(obj==this.board.blackTile || obj==this.board.whiteTile) {
+                        customId -= 420;
                         let BoardX = Math.floor(customId/32);
                         customId = customId % 32;
                         let BoardY = Math.floor(customId/16);
@@ -171,9 +164,21 @@ class XMLscene extends CGFscene {
                         customId = customId % 4;
                         let BoardColumn = customId;
                         console.log("Picked tile: Board ["+BoardX+","+BoardY+"], tile ["+BoardLine+","+BoardColumn+"].");
-                    } else if(obj==this.board.whitePiece || obj == this.board.blackPiece) {
+                        postGameRequest("[hello]", test);
+                    } else if(obj==this.board.whitePiece) {
                         customId -= 64;
-                        console.log("Picked piece "+customId+".");
+                        console.log("Picked white piece "+customId+".");
+                        let position = this.board.whitePiecePositions[customId];
+                        let x = position[0]*4+position[2];
+                        let y = position[1]*4+position[3];
+                        postGameRequest("[get_moves_piece," + x + "," + y + "]", test);
+                    } else if(obj==this.board.blackPiece) {
+                        customId -= 80;
+                        console.log("Picked black piece "+customId+".");
+                        let position = this.board.blackPiecePositions[customId];
+                        let x = position[0]*4+position[2];
+                        let y = position[1]*4+position[3];
+                        postGameRequest("[get_moves_piece," + x + "," + y + "]", test);
                     }
 				}
 				this.pickResults.splice(0, this.pickResults.length);
@@ -221,44 +226,7 @@ class XMLscene extends CGFscene {
             this.board.display();
         }
 
-        this.defaultMaterial.apply();
-        /*
-        for (let y = 0; y < 2; y++) {
-            for (let x = 0; x < 2; x++) {
-                for (let i = 0; i < 2; i++) {
-                    for (let j = 0; j < 4; j++) {
-                        if(i)
-                            this.defaultMaterial.setTexture(this.blackTileTexture);
-                        else
-                            this.defaultMaterial.setTexture(this.whiteTileTexture);
-                        this.defaultMaterial.apply();
-                        this.pushMatrix();
-                        this.translate(x*6+i*3, 0.5, y*6+j);
-                        this.registerForPick(64+y*16+x*8+i*4+j, this.piece);
-                        this.piece.display();
-                        this.popMatrix();
-                    }
-                }
-                for (let i = 0; i < 4; i++) {
-                    for (let j = 0; j < 4; j++) {
-                        if((i+j)%2)
-                            this.defaultMaterial.setTexture(this.blackTileTexture);
-                        else
-                            this.defaultMaterial.setTexture(this.whiteTileTexture);
-                        this.defaultMaterial.apply();
-                        this.pushMatrix();
-                        this.translate(x*6+i, 0, y*6+j);
-                        this.registerForPick(y*32+x*16+j*4+i, this.tile);
-                        this.tile.display();
-                        this.popMatrix();
-                    }
-                }
-            }
-        }
-        */
-
         this.logPicking();
-        this.clearPickRegistration();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup

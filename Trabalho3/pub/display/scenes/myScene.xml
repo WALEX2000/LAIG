@@ -3,8 +3,8 @@
 
     <views default="mainFrame">
         <perspective id="mainFrame" near="0.1" far="1500" angle="45">
-            <from x="30" y="10" z="30" />
-            <to x="0" y="5" z="0" />
+            <from x="-10" y="10" z="0" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="closeUp" near="0.1" far="1500" angle="60">
@@ -41,6 +41,9 @@
 
     <textures>
         <texture id="ropeTex" file="scenes/images/ropeTex.jpg" />
+        <texture id="blackTileTex" file="scenes/images/black_tile.jpg" />
+        <texture id="whiteTileTex" file="scenes/images/white_tile.jpg" />
+        <texture id="woodTex" file="scenes/images/wood.jpg" />
     </textures>
 
     <materials>
@@ -85,6 +88,22 @@
         <primitive id="cylinder">
             <cylinder base="1" top="1" height="1.0" slices="15" stacks="15" />
         </primitive>
+
+        <primitive id="piece">
+            <patch npointsU="3" npointsV="3" npartsU="10" npartsV="10">
+                <controlpoint xx="0" yy="0" zz="-0.3" />
+                <controlpoint xx="0.5" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0.3" />
+
+                <controlpoint xx="0" yy="0" zz="-0.3" />
+                <controlpoint xx="0" yy="0.5" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0.3" />
+
+                <controlpoint xx="0" yy="0" zz="-0.3" />
+                <controlpoint xx="-0.5" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0.3" />
+            </patch>
+        </primitive>
     </primitives>
 
     <components>
@@ -116,12 +135,12 @@
 
         <component id="tile">
             <transformation>
-                <translate x="0" y="1" z="0"/>
+                <translate x="0" y="0.25" z="0"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="tileTop"/>
                 <componentref id="tileSides"/>
@@ -136,7 +155,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="plane"/>
             </children>
@@ -146,9 +165,9 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="greyDiffuse" />
+                <material id="whiteDiffuse" />
             </materials>
-            <texture id="none" />
+            <texture id="woodTex" length_s="1" length_t="1"/>
             <children>
                 <componentref id="tileSide1"/>
                 <componentref id="tileSide2"/>
@@ -163,7 +182,7 @@
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="none" />
+            <texture id="woodTex" length_s="1" length_t="1"/>
             <children>
                 <componentref id="tileBorder1"/>
                 <componentref id="tileBorder2"/>
@@ -177,9 +196,9 @@
                 <translate x="0" y="-0.25" z="0.5"/>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="tileBorder"/>
             </children>
@@ -191,9 +210,9 @@
                 <translate x="0" y="-0.25" z="0.5"/>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="tileBorder"/>
             </children>
@@ -205,9 +224,9 @@
                 <translate x="0" y="-0.25" z="0.5"/>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="tileBorder"/>
             </children>
@@ -219,9 +238,9 @@
                 <translate x="0" y="-0.25" z="0.5"/>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="tileBorder"/>
             </children>
@@ -233,9 +252,9 @@
                 <scale x="1" y="1" z="0.5"/>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="plane"/>
             </children>
@@ -249,7 +268,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="plane"/>
             </children>
@@ -263,7 +282,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="plane"/>
             </children>
@@ -277,7 +296,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="plane"/>
             </children>
@@ -291,7 +310,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="plane"/>
             </children>
@@ -305,7 +324,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="woodTex" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="plane"/>
             </children>
@@ -320,6 +339,7 @@
             </materials>
             <texture id="none" />
             <children>
+                <primitiveref id="piece" />
             </children>
         </component>
 
@@ -327,10 +347,11 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="blackDiffuse" />
             </materials>
             <texture id="none" />
             <children>
+                <primitiveref id="piece" />
             </children>
         </component>
 
@@ -340,7 +361,7 @@
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="none" />
+            <texture id="whiteTileTex" length_s="1" length_t="1"/>
             <children>
                 <componentref id="tile"/>
             </children>
@@ -350,9 +371,9 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="blackDiffuse" />
+                <material id="whiteDiffuse" />
             </materials>
-            <texture id="none" />
+            <texture id="blackTileTex" length_s="1" length_t="1"/>
             <children>
                 <componentref id="tile"/>
             </children>
@@ -360,7 +381,7 @@
 
         <component id="divider">
             <transformation>
-                <translate x="-0.5" y="0.5" z="-0.5"/>
+                <translate x="-0.5" y="0" z="-0.5"/>
                 <scale x="0.25" y="0.25" z="10"/>
             </transformation>
             <materials>
