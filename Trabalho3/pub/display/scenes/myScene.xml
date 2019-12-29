@@ -3,7 +3,7 @@
 
     <views default="mainFrame">
         <perspective id="mainFrame" near="0.1" far="1500" angle="45">
-            <from x="-10" y="10" z="0" />
+            <from x="0" y="10" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
 

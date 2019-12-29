@@ -49,9 +49,4 @@ processString([_Par=Val], R):-
 	Term =.. ListR,											% Create Term from ListR
 	Term.													% Call the Term
 
-%---------------------------------------------
-
-hello(_,_,Message):-
-	Message = "goodbye".
-
 :- server(8081).

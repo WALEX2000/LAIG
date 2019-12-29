@@ -21,8 +21,6 @@ class XMLscene extends CGFscene {
      */
     init(application) {
         super.init(application);
-        //TEMP
-        postGameRequest("[start_game,0,pvp]", test);
 
         this.sceneInited = false;
         this.enableTextures(true);
@@ -123,8 +121,10 @@ class XMLscene extends CGFscene {
         this.interface.createLightsDropdown(this.graph.lights);
 
         this.sceneInited = true;
+        postGameRequest("[start_game]", this.board.resetGame.bind(this.board));
 
         this.time0 = performance.now();
+        this.axis = new CGFaxis(this);
     }
 
     //function triggered by changing view in interface
@@ -148,44 +148,6 @@ class XMLscene extends CGFscene {
         this.render(this.cameras[this.selectedViewIndex]);
     }
 
-    logPicking() {
-		if (this.pickMode == false) {
-			if (this.pickResults != null && this.pickResults.length > 0) {
-				for (var i = 0; i < this.pickResults.length; i++) {
-                    let obj = this.pickResults[i][0];
-                    let customId = this.pickResults[i][1];
-                    if(obj==this.board.blackTile || obj==this.board.whiteTile) {
-                        customId -= 420;
-                        let BoardX = Math.floor(customId/32);
-                        customId = customId % 32;
-                        let BoardY = Math.floor(customId/16);
-                        customId = customId % 16;
-                        let BoardLine = Math.floor(customId/4);
-                        customId = customId % 4;
-                        let BoardColumn = customId;
-                        console.log("Picked tile: Board ["+BoardX+","+BoardY+"], tile ["+BoardLine+","+BoardColumn+"].");
-                        postGameRequest("[hello]", test);
-                    } else if(obj==this.board.whitePiece) {
-                        customId -= 64;
-                        console.log("Picked white piece "+customId+".");
-                        let position = this.board.whitePiecePositions[customId];
-                        let x = position[0]*4+position[2];
-                        let y = position[1]*4+position[3];
-                        postGameRequest("[get_moves_piece," + x + "," + y + "]", test);
-                    } else if(obj==this.board.blackPiece) {
-                        customId -= 80;
-                        console.log("Picked black piece "+customId+".");
-                        let position = this.board.blackPiecePositions[customId];
-                        let x = position[0]*4+position[2];
-                        let y = position[1]*4+position[3];
-                        postGameRequest("[get_moves_piece," + x + "," + y + "]", test);
-                    }
-				}
-				this.pickResults.splice(0, this.pickResults.length);
-			}
-		}
-	}
-
     render(camera) {
         // ---- BEGIN Background, camera and axis setup
 
@@ -202,6 +164,8 @@ class XMLscene extends CGFscene {
 
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
+
+        this.axis.display();
 
         this.pushMatrix();
 
@@ -226,7 +190,7 @@ class XMLscene extends CGFscene {
             this.board.display();
         }
 
-        this.logPicking();
+        this.board.checkPicking();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup

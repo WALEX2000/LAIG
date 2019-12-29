@@ -1,22 +1,22 @@
 :-use_module(library(lists)).
 
-valid_moves_by_piece(Board, Player, Y/X, ListOfMoves):-
+valid_moves_by_piece(Board, Player, Turn, Y/X, ListOfMoves):-
     board_size(Board, BoardSize),
     TotalSize is BoardSize*2,
-    findall([Yf/Xf], get_all_moves(Board, TotalSize, Player, Y/X, Yf/Xf), ListOfMoves).
+    findall([Yf/Xf], get_all_moves(Board, TotalSize, Player, Turn, Y/X, Yf/Xf), ListOfMoves).
 
-%Player: w|1, w|2, b|1, b|2 (White or Black, 1º ou 2º jogada)
+%Player: w,1, w,2, b,1, b,2 (White or Black, 1º ou 2º jogada)
 %LastMove comes in the following format [Yi/Xi, Yf/Xf]
 %ListOfMoves comes in the following format [[Yi/Xi, Yf/Xf],[Yi/Xi, Yf/Xf]]; o movimento pode estar vazio e corresponde a uma peça enimiga empurrada
-valid_moves(Board, Player, LastMove, ListOfMoves):-
+valid_moves(Board, Player, Turn, LastMove, ListOfMoves):-
     board_size(Board, BoardSize),
     TotalSize is BoardSize*2,
-    findall([[Yi/Xi, Yf/Xf], PiecePushed], get_all_moves(Board, TotalSize, Player, LastMove, Yi/Xi, Yf/Xf, PiecePushed), ListOfMoves).
+    findall([[Yi/Xi, Yf/Xf], PiecePushed], get_all_moves(Board, TotalSize, Player, Turn, LastMove, Yi/Xi, Yf/Xf, PiecePushed), ListOfMoves).
 
-valid_moves(Board, Player, ListOfMoves) :-
+valid_moves(Board, Player, Turn, ListOfMoves) :-
     board_size(Board, BoardSize),
     TotalSize is BoardSize*2,
-    findall([Yi/Xi, Yf/Xf], get_all_moves(Board, TotalSize, Player, Yi/Xi, Yf/Xf), ListOfMoves).
+    findall([Yi/Xi, Yf/Xf], get_all_moves(Board, TotalSize, Player, Turn, Yi/Xi, Yf/Xf), ListOfMoves).
 
 %gets all coordinates inside the board
 inside_board(TotalSize, Y/X):-
@@ -147,17 +147,17 @@ check_move2_destination(Board, LastMove, Yi/Xi, Yf/Xf, PieceType, PiecePushed):-
     %If enemy piece is push out of the board then PiecePushed will be [EYi/EXi] else  [EYi/EXi, EYf/EXf]
 
 %Acceptance function for moves a player can execute in the second turn
-get_all_moves(Board, TotalSize, PieceType|2, LastMove, Yi/Xi, Yf/Xf, PiecePushed) :-
+get_all_moves(Board, TotalSize, PieceType, 2, LastMove, Yi/Xi, Yf/Xf, PiecePushed) :-
     inside_board(TotalSize, Yi/Xi),
     get_move2_piece(Board, Yi/Xi, PieceType, LastMove),
     check_move2_destination(Board, LastMove, Yi/Xi, Yf/Xf, PieceType, PiecePushed).
 
 
 %Acceptance function for moves a player can execute in the first turn
-get_all_moves(Board, TotalSize, PieceType|1, Yi/Xi, Yf/Xf) :-
+get_all_moves(Board, TotalSize, PieceType, 1, Yi/Xi, Yf/Xf) :-
     inside_board(TotalSize, Yi/Xi),
     (get_move1_piece(TotalSize, PieceType, Board, Yi/Xi), check_move1_destination(Board, Yi/Xi, Yf/Xf)),
-    move([Yi/Xi, Yf/Xf],Board, TempBoard), valid_moves(TempBoard, PieceType|2, [Yi/Xi, Yf/Xf], ListOfMoves),
+    move([Yi/Xi, Yf/Xf],Board, TempBoard), valid_moves(TempBoard, PieceType, 2, [Yi/Xi, Yf/Xf], ListOfMoves),
     \+ListOfMoves = [].
 
 %Needs to have full board in order to check if there'll be any valid moves after this play is made
@@ -205,31 +205,31 @@ board_to_general_coords(Bx, By, BoardSize, Yl/Xl, Yg/Xg):-
 
 %​choose_move(+Board, +Level, +Player, -Move)​
 %Choose the move for a level 0 bot difficulty setting (Move 1)
-choose_move(Board, 0, PieceType|1, Move):-
-    valid_moves(Board, PieceType|1, ListOfMoves),
+choose_move(Board, 0, PieceType,1, Move):-
+    valid_moves(Board, PieceType,1, ListOfMoves),
     length(ListOfMoves, Size),
     Last is Size-1,
     X is random(Last),
     nth0(X, ListOfMoves, Move).
 %Choose the move for a level 1 bot difficulty setting (Move 1)
-choose_move(Board, 1, PieceType|1, Move):-
-    valid_moves(Board, PieceType|1, ListOfMoves),
+choose_move(Board, 1, PieceType,1, Move):-
+    valid_moves(Board, PieceType,1, ListOfMoves),
     %For each move in piece of moves give it a value and store it in a list
-    store_value_list(Board, ListOfMoves, PieceType|1, List),
+    store_value_list(Board, ListOfMoves, PieceType,1, List),
     %Now choose a random move from the list of moves with the highest value
     max_list(List, Max),
     get_random_max_move(ListOfMoves, List, Max, Move).
 
 %Choose the move for a level 0 bot difficulty setting (Move 2)
-choose_move(Board, 0, PieceType|2, LastMove, Move):-
-    valid_moves(Board, PieceType|2, LastMove, ListOfMoves),
+choose_move(Board, 0, PieceType,2, LastMove, Move):-
+    valid_moves(Board, PieceType,2, LastMove, ListOfMoves),
     length(ListOfMoves, Size),
     X is random(Size),
     nth0(X, ListOfMoves, Move).
 %Choose the move for a level 1 bot difficulty setting (Move 2)
-choose_move(Board, 1, PieceType|2, LastMove, Move):-
-    valid_moves(Board, PieceType|2, LastMove, ListOfMoves),
-    store_value_list(Board, ListOfMoves, PieceType|2, List),
+choose_move(Board, 1, PieceType,2, LastMove, Move):-
+    valid_moves(Board, PieceType,2, LastMove, ListOfMoves),
+    store_value_list(Board, ListOfMoves, PieceType,2, List),
     max_list(List, Max),
     get_random_max_move(ListOfMoves, List, Max, Move).
 
@@ -241,14 +241,14 @@ get_random_max_move(ListOfMoves, List, Max, Move):-
     nth0(ChosenIndex, ListOfMoves, Move).
 
 %Returns a List of Values in List
-store_value_list(Board, ListOfMoves, PieceType|MoveN, List):-
-    store_value_list(Board, ListOfMoves, PieceType|MoveN, [], List).
+store_value_list(Board, ListOfMoves, PieceType,MoveN, List):-
+    store_value_list(Board, ListOfMoves, PieceType,MoveN, [], List).
 
-store_value_list(Board, [Move|Rest], PieceType|MoveN, List, FinalList):-
-    value(Board, PieceType|MoveN, Move, Value),
+store_value_list(Board, [Move|Rest], PieceType,MoveN, List, FinalList):-
+    value(Board, PieceType,MoveN, Move, Value),
     append(List,[Value],NewList),
-    store_value_list(Board, Rest, PieceType|MoveN, NewList, FinalList).
-store_value_list(_, [], _, List, FinalList):- FinalList = List.
+    store_value_list(Board, Rest, PieceType,MoveN, NewList, FinalList).
+store_value_list(_, [], _, _, List, FinalList):- FinalList = List.
 
 
 %Checks if game is over
@@ -301,16 +301,16 @@ has_black_piece([_|Rest]):-
 %Evaluate a board for a plyer's first move
 %On the first move I must give positive value +2 for each piece I can eat in the next move,
 %negative value -1 for each piece the enemy could eat on the next move if the board was like this
-value(Board, PieceType|1, Move, Value):-
-    valid_moves(Board, PieceType|2, Move, ListOfMoves),
+value(Board, PieceType,1, Move, Value):-
+    valid_moves(Board, PieceType,2, Move, ListOfMoves),
     count_eat_moves(ListOfMoves, Count),
     move(Move, Board, TempBoard),
     ((PieceType = w, EnemyPiece = b);
      (PieceType = b, EnemyPiece = w)),
-    get_enemy_move_value(TempBoard, 1, EnemyPiece|1, EnemyValue),
+    get_enemy_move_value(TempBoard, 1, EnemyPiece,1, EnemyValue),
     %get the best move's value from the enemy if he played his first move on a board with our Move
     Value is Count * 2 - EnemyValue.
-value([BP1|[BP2]], PieceType|2, _, Value):-
+value([BP1|[BP2]], PieceType,2, _, Value):-
     %Go board by board and count how many friendly pieces vs how many enemy's pieces
     nth0(0, BP1, B1), nth0(1, BP1, B2), nth0(0, BP2, B3), nth0(1, BP2, B4),
     value_small_board(B1, PieceType, V1),
@@ -319,20 +319,20 @@ value([BP1|[BP2]], PieceType|2, _, Value):-
     value_small_board(B4, PieceType, V4),
     Value is V1 + V2 + V3 + V4.
 
-get_enemy_move_value(TempBoard, 1, EnemyPiece|1, Value):-
-    valid_moves(TempBoard, EnemyPiece|1, ListOfMoves), %Get all valid moves enemy can play on first move
-    store_enemy_value_list(TempBoard, ListOfMoves, EnemyPiece|1, List),
+get_enemy_move_value(TempBoard, 1, EnemyPiece,1, Value):-
+    valid_moves(TempBoard, EnemyPiece,1, ListOfMoves), %Get all valid moves enemy can play on first move
+    store_enemy_value_list(TempBoard, ListOfMoves, EnemyPiece,1, List),
     max_list(List, Value).
 
 %Stores a list of values that the enemy has for his next play if it were to happen now
-store_enemy_value_list(Board, ListOfMoves, PieceType|1, List):-
-    store_enemy_value_list(Board, ListOfMoves, PieceType|1, [], List).
-store_enemy_value_list(Board, [Move|Rest], PieceType|1, List, FinalList):-
-    valid_moves(Board, PieceType|2, Move, ListOfMoves), %Get all valid moves enemy can play on his second move for a given first move
+store_enemy_value_list(Board, ListOfMoves, PieceType,1, List):-
+    store_enemy_value_list(Board, ListOfMoves, PieceType,1, [], List).
+store_enemy_value_list(Board, [Move|Rest], PieceType,1, List, FinalList):-
+    valid_moves(Board, PieceType,2, Move, ListOfMoves), %Get all valid moves enemy can play on his second move for a given first move
     count_eat_moves(ListOfMoves, Value),
     append(List,[Value],NewList),
-    store_enemy_value_list(Board, Rest, PieceType|1, NewList, FinalList).
-store_enemy_value_list(_, [], _, List, FinalList):- FinalList = List.
+    store_enemy_value_list(Board, Rest, PieceType,1, NewList, FinalList).
+store_enemy_value_list(_, [], _,_, List, FinalList):- FinalList = List.
 
 %[[Yi/Xi, Yf/Xf],[Yi/Xf, Yf/Xf]]
 %Adds 1 to the moves where [_|[[_|[]]]]
