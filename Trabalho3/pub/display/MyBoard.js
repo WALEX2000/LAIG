@@ -8,7 +8,7 @@ function translatePLtoJSboard(PLBoard) {
 
 class MyBoard {
     //Todos estes parametros são Components
-    constructor(scene, whiteTile, blackTile, whitePiece, blackPiece, divider) {
+    constructor(scene, whiteTile, blackTile, whitePiece, blackPiece, divider, indicator) {
 
         this.whiteTile = whiteTile;
         this.blackTile = blackTile;
@@ -17,6 +17,7 @@ class MyBoard {
         this.blackPiece = blackPiece;
 
         this.divider = divider;
+        this.indicator = indicator;
 
         this.scene = scene;
 
@@ -61,6 +62,8 @@ class MyBoard {
         this.drawPieces(this.blackPiecePositions, this.blackPiece, 16);
         this.scene.popMatrix();
 
+        this.time = performance.now();
+
         this.showSuggestions();
         //TODO display fallen pieces in appropriate locations
     }
@@ -84,9 +87,10 @@ class MyBoard {
     drawPieces(positions, piece, offset) {
         for (let i = 0; i < positions.length; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(positions[i][0] * (this.size + this.spacing), 0.25, positions[i][1] * (this.size + this.spacing));
+            this.scene.translate(positions[i][0] * (this.size + this.spacing), 0.40, positions[i][1] * (this.size + this.spacing));
             this.scene.translate(positions[i][2]-this.size-this.spacing/2,0,positions[i][3]-this.size-this.spacing/2);
             this.scene.registerForPick(64+i+offset, piece);
+            this.scene.rotate(Math.PI/2, 0, 0, 1);
             piece.display();
             this.scene.clearPickRegistration();
             this.scene.popMatrix();
@@ -150,8 +154,8 @@ class MyBoard {
             this.scene.pushMatrix();
             this.scene.translate(Math.floor(this.validMoves[i][1]/4) * (this.size + this.spacing), 1, Math.floor(this.validMoves[i][0]/4) * (this.size + this.spacing));
             this.scene.translate(this.validMoves[i][1]%4-this.size-this.spacing/2,0,this.validMoves[i][0]%4-this.size-this.spacing/2);
-            this.scene.translate(0.5,0,0.5);
-            this.whitePiece.display();
+            this.scene.translate(0.5,0.01*Math.sin(0.01*this.time),0.5);
+            this.indicator.display();
             this.scene.popMatrix();
         }
     }

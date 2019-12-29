@@ -774,7 +774,8 @@ class MySceneGraph {
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
                     grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'plane' &&
-                    grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'cylinder2')) {
+                    grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'cylinder2') &&
+                    grandChildren[0].nodeName != 'OBJprimitive') {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch or cylinder2)"
             }
 
@@ -974,6 +975,15 @@ class MySceneGraph {
 
                 let cylinder2 = new MyCylinder2(this.scene, primitiveId, base, top, height, slices, stacks);
                 this.primitives[primitiveId] = cylinder2;
+            } else if (primitiveType == 'OBJprimitive') {
+                // path
+                var path = this.reader.getString(grandChildren[0], 'path');
+                if (path == null)
+                    return "unable to parse path of the primitive coordinates for ID = " + primitiveId;
+
+                var OBJprimitive = new CGFOBJModel(this.scene, path);
+                OBJprimitive.texCoords = [];
+                this.primitives[primitiveId] = OBJprimitive;
             } else {
                 console.warn("To do: Parse other primitives.");
             }
@@ -1215,9 +1225,11 @@ class MySceneGraph {
                 this.blackTile = this.allComponents[componentID];
             } else if(componentID == "divider") {
                 this.divider = this.allComponents[componentID];
+            } else if(componentID == "indicator") {
+                this.indicator = this.allComponents[componentID];
             }
         }
-        this.scene.board = new MyBoard(this.scene, this.whiteTile, this.blackTile, this.whitePiece, this.blackPiece, this.divider);
+        this.scene.board = new MyBoard(this.scene, this.whiteTile, this.blackTile, this.whitePiece, this.blackPiece, this.divider, this.indicator);
         
         //check if any component is not loaded.
         for(let component in this.allComponents) {
