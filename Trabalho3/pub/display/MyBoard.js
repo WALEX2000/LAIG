@@ -154,7 +154,8 @@ class MyBoard {
             this.scene.pushMatrix();
             this.scene.translate(Math.floor(this.validMoves[i][1]/4) * (this.size + this.spacing), 1, Math.floor(this.validMoves[i][0]/4) * (this.size + this.spacing));
             this.scene.translate(this.validMoves[i][1]%4-this.size-this.spacing/2,0,this.validMoves[i][0]%4-this.size-this.spacing/2);
-            this.scene.translate(0.5,0.1*Math.sin(0.01*this.time),0.5);
+            this.scene.translate(0.5,0.05*Math.sin(0.005*this.time),0.5);
+            this.scene.rotate(0.0005*this.time, 0, 1, 0);
             this.indicator.display();
             this.scene.popMatrix();
         }
