@@ -396,8 +396,9 @@
 
         <component id="indicator">
             <transformation>
+                <translate x="0" y="0" z="0.05" />
                 <rotate axis="x" angle="-90" />
-                <scale x="0.01" y="0.01" z="0.01" />
+                <scale x="0.005" y="0.005" z="0.005" />
             </transformation>
             <materials>
                 <material id="greenSpecular" />
