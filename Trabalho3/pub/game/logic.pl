@@ -1,9 +1,14 @@
 :-use_module(library(lists)).
 
-valid_moves_by_piece(Board, Player, Turn, Y/X, ListOfMoves):-
+valid_moves_by_piece(Board, Player, 1, Y/X, ListOfMoves):-
     board_size(Board, BoardSize),
     TotalSize is BoardSize*2,
-    findall([Yf/Xf], get_all_moves(Board, TotalSize, Player, Turn, Y/X, Yf/Xf), ListOfMoves).
+    findall([Yf/Xf], get_all_moves(Board, TotalSize, Player, 1, Y/X, Yf/Xf), ListOfMoves).
+
+valid_moves_by_piece(Board, Player, 2, LastMove, Y/X, ListOfMoves, PiecePushed):-
+    board_size(Board, BoardSize),
+    TotalSize is BoardSize*2,
+    findall([[Yf/Xf],PiecePushed], get_all_moves(Board, TotalSize, Player, 2, LastMove, Y/X, Yf/Xf, PiecePushed), ListOfMoves).
 
 %Player: w,1, w,2, b,1, b,2 (White or Black, 1º ou 2º jogada)
 %LastMove comes in the following format [Yi/Xi, Yf/Xf]

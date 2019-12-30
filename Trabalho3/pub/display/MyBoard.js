@@ -9,15 +9,15 @@ function translatePLtoJSboard(PLBoard) {
 class MyBoard {
     //Todos estes parametros são Components
     constructor(scene, whiteTile, blackTile, whitePiece, blackPiece, divider, indicator) {
-
         this.whiteTile = whiteTile;
         this.blackTile = blackTile;
-
         this.whitePiece = whitePiece;
         this.blackPiece = blackPiece;
-
         this.divider = divider;
         this.indicator = indicator;
+        this.player = 'w';
+        this.turn = 1;
+        this.phase = "PiecePicking"
 
         this.scene = scene;
 
@@ -34,8 +34,8 @@ class MyBoard {
         for(let x = 0; x < 2; x++) {
             for(let y = 0; y < 2; y++) {
                 for (let row = 0; row < 4; row++) {
-                    this.blackPiecePositions.push([x,y,row,0]);
-                    this.whitePiecePositions.push([x,y,row,3]);
+                    this.blackPiecePositions.push([x*4+row, y*4]);
+                    this.whitePiecePositions.push([x*4+row, y*4+3]);
                 }
             }
         }
@@ -75,7 +75,7 @@ class MyBoard {
             for(let col = 0; col < this.size; col++) {
                 this.scene.pushMatrix();
                 this.scene.translate(row-this.size-this.spacing/2, 0, col-this.size-this.spacing/2); //apply row on x and col on y TODO needs to account for tileSize..
-                this.scene.registerForPick(420+boardPos[0]*32+boardPos[1]*16+row*4+col, tile);
+                this.scene.registerForPick(420+(boardPos[0]*4+row)*8+boardPos[1]*4+col, tile);
                 tile.display();
                 this.scene.clearPickRegistration();
                 this.scene.popMatrix();
@@ -87,8 +87,8 @@ class MyBoard {
     drawPieces(positions, piece, offset) {
         for (let i = 0; i < positions.length; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(positions[i][0] * (this.size + this.spacing), 0.40, positions[i][1] * (this.size + this.spacing));
-            this.scene.translate(positions[i][2]-this.size-this.spacing/2,0,positions[i][3]-this.size-this.spacing/2);
+            this.scene.translate(Math.floor(positions[i][0]/4) * (this.size + this.spacing), 0.40, Math.floor(positions[i][1]/4) * (this.size + this.spacing));
+            this.scene.translate(positions[i][0]%4-this.size-this.spacing/2,0,positions[i][1]%4-this.size-this.spacing/2);
             this.scene.registerForPick(64+i+offset, piece);
             this.scene.rotate(Math.PI/2, 0, 0, 1);
             piece.display();
@@ -103,32 +103,41 @@ class MyBoard {
 				for (var i = 0; i < this.scene.pickResults.length; i++) {
                     let obj = this.scene.pickResults[i][0];
                     let customId = this.scene.pickResults[i][1];
-                    if(obj==this.blackTile || obj==this.whiteTile) {
-                        customId -= 420;
-                        let BoardX = Math.floor(customId/32);
-                        customId = customId % 32;
-                        let BoardY = Math.floor(customId/16);
-                        customId = customId % 16;
-                        let BoardLine = Math.floor(customId/4);
-                        customId = customId % 4;
-                        let BoardColumn = customId;
-                        console.log("Picked tile: Board ["+BoardX+","+BoardY+"], tile ["+BoardLine+","+BoardColumn+"].");
-                    } else if(obj==this.whitePiece) {
-                        customId -= 64;
-                        console.log("Picked white piece "+customId+".");
-                        let position = this.whitePiecePositions[customId];
-                        let x = position[0]*4+position[2];
-                        let y = position[1]*4+position[3];
-                        console.log("Position: x="+x+",y="+y);
-                        postGameRequest("[get_moves_piece," + translateJStoPLboard(this.board_state) + ",w,1," + x + "," + y + "]", this.getPieceMoves.bind(this));
-                    } else if(obj==this.blackPiece) {
-                        customId -= 80;
-                        console.log("Picked black piece "+customId+".");
-                        let position = this.blackPiecePositions[customId];
-                        let x = position[0]*4+position[2];
-                        let y = position[1]*4+position[3];
-                        console.log("Position: x="+x+",y="+y);
-                        postGameRequest("[get_moves_piece," + translateJStoPLboard(this.board_state) + ",b,1," + x + "," + y + "]", this.getPieceMoves.bind(this));
+                    switch(this.phase) {
+                        case "PiecePicking":
+                            if(obj==this.whitePiece || obj == this.blackPiece) {
+                                customId -= 64;
+                                let position;
+                                if(obj == this.blackPiece) {
+                                    customId -= 16;
+                                    position = this.blackPiecePositions[customId];
+                                } else position = this.whitePiecePositions[customId];
+                                this.selectedPieceX = position[0];
+                                this.selectedPieceY = position[1];
+                                console.log("Position: x="+this.selectedPieceX+",y="+this.selectedPieceY);
+                                if(this.turn==1)
+                                    postGameRequest("[get_moves_piece," + translateJStoPLboard(this.board_state) + ","+this.player+",1,"+this.selectedPieceX + "," + this.selectedPieceY + "]", this.getPieceMovesTurn1.bind(this));
+                                else
+                                    postGameRequest("[get_moves_piece," + translateJStoPLboard(this.board_state) + ","+this.player+",2,["+this.lastMoveStartY+"/"+this.lastMoveStartX+","+this.lastMoveEndY+"/"+this.lastMoveEndX+"],"+this.selectedPieceX + "," + this.selectedPieceY + "]", this.getPieceMovesTurn2.bind(this));
+                                console.log("[get_moves_piece," + translateJStoPLboard(this.board_state) + ","+this.player+",2,["+this.lastMoveStartY+"/"+this.lastMoveStartX+","+this.lastMoveEndY+"/"+this.lastMoveEndX+"],"+this.selectedPieceX + "," + this.selectedPieceY + "]");
+                            }
+                            break;
+                        case "TilePicking":
+                            if(obj==this.blackTile || obj==this.whiteTile) {
+                                customId -= 420;
+                                this.selectedTileX = Math.floor(customId/8);
+                                customId = customId % 8;
+                                this.selectedTileY = customId;
+                                if(this.turn==1)
+                                    postGameRequest("[move_piece," + translateJStoPLboard(this.board_state) + "," + this.player + "," + this.turn + "," + this.selectedPieceX + "," + this.selectedPieceY + "," + this.selectedTileX + "," + this.selectedTileY + "]", this.movePiece.bind(this));
+                                else
+                                    postGameRequest("[move_piece," + translateJStoPLboard(this.board_state) + "," + this.player + "," + this.turn + "," + this.selectedPieceX + "," + this.selectedPieceY + "," + this.selectedTileX + "," + this.selectedTileY + ",["+this.lastMoveStartY+"/"+this.lastMoveStartX+","+this.lastMoveEndY+"/"+this.lastMoveEndX+"]]", this.movePiece.bind(this))
+                                console.log("[move_piece," + translateJStoPLboard(this.board_state) + "," + this.player + "," + this.turn + "," + this.selectedPieceX + "," + this.selectedPieceY + "," + this.selectedTileX + "," + this.selectedTileY + ",["+this.lastMoveStartY+"/"+this.lastMoveStartX+","+this.lastMoveEndY+"/"+this.lastMoveEndX+"]]");
+                                console.log("Picked tile ["+this.selectedTileX+","+this.selectedTileY+"].");
+                                this.phase="PiecePicking";
+                                this.validMoves = [];
+                            }
+                            break;
                     }
 				}
 				this.scene.pickResults.splice(0, this.scene.pickResults.length);
@@ -142,11 +151,27 @@ class MyBoard {
         console.log(this.board_state);
     }
 
-    getPieceMoves(reply) {
+    getPieceMovesTurn1(reply) {
         let response = JSON.parse(reply.target.response);
         console.log(response);
         this.validMoves = JSON.parse(response.argA.replace(/\//g,','));
         console.log(this.validMoves);
+        if(this.validMoves.length!=0) {
+            this.phase="TilePicking";
+        }
+    }
+
+    getPieceMovesTurn2(reply) {
+        let response = JSON.parse(reply.target.response);
+        console.log(response);
+        console.log(this.validMoves);
+        this.validMoves = JSON.parse(response.argA.replace(/\//g,','));
+        if(this.validMoves.length!=0)
+            this.validMoves = this.validMoves[0];
+        console.log(this.validMoves);
+        if(this.validMoves.length!=0) {
+            this.phase="TilePicking";
+        }
     }
 
     showSuggestions() {
@@ -158,6 +183,59 @@ class MyBoard {
             this.scene.rotate(0.0005*this.time, 0, 1, 0);
             this.indicator.display();
             this.scene.popMatrix();
+        }
+    }
+
+    movePiece(reply) {
+        let response = JSON.parse(reply.target.response);
+        if(response.message == "Invalid move")
+            console.log("Invalid move");
+        else {
+            this.board_state = translatePLtoJSboard(response.argA);
+            let positions;
+            if(response.argB[0] != "_") {
+                let piecePushed = JSON.parse(response.argB.replace(/\//g,','));
+                let enemyPositions;
+                if(this.player == 'w')
+                    enemyPositions = this.blackPiecePositions;
+                else
+                    enemyPositions = this.whitePiecePositions
+                if(piecePushed.length == 4) {
+                    for (let i = 0; i < enemyPositions.length; i++) {
+                        if(enemyPositions[i][0] == piecePushed[1] && enemyPositions[i][1] == piecePushed[0]) {
+                            enemyPositions[i] = [piecePushed[3], piecePushed[2]];
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < enemyPositions.length; i++) {
+                        if(enemyPositions[i][0] == piecePushed[1] && enemyPositions[i][1] == piecePushed[0]) {
+                            enemyPositions[i] = [-0.2,0];
+                        }
+                    }
+                }
+            }
+            if(this.player == 'w')
+                positions = this.whitePiecePositions;
+            else
+                positions = this.blackPiecePositions
+            for (let i = 0; i < positions.length; i++) {
+                if(positions[i][0] == this.selectedPieceX && positions[i][1] == this.selectedPieceY) {
+                    positions[i] = [this.selectedTileX, this.selectedTileY];
+                }
+            }
+            if(this.turn==1) {
+                this.turn=2;
+                this.lastMoveStartX = this.selectedPieceX;
+                this.lastMoveStartY = this.selectedPieceY;
+                this.lastMoveEndX = this.selectedTileX;
+                this.lastMoveEndY = this.selectedTileY;
+            } else {
+                this.turn=1;
+                if(this.player=='w')
+                    this.player='b';
+                else this.player='w';
+            }
+            console.log("Move successful");
         }
     }
 }

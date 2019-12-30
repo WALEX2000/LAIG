@@ -8,8 +8,28 @@ start_game(InitialBoard, _, Message):-
     create_board(4, InitialBoard),
     Message = "Game reset.".
 
-get_moves_piece(Board, Player, Turn, X, Y, Moves,_,Message):-
-    valid_moves_by_piece(Board, Player, Turn, Y/X, Moves),
-    %valid_moves(Board, Player, Turn, Moves),
+get_moves_piece(Board, Player, 1, X, Y, Moves,_,Message):-
+    valid_moves_by_piece(Board, Player, 1, Y/X, Moves),
     length(Moves, NumMoves),
     atom_concat(NumMoves, " moves found for piece", Message).
+
+get_moves_piece(Board, Player, 2, LastMove, X, Y, Moves,PiecePushed,Message):-
+    valid_moves_by_piece(Board, Player, 2, LastMove, Y/X, Moves, PiecePushed),
+    length(Moves, NumMoves),
+    atom_concat(NumMoves, " moves found for piece", Message).
+
+move_piece(Board, Player, 1, Xi, Yi, Xf, Yf, NewBoard, _, Message):-
+    valid_moves_by_piece(Board, Player, 1, Yi/Xi, Moves),
+    member([Yf/Xf],Moves),
+    move([Yi/Xi, Yf/Xf], Board, NewBoard),
+    Message = "Move successful".
+move_piece(_, _, _, _, _, _, _, _, _, Message):-
+    Message = "Invalid move".
+
+move_piece(Board, Player, 2, Xi, Yi, Xf, Yf, LastMove, NewBoard, PiecePushed, Message):-
+    valid_moves_by_piece(Board, Player, 2, LastMove, Yi/Xi, Moves, PiecePushed),
+    member([[Yf/Xf],PiecePushed],Moves),
+    move([Yi/Xi, Yf/Xf], Board, NewBoard),
+    Message = "Move successful".
+move_piece(_, _, _, _, _, _, _, _, _, _, Message):-
+    Message = "Invalid move".
