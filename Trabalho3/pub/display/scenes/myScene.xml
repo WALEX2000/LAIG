@@ -332,7 +332,7 @@
 
         <component id="whitePiece">
             <transformation>
-                <scale x="0.02" y="0.002" z="0.002" />
+                <scale x="0.002" y="0.002" z="0.002" />
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
@@ -345,7 +345,7 @@
 
         <component id="blackPiece">
             <transformation>
-                <scale x="0.02" y="0.002" z="0.002" />
+                <scale x="0.002" y="0.002" z="0.002" />
             </transformation>
             <materials>
                 <material id="blackDiffuse" />

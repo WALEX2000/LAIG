@@ -1,6 +1,6 @@
 class Animation { //abstract class
     constructor(scene) {
-        this.animationMartix = mat4.create();
+        this.animationMatrix = mat4.create();
         this.scene = scene;
     }
 
@@ -31,7 +31,7 @@ class KeyframeAnimation extends Animation {
     }
 
     apply() {
-        this.scene.multMatrix(this.animationMartix);
+        this.scene.multMatrix(this.animationMatrix);
     }
 
 
@@ -49,7 +49,7 @@ class KeyframeAnimation extends Animation {
 
         if(this.nextKeyframeIndex == this.keyframes.length) { //if animation has already ended
             let animationKeyframe = this.keyframes[this.keyframes.length - 1];
-            this.animationMartix = getMatrix(animationKeyframe.transforms);
+            this.animationMatrix = getMatrix(animationKeyframe.transforms);
             this.nextKeyframeIndex--;
             this.currentKeyframeIndex--;
             return;
@@ -119,6 +119,74 @@ class KeyframeAnimation extends Animation {
             return getMatrix(newTransObj);
         }
         //apply new matrix
-        this.animationMartix = lerpTransforms(transObj1, transObj2, ammountOfLerp);
+        this.animationMatrix = lerpTransforms(transObj1, transObj2, ammountOfLerp);
+    }
+}
+
+class PieceMoveAnimation extends KeyframeAnimation {
+    constructor(scene, x, z) {
+        x = -x;
+        let t = performance.now()*0.001-0.6;
+        let keyframeAnimation = new KeyframeAnimation(scene, 
+            {keyframes: [
+                {instant: t, transforms: {translate: {x: 0, y: 0, z:0},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:0, z:0}}},
+                {instant: t+0.2, transforms: {translate: {x: 50, y: 0, z:0},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*60, z:Math.sign(x)*60}}},
+                {instant: t+0.4, transforms: {translate: {x: 75, y: x*100, z:z*100},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*120, z:Math.sign(x)*120}}},
+                {instant: t+0.6, transforms: {translate: {x: 75, y: x*250, z:z*250},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*180, z:Math.sign(x)*180}}},
+                {instant: t+0.8, transforms: {translate: {x: 50, y: x*400, z:z*400},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*270, z:Math.sign(x)*270}}},
+                {instant: t+1, transforms: {translate: {x: 0, y: x*500, z:z*500},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*360, z:Math.sign(x)*360}}}
+            ], id: 0});
+                
+        super(scene, keyframeAnimation);
+        this.x = -x;
+        this.z = z;
+    }
+}
+
+class PieceCaptureAnimation extends KeyframeAnimation {
+    constructor(scene, x, z, height) {
+        let tempX = Math.floor(x/4) * (4+2) + x%4 -4-2/2;
+        let tempZ = Math.floor(z/4) * (4+2) + z%4 -4-2/2;
+        x = tempX-5;
+        z = -tempZ;
+        height = height*100;
+        let t = performance.now()*0.001-0.6;
+        let keyframeAnimation = new KeyframeAnimation(scene, 
+            {keyframes: [
+                {instant: t, transforms: {translate: {x: 0, y: 0, z:0},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:0, z:0}}},
+                {instant: t+0.2, transforms: {translate: {x: 50+height/2, y: 0, z:0},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*60, z:Math.sign(x)*60}}},
+                {instant: t+0.4, transforms: {translate: {x: 75+height, y: x*100, z:z*100},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*120, z:Math.sign(x)*120}}},
+                {instant: t+0.6, transforms: {translate: {x: 75+height, y: x*250, z:z*250},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*180, z:Math.sign(x)*180}}},
+                {instant: t+0.8, transforms: {translate: {x: 50+height, y: x*400, z:z*400},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*270, z:Math.sign(x)*270}}},
+                {instant: t+1, transforms: {translate: {x: height, y: x*500, z:z*500},
+                                            scale: {x:1, y:1, z:1},
+                                            rotate: {x: 0, y:-Math.sign(z)*360, z:Math.sign(x)*360}}}
+            ], id: 0});
+                
+        super(scene, keyframeAnimation);
+        this.x = -x;
+        this.z = z;
     }
 }

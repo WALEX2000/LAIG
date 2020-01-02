@@ -61,6 +61,11 @@ class MyInterface extends CGFinterface {
         }
     }
 
+    createGamemodeDropdown() {
+        this.gui.add(this.scene.board, 'gamemode', ['PvP', 'PvM', 'MvM']).onChange(this.scene.board.checkDifficultyChange.bind(this.scene.board)).name('Gamemode');
+        this.gui.add(this.scene.board, 'difficulty', [0,1]).name('Difficulty');
+    }
+
     update() {
         if(!this.pressM && this.isKeyPressed('KeyM')) {
             this.scene.nextMaterial();

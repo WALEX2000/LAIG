@@ -26,6 +26,10 @@ class MyComponent{
         this.animation = animation;
     }
 
+    clone() {
+        return new MyComponent(true, this.transformation, this.materials, this.texture, this.children, this.scene, this.animation);
+    }
+
     //get ID and associate the animation to this component (ideally when display I'll just need to call animation.play())
     //A função animation.play vai pegar na animação, ver o tempo em que está e interpolar entre o keyframe anterior e o proximo
 

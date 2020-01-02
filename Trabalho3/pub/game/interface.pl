@@ -33,3 +33,14 @@ move_piece(Board, Player, 2, Xi, Yi, Xf, Yf, LastMove, NewBoard, PiecePushed, Me
     Message = "Move successful".
 move_piece(_, _, _, _, _, _, _, _, _, _, Message):-
     Message = "Invalid move".
+
+bot_move(Board, Difficulty, PieceType, 1, NewBoard, Move, Message):-
+    choose_move(Board, Difficulty, PieceType, 1, Move),
+    move(Move,Board,NewBoard),
+    Message = "Bot move successful".
+
+bot_move(Board, Difficulty, PieceType, 2, LastMove, NewBoard, [Move,PiecePushed], Message):-
+    choose_move(Board, Difficulty, PieceType, 2, LastMove, [Move, PiecePushed]),
+    push_piece(Board, IntermediateBoard, PiecePushed),
+    move(Move,IntermediateBoard,NewBoard),
+    Message = "Bot move successful".

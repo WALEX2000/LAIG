@@ -120,8 +120,9 @@ class XMLscene extends CGFscene {
         this.initLights();
         this.interface.createLightsDropdown(this.graph.lights);
 
+        this.interface.createGamemodeDropdown();
+
         this.sceneInited = true;
-        postGameRequest("[start_game]", this.board.resetGame.bind(this.board));
 
         this.time0 = performance.now();
         this.axis = new CGFaxis(this);
