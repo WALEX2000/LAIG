@@ -107,6 +107,7 @@
             <children>
             </children>
         </component>
+
         <!-- A partir daqui são especificações de como se fazem as peças e tiles do board-->
 
         <component id="tile">
