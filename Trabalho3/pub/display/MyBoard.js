@@ -32,6 +32,7 @@ class MyBoard {
         this.phase = "PiecePicking"
         this.boardSize = 4; //Size of boards, to get from PROLOG App
         this.boardSpacing = 2; //Spacing between boards
+        this.busy = false;
 
         this.whitePieces = [];
         this.blackPieces = [];
@@ -224,6 +225,9 @@ class MyBoard {
     }
 
     resetGame() {
+        if(this.busy)
+            return;
+        this.busy = true;
         this.resetGame2();
     }
 
@@ -237,9 +241,13 @@ class MyBoard {
             await new Promise(r => setTimeout(r, 200));
         }
         this.timer.resetCount();
+        this.busy=false;
     }
 
     replayGame() {
+        if(this.busy)
+            return;
+        this.busy=true;
         this.replayGame2();
     }
 
@@ -332,6 +340,8 @@ class MyBoard {
                 else this.player='w';
             }
         }
+        this.phase = "TilePicking";
+        this.busy=false;
     }
 
     getPieceMovesTurn1(reply) {
@@ -658,8 +668,8 @@ class MyBoard {
 
     rotateGameCamera() {
         if(this.gameCameraRotation > 0) {
-            this.gameCameraRotation -= Math.PI/16;
-            this.gameCamera.orbit(CGFcameraAxis.Y, Math.PI/16);
+            this.gameCameraRotation -= Math.PI/32;
+            this.gameCamera.orbit(CGFcameraAxis.Y, Math.PI/32);
         }
     }
 
