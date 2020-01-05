@@ -39,6 +39,20 @@
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
 
+        <material id="blackDiffuse" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="greenSpecular" shininess="2">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.7" b="0.3" a="1.0" />
+            <diffuse r="0.3" g="1.0" b="0.4" a="1.0" />
+            <specular r="0.6" g="1.0" b="0.7" a="1.0" />
+        </material>
+
         <material id="blueGlass" shininess="1">
             <emission r="0" g="0" b="0" a="1" />
             <ambient r="0.607" g="0.886" b="0.949" a=".8" />
@@ -144,9 +158,6 @@
         <primitive id="sphere">
             <sphere radius="1" slices="10" stacks="10" />
         </primitive>
-        <primitive id="cylinder">
-            <cylinder top="3" base="1" height="5" slices="10" stacks="10" />
-        </primitive>
         <primitive id="torus">
             <torus inner = "0.25" outer = "1" slices="10" loops="20" />
         </primitive>
@@ -167,6 +178,19 @@
         </primitive>
         <primitive id="skyboxRectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+
+        <primitive id="plane">
+            <plane npartsU="4" npartsV="4"/>
+        </primitive>
+        <primitive id="cylinder">
+            <cylinder base="1" top="1" height="1.0" slices="15" stacks="15" />
+        </primitive>
+        <primitive id="piece">
+            <OBJprimitive path="models/gamePiece.obj" />
+        </primitive>
+        <primitive id="arrow">
+            <OBJprimitive path="models/arrow.obj" />
         </primitive>
     </primitives>
 

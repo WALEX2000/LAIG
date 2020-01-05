@@ -27,6 +27,15 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
+    resetInterface() {
+        this.gui.destroy();
+        this.gui = new dat.GUI();
+        this.createGraphDropdown();
+        this.createCameraDropdown();
+        this.createLightsDropdown();
+        this.createGameInterface();
+    }
+
     /**
      * initKeys
      */
@@ -58,10 +67,10 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'selectedViewIndex', this.scene.viewIds).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View');
     }
 
-    createLightsDropdown(lights) {
+    createLightsDropdown() {
         let lightsDropdownFolder = this.gui.addFolder("Lights");
-        for (let key in lights) {
-            lightsDropdownFolder.add(lights[key], '0').name(key);
+        for (let key in this.scene.graphs[this.scene.selectedGraph].lights) {
+            lightsDropdownFolder.add(this.scene.graphs[this.scene.selectedGraph].lights[key], '0').name(key);
         }
     }
 

@@ -1230,8 +1230,6 @@ class MySceneGraph {
             }
         }
         
-        this.scene.board = new MyBoard(this.scene, this.whiteTile, this.blackTile, this.whitePiece, this.blackPiece, this.divider, this.indicator, this.boardTable);
-        
         //check if any component is not loaded.
         for(let component in this.allComponents) {
             if(!this.allComponents[component].isLoaded()) {
