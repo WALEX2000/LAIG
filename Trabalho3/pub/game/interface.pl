@@ -29,7 +29,8 @@ move_piece(_, _, _, _, _, _, _, _, _, Message):-
 move_piece(Board, Player, 2, Xi, Yi, Xf, Yf, LastMove, NewBoard, PiecePushed, Message):-
     valid_moves_by_piece(Board, Player, 2, LastMove, Yi/Xi, Moves, PiecePushed),
     member([[Yf/Xf],PiecePushed],Moves),
-    move([Yi/Xi, Yf/Xf], Board, NewBoard),
+    push_piece(Board, IntermediateBoard, PiecePushed),
+    move([Yi/Xi, Yf/Xf], IntermediateBoard, NewBoard),
     Message = "Move successful".
 move_piece(_, _, _, _, _, _, _, _, _, _, Message):-
     Message = "Invalid move".
@@ -38,7 +39,6 @@ bot_move(Board, Difficulty, PieceType, 1, NewBoard, Move, Message):-
     choose_move(Board, Difficulty, PieceType, 1, Move),
     move(Move,Board,NewBoard),
     Message = "Bot move successful".
-
 bot_move(Board, Difficulty, PieceType, 2, LastMove, NewBoard, [Move,PiecePushed], Message):-
     choose_move(Board, Difficulty, PieceType, 2, LastMove, [Move, PiecePushed]),
     push_piece(Board, IntermediateBoard, PiecePushed),
