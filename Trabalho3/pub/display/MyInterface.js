@@ -61,9 +61,17 @@ class MyInterface extends CGFinterface {
         }
     }
 
-    createGamemodeDropdown() {
-        this.gui.add(this.scene.board, 'gamemode', ['PvP', 'PvM', 'MvM']).onChange(this.scene.board.checkDifficultyChange.bind(this.scene.board)).name('Gamemode');
-        this.gui.add(this.scene.board, 'difficulty', [0,1]).name('Difficulty');
+    createGameInterface() {
+        let settingsFolder = this.gui.addFolder("Settings");
+        settingsFolder.add(this.scene.board, 'gamemode', ['PvP', 'PvM', 'MvM']).onChange(this.scene.board.checkGamemodeChange.bind(this.scene.board)).name('Gamemode');
+        settingsFolder.add(this.scene.board, 'difficulty', [0,1]).name('Difficulty');
+        settingsFolder.add(this.scene.board, 'boardSize', [3,4,5,6]).name('Board Size').onChange(this.scene.board.updateBoardSize.bind(this.scene.board));
+        settingsFolder.add(this.scene.board.timer, 'maxTime', [15, 30, 45]).name('Timeout').onChange(this.scene.board.timer.resetCount.bind(this.scene.board.timer));
+        this.gui.add(this.scene.board, 'initGame').name('Start game');
+        this.gui.add(this.scene.board, 'resetGame').name('Reset game');
+        this.gui.add(this.scene.board, 'replayGame').name('Replay game');
+        this.gui.add(this.scene.board, 'undoMove').name('Undo move');
+        this.gui.add(this.scene.board, 'gameCameraActive').onChange(this.scene.board.toggleGameCamera.bind(this.scene.board)).name('Game Camera');
     }
 
     update() {

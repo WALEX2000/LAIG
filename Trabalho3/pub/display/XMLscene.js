@@ -120,7 +120,7 @@ class XMLscene extends CGFscene {
         this.initLights();
         this.interface.createLightsDropdown(this.graph.lights);
 
-        this.interface.createGamemodeDropdown();
+        this.interface.createGameInterface();
 
         this.sceneInited = true;
 
@@ -146,7 +146,7 @@ class XMLscene extends CGFscene {
         if(!this.sceneInited)
             return;
 
-        this.render(this.cameras[this.selectedViewIndex]);
+        this.render(this.camera);
     }
 
     render(camera) {
@@ -156,9 +156,6 @@ class XMLscene extends CGFscene {
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-        this.camera = camera;
-        this.interface.setActiveCamera(camera);
-
         // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();
         this.loadIdentity();
@@ -166,7 +163,7 @@ class XMLscene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
 
-        this.axis.display();
+        //this.axis.display();
 
         this.pushMatrix();
 

@@ -9,6 +9,12 @@ function translatePLtoJSboard(PLBoard) {
 class MyBoard {
     //Todos estes parametros são Components
     constructor(scene, whiteTile, blackTile, whitePiece, blackPiece, divider, indicator) {
+        this.scene = scene;
+        this.gameCamera = new CGFcamera(45, 0.1, 1500, vec3.fromValues(0.0,10.0,10.0), vec3.fromValues(0.0,0.0,0.0));
+        this.gameCameraActive = false;
+        this.gameCameraRotation = 0;
+        this.timer = new MyTimer(this.scene, this);
+        
         this.whiteTile = whiteTile;
         this.blackTile = blackTile;
         this.whiteTile.type = "tile";
@@ -26,13 +32,13 @@ class MyBoard {
         this.boardSize = 4; //Size of boards, to get from PROLOG App
         this.boardSpacing = 2; //Spacing between boards
 
-        this.scene = scene;
-
         this.whitePieces = [];
         this.blackPieces = [];
-        postGameRequest("[start_game]", this.resetGame.bind(this));
         this.validMoves = [];
-        this.pileHeight = 0;
+        this.moves = [];
+        this.boards = [];
+        this.pileHeight = -2.25;
+        this.piecePile = [];
     }
 
     initPieces() {
@@ -40,29 +46,39 @@ class MyBoard {
         this.blackPieces = [];
         for(let x = 0; x < 2; x++) {
             for(let y = 0; y < 2; y++) {
-                for (let row = 0; row < 4; row++) {
+                for (let row = 0; row < this.boardSize; row++) {
                     let newBlackPiece = this.blackPiece.clone();
                     newBlackPiece.transformation = mat4.create();
-                    mat4.translate(newBlackPiece.transformation, newBlackPiece.transformation, [x * (this.boardSize + this.boardSpacing), 0.40, y * (this.boardSize + this.boardSpacing)]);
+                    mat4.translate(newBlackPiece.transformation, newBlackPiece.transformation, [x * (this.boardSize + this.boardSpacing), 0.35, y * (this.boardSize + this.boardSpacing)]);
                     mat4.translate(newBlackPiece.transformation, newBlackPiece.transformation, [row-this.boardSize-this.boardSpacing/2,0,-this.boardSize-this.boardSpacing/2]);
                     mat4.scale(newBlackPiece.transformation, newBlackPiece.transformation, [0.002, 0.002, 0.002]);
                     mat4.rotateZ(newBlackPiece.transformation, newBlackPiece.transformation, Math.PI/2);
                     newBlackPiece.position = [x*this.boardSize+row,y*this.boardSize];
+                    newBlackPiece.animation = new PieceFallingAnimation(this.scene);
                     newBlackPiece.type = "blackPiece";
                     this.blackPieces.push(newBlackPiece);
                     
                     let newWhitePiece = this.whitePiece.clone();
                     newWhitePiece.transformation = mat4.create();
-                    mat4.translate(newWhitePiece.transformation, newWhitePiece.transformation, [x * (this.boardSize + this.boardSpacing), 0.40, y * (this.boardSize + this.boardSpacing)]);
-                    mat4.translate(newWhitePiece.transformation, newWhitePiece.transformation, [row-this.boardSize-this.boardSpacing/2,0,3-this.boardSize-this.boardSpacing/2]);
+                    mat4.translate(newWhitePiece.transformation, newWhitePiece.transformation, [x * (this.boardSize + this.boardSpacing), 0.35, y * (this.boardSize + this.boardSpacing)]);
+                    mat4.translate(newWhitePiece.transformation, newWhitePiece.transformation, [row-this.boardSize-this.boardSpacing/2,0,this.boardSize-1-this.boardSize-this.boardSpacing/2]);
                     mat4.scale(newWhitePiece.transformation, newWhitePiece.transformation, [0.002, 0.002, 0.002]);
                     mat4.rotateZ(newWhitePiece.transformation, newWhitePiece.transformation, Math.PI/2);
-                    newWhitePiece.position = [x*this.boardSize+row,y*this.boardSize+3];
+                    newWhitePiece.position = [x*this.boardSize+row,y*this.boardSize+this.boardSize-1];
                     newWhitePiece.type = "whitePiece";
+                    newWhitePiece.animation = new PieceFallingAnimation(this.scene);
                     this.whitePieces.push(newWhitePiece);
                 }
             }
         }
+    }
+
+    updateBoardSize() {
+        this.boardSize = Number(this.boardSize);
+        this.moves=[];
+        this.boards=[];
+        this.player='w';
+        this.turn=1;
     }
 
     //Dar display das Tiles e divider em posições corretas 
@@ -70,20 +86,25 @@ class MyBoard {
     display() {
         //Display 2 boards, a rope and a 2 other boards
         this.scene.pushMatrix();
+        this.scene.translate(0,0.75,0);
+        this.timer.display();
+        this.scene.popMatrix();
+        this.rotateGameCamera();
+        this.scene.pushMatrix();
         this.scene.translate(0.5,0,0.5);
         this.drawBoard(this.whiteTile, [0,0]);
         this.drawBoard(this.blackTile, [1,0]);
         this.scene.pushMatrix();
-        this.scene.translate(0,0,-1);
+        this.scene.translate(-0.5,0,-1);
         this.scene.rotate(Math.PI/2, 0, 1, 0);
-        this.scene.translate(0, 0, -this.boardSize-this.boardSpacing/2);
+        this.scene.scale(1,1,this.boardSize*2+this.boardSpacing);
         this.divider.display();
         this.scene.popMatrix();
         this.drawBoard(this.whiteTile, [0,1]);
         this.drawBoard(this.blackTile, [1,1]);
 
         this.drawPieces(this.whitePieces, 0);
-        this.drawPieces(this.blackPieces, 16);
+        this.drawPieces(this.blackPieces, this.boardSize*4);
         this.scene.popMatrix();
 
         this.time = performance.now();
@@ -99,7 +120,7 @@ class MyBoard {
             for(let col = 0; col < this.boardSize; col++) {
                 this.scene.pushMatrix();
                 this.scene.translate(row-this.boardSize-this.boardSpacing/2, 0, col-this.boardSize-this.boardSpacing/2); //apply row on x and col on y TODO needs to account for tileSize..
-                this.scene.registerForPick(420+(boardPos[0]*this.boardSize+row)*8+boardPos[1]*this.boardSize+col, tile);
+                this.scene.registerForPick(420+(boardPos[0]*this.boardSize+row)*(this.boardSize*2)+boardPos[1]*this.boardSize+col, tile);
                 tile.display();
                 this.scene.clearPickRegistration();
                 this.scene.popMatrix();
@@ -138,14 +159,14 @@ class MyBoard {
                         case "TilePicking":
                             if(obj==this.blackTile || obj==this.whiteTile) {
                                 customId -= 420;
-                                this.selectedTileX = Math.floor(customId/8);
-                                customId = customId % 8;
+                                this.selectedTileX = Math.floor(customId/(this.boardSize*2));
+                                customId = customId % (this.boardSize*2);
                                 this.selectedTileY = customId;
+                                console.log("Picked tile ["+this.selectedTileX+","+this.selectedTileY+"].");
                                 if(this.turn==1)
                                     postGameRequest("[move_piece," + translateJStoPLboard(this.board_state) + "," + this.player + "," + this.turn + "," + this.selectedPieceX + "," + this.selectedPieceY + "," + this.selectedTileX + "," + this.selectedTileY + "]", this.movePiece.bind(this));
                                 else
                                     postGameRequest("[move_piece," + translateJStoPLboard(this.board_state) + "," + this.player + "," + this.turn + "," + this.selectedPieceX + "," + this.selectedPieceY + "," + this.selectedTileX + "," + this.selectedTileY + ",["+this.lastMoveStartY+"/"+this.lastMoveStartX+","+this.lastMoveEndY+"/"+this.lastMoveEndX+"]]", this.movePiece.bind(this))
-                                console.log("Picked tile ["+this.selectedTileX+","+this.selectedTileY+"].");
                                 this.phase="PiecePicking";
                                 this.validMoves = [];
                             }
@@ -154,7 +175,7 @@ class MyBoard {
                                 customId -= 64;
                                 let position;
                                 if(obj.type == "blackPiece") {
-                                    customId -= 16;
+                                    customId -= this.boardSize*4;
                                     position = this.blackPieces[customId].position;
                                 } else position = this.whitePieces[customId].position;
                                 this.selectedPieceX = position[0];
@@ -171,12 +192,124 @@ class MyBoard {
 				this.scene.pickResults.splice(0, this.scene.pickResults.length);
 			}
 		}
-	}
+    }
+    
+    initGame() {
+        postGameRequest("[start_game,"+this.boardSize+"]", this.startGame.bind(this));
+    }
 
-    resetGame(reply) {
+    startGame(reply) {
         let response = JSON.parse(reply.target.response);
         this.board_state = translatePLtoJSboard(response.argA);
         this.initPieces();
+        this.timer.resetCount();
+        this.phase = 'TilePicking';
+        if(!this.isHumanPlaying()) 
+            postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + "]", this.botMovePiece.bind(this));
+    }
+
+    resetGame() {
+        this.timer.resetCount();
+        this.validMoves = [];
+        if(this.player == 'b') {
+            this.gameCameraRotation += Math.PI;
+        }
+        while(this.moves.length != 0)
+            this.undoMove(false);
+    }
+
+    replayGame() {
+        this.replayGame2();
+    }
+
+    async replayGame2() {
+        let moves = [];
+        let boards = [];
+        for(let i = 0; i < this.moves.length; i++) {
+            moves.push(this.moves[i]);
+            boards.push(this.boards[i]);
+        }
+        this.resetGame();
+        this.phase = "gameOver";
+        this.timer.stopCount();
+        this.boards=boards;
+        this.board_state = this.boards[this.boards.length-1];
+        await new Promise(r => setTimeout(r, 500));
+        for(let i = 0; i < moves.length; i++) {
+            await new Promise(r => setTimeout(r, 500));
+            if(this.phase != 'gameOver')
+                return;
+            let move = moves[i];
+            let pieces;
+            let piecePushed;
+            if(this.player == 'w')
+                pieces = this.whitePieces;
+            else
+                pieces = this.blackPieces;
+            if(move.length!=0) {
+                if(Array.isArray(move[0])) {
+                    piecePushed = move[1];
+                    move = move[0];
+                    this.moves.push([move,piecePushed])
+                } else {
+                    this.moves.push(move);
+                }
+            }  
+
+            if(piecePushed != undefined && piecePushed != []) {
+                let enemyPieces;
+                if(this.player == 'w')
+                    enemyPieces = this.blackPieces;
+                else
+                    enemyPieces = this.whitePieces;
+                if(piecePushed.length == 4) {
+                    for (let i = 0; i < enemyPieces.length; i++) {
+                        if(enemyPieces[i].position[0] == piecePushed[1] && enemyPieces[i].position[1] == piecePushed[0]) {
+                            enemyPieces[i].position[0] = piecePushed[3];
+                            enemyPieces[i].position[1] = piecePushed[2];
+                            if(enemyPieces[i].animation != null)
+                                mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [enemyPieces[i].animation.y, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
+                            enemyPieces[i].animation = new PieceMoveAnimation(this.scene, piecePushed[3]-piecePushed[1], piecePushed[2]-piecePushed[0]);
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < enemyPieces.length; i++) {
+                        if(enemyPieces[i].position[0] == piecePushed[1] && enemyPieces[i].position[1] == piecePushed[0]) {
+                            if(enemyPieces[i].animation != null)
+                                mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [enemyPieces[i].animation.y, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
+                            enemyPieces[i].animation = new PieceCaptureAnimation(this.scene, enemyPieces[i].position[0], enemyPieces[i].position[1], this.pileHeight, this.boardSize, this.boardSpacing);
+                            enemyPieces[i].position[0] = -1;
+                            enemyPieces[i].position[1] = -1;
+                            this.piecePile.push(enemyPieces[i]);
+                            this.pileHeight += 0.5;
+                        }
+                    }
+                }
+            }
+            if(move.length != 0) {
+                for (let i = 0; i < pieces.length; i++) {
+                    if(pieces[i].position[0] == move[1] && pieces[i].position[1] == move[0]) {
+                        pieces[i].position[0] = move[3];
+                        pieces[i].position[1] = move[2];
+                        if(pieces[i].animation != null)
+                            mat4.translate(pieces[i].transformation, pieces[i].transformation, [pieces[i].animation.y, -pieces[i].animation.x*500, pieces[i].animation.z*500]);
+                        pieces[i].animation = new PieceMoveAnimation(this.scene, move[3]-move[1], move[2]-move[0]);
+                    }
+                }
+            }
+
+            await new Promise(r => setTimeout(r, 500));
+
+            if(this.turn==1) {
+                this.turn=2;
+            } else {
+                this.turn=1;
+                this.gameCameraRotation += Math.PI;
+                if(this.player=='w')
+                    this.player='b';
+                else this.player='w';
+            }
+        }
     }
 
     getPieceMovesTurn1(reply) {
@@ -214,9 +347,11 @@ class MyBoard {
         if(response.message == "Invalid move")
             console.log("Invalid move");
         else {
+            this.boards.push(this.board_state);
             this.board_state = translatePLtoJSboard(response.argA);
             if(response.argB[0] != "_") {
                 let piecePushed = JSON.parse(response.argB.replace(/\//g,','));
+                this.moves.push([[this.selectedPieceY,this.selectedPieceX,this.selectedTileY,this.selectedTileX],piecePushed]);
                 let enemyPieces;
                 if(this.player == 'w')
                     enemyPieces = this.blackPieces;
@@ -228,22 +363,24 @@ class MyBoard {
                             enemyPieces[i].position[0] = this.selectedTileX;
                             enemyPieces[i].position[1] = this.selectedTileY;
                             if(enemyPieces[i].animation != null)
-                                mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [0, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
-                            enemyPieces[i].animation = new PieceMoveAnimation(this.scene, piecePushed[3]-piecePushed[1], piecePushed[0]-piecePushed[2]);
+                                mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [enemyPieces[i].animation.y, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
+                            enemyPieces[i].animation = new PieceMoveAnimation(this.scene, piecePushed[3]-piecePushed[1], piecePushed[2]-piecePushed[0]);
                         }
                     }
                 } else {
                     for (let i = 0; i < enemyPieces.length; i++) {
                         if(enemyPieces[i].position[0] == piecePushed[1] && enemyPieces[i].position[1] == piecePushed[0]) {
                             if(enemyPieces[i].animation != null)
-                                mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [0, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
-                            enemyPieces[i].animation = new PieceCaptureAnimation(this.scene, enemyPieces[i].position[0], enemyPieces[i].position[1]);
-                            enemyPieces[i].position[0] = -1;
-                            enemyPieces[i].position[1] = -1;
+                                mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [enemyPieces[i].animation.y, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
+                                enemyPieces[i].animation = new PieceCaptureAnimation(this.scene, enemyPieces[i].position[0], enemyPieces[i].position[1], this.pileHeight, this.boardSize, this.boardSpacing);
+                                enemyPieces[i].position[0] = -1;
+                                enemyPieces[i].position[1] = -1;
+                                this.piecePile.push(enemyPieces[i]);
+                                this.pileHeight += 0.5;
                         }
                     }
                 }
-            }
+            } else this.moves.push([this.selectedPieceY,this.selectedPieceX,this.selectedTileY,this.selectedTileX]);
             let pieces;
             if(this.player == 'w')
                 pieces = this.whitePieces;
@@ -254,10 +391,13 @@ class MyBoard {
                     pieces[i].position[0] = this.selectedTileX;
                     pieces[i].position[1] = this.selectedTileY;
                     if(pieces[i].animation != null)
-                        mat4.translate(pieces[i].transformation, pieces[i].transformation, [0, -pieces[i].animation.x*500, pieces[i].animation.z*500]);
+                        mat4.translate(pieces[i].transformation, pieces[i].transformation, [pieces[i].animation.y, -pieces[i].animation.x*500, pieces[i].animation.z*500]);
                     pieces[i].animation = new PieceMoveAnimation(this.scene, this.selectedTileX-this.selectedPieceX, this.selectedTileY-this.selectedPieceY);
                 }
             }
+            this.checkGameOver();
+            if(this.phase == "gameOver")
+                return;
             if(this.turn==1) {
                 this.turn=2;
                 this.lastMoveStartX = this.selectedPieceX;
@@ -265,6 +405,8 @@ class MyBoard {
                 this.lastMoveEndX = this.selectedTileX;
                 this.lastMoveEndY = this.selectedTileY;
             } else {
+                this.timer.resetCount();
+                this.gameCameraRotation += Math.PI;
                 this.turn=1;
                 if(this.player=='w')
                     this.player='b';
@@ -272,13 +414,15 @@ class MyBoard {
                 if(!this.isHumanPlaying())
                     postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + "]", this.botMovePiece.bind(this));
             }
-            new Audio('sounds/coin.mp3').play();
             console.log("Move successful");
         }
     }
 
     async botMovePiece(reply) {
+        if(this.timer.counting==false || this.phase == 'gameOver')
+            return;
         let response = JSON.parse(reply.target.response);
+        this.boards.push(this.board_state);
         this.board_state = translatePLtoJSboard(response.argA);
         let move = JSON.parse(response.argB.replace(/\//g,','));
 
@@ -291,6 +435,9 @@ class MyBoard {
         if(Array.isArray(move[0])) {
             piecePushed = move[1];
             move = move[0];
+            this.moves.push([move,piecePushed])
+        } else {
+            this.moves.push(move);
         }
 
         if(piecePushed != undefined && piecePushed != []) {
@@ -305,7 +452,7 @@ class MyBoard {
                         enemyPieces[i].position[0] = piecePushed[3];
                         enemyPieces[i].position[1] = piecePushed[2];
                         if(enemyPieces[i].animation != null)
-                            mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [0, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
+                            mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [enemyPieces[i].animation.y, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
                         enemyPieces[i].animation = new PieceMoveAnimation(this.scene, piecePushed[3]-piecePushed[1], piecePushed[2]-piecePushed[0]);
                     }
                 }
@@ -313,10 +460,11 @@ class MyBoard {
                 for (let i = 0; i < enemyPieces.length; i++) {
                     if(enemyPieces[i].position[0] == piecePushed[1] && enemyPieces[i].position[1] == piecePushed[0]) {
                         if(enemyPieces[i].animation != null)
-                            mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [0, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
-                        enemyPieces[i].animation = new PieceCaptureAnimation(this.scene, enemyPieces[i].position[0], enemyPieces[i].position[1], this.pileHeight);
+                            mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [enemyPieces[i].animation.y, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
+                        enemyPieces[i].animation = new PieceCaptureAnimation(this.scene, enemyPieces[i].position[0], enemyPieces[i].position[1], this.pileHeight, this.boardSize, this.boardSpacing);
                         enemyPieces[i].position[0] = -1;
                         enemyPieces[i].position[1] = -1;
+                        this.piecePile.push(enemyPieces[i]);
                         this.pileHeight += 0.5;
                     }
                 }
@@ -327,12 +475,12 @@ class MyBoard {
                 pieces[i].position[0] = move[3];
                 pieces[i].position[1] = move[2];
                 if(pieces[i].animation != null)
-                    mat4.translate(pieces[i].transformation, pieces[i].transformation, [0, -pieces[i].animation.x*500, pieces[i].animation.z*500]);
+                    mat4.translate(pieces[i].transformation, pieces[i].transformation, [pieces[i].animation.y, -pieces[i].animation.x*500, pieces[i].animation.z*500]);
                 pieces[i].animation = new PieceMoveAnimation(this.scene, move[3]-move[1], move[2]-move[0]);
             }
         }
 
-        //await new Promise(r => setTimeout(r, 500));
+        await new Promise(r => setTimeout(r, 500));
 
         if(this.turn==1) {
             this.turn=2;
@@ -340,23 +488,172 @@ class MyBoard {
             this.lastMoveStartY = move[0];
             this.lastMoveEndX = move[3];
             this.lastMoveEndY = move[2];
+            this.checkGameOver();
+            if(this.phase == "gameOver")
+                return;
             postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + ",[" + move[0] + "/" + move[1] + "," + move[2] + "/" + move[3]+"]]", this.botMovePiece.bind(this));
         } else {
+            this.timer.resetCount();
             this.turn=1;
+            this.gameCameraRotation += Math.PI;
             if(this.player=='w')
                 this.player='b';
             else this.player='w';
+            this.checkGameOver();
+            if(this.phase == "gameOver")
+                return;
+            await new Promise(r => setTimeout(r, 750));
             if(!this.isHumanPlaying())
                 postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + "]", this.botMovePiece.bind(this));
         }
+        console.log('Bot move successful');
     }
 
-    checkDifficultyChange() {
-        if(!this.isHumanPlaying()) {
+    checkGamemodeChange() {
+        if(!this.isHumanPlaying() && this.whitePieces.length != 0) {
             if(this.turn == 1)
                 postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + "]", this.botMovePiece.bind(this));
             else
-            postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + ",[" + this.lastMoveStartY + "/" + this.lastMoveStartX + "," + this.lastMoveEndY + "/" + this.lastMoveEndY+"]]", this.botMovePiece.bind(this));
+                postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + ",[" + this.lastMoveStartY + "/" + this.lastMoveStartX + "," + this.lastMoveEndY + "/" + this.lastMoveEndY+"]]", this.botMovePiece.bind(this));
         }
+    }
+
+    undoMove(rotateCamera) {
+        if(rotateCamera)
+            this.phase = "TilePicking";
+        if(this.moves.length == 0)
+            return;
+
+        let move = this.moves.pop();
+        if(move==[])
+            return;
+        this.board_state = this.boards.pop();
+
+        if(this.turn == 2)
+            this.turn = 1;
+        else {
+            if(rotateCamera!=false) {
+                this.gameCameraRotation += Math.PI;
+            }
+            this.turn = 2;
+            this.lastMoveStartX = this.moves[this.moves.length-1][1];
+            this.lastMoveStartY = this.moves[this.moves.length-1][0];
+            this.lastMoveEndX = this.moves[this.moves.length-1][3];
+            this.lastMoveEndY = this.moves[this.moves.length-1][2];
+            if(this.player=='w')
+                this.player='b';
+            else
+                this.player='w';
+        }
+
+        let piecePushed;
+        if(Array.isArray(move[0])) {
+            piecePushed = move[1];
+            move = move[0];
+        }
+        let pieces;
+        if(this.player == 'w')
+            pieces = this.whitePieces;
+        else
+            pieces = this.blackPieces;
+
+        if(piecePushed != undefined && piecePushed.length != 0) {
+            let enemyPieces;
+            if(this.player == 'w')
+                enemyPieces = this.blackPieces;
+            else
+                enemyPieces = this.whitePieces;
+            if(piecePushed.length == 4) {
+                for (let i = 0; i < enemyPieces.length; i++) {
+                    if(enemyPieces[i].position[0] == piecePushed[3] && enemyPieces[i].position[1] == piecePushed[2]) {
+                        enemyPieces[i].position[0] = piecePushed[1];
+                        enemyPieces[i].position[1] = piecePushed[0];
+                        if(enemyPieces[i].animation != null)
+                            mat4.translate(enemyPieces[i].transformation, enemyPieces[i].transformation, [enemyPieces[i].animation.y, -enemyPieces[i].animation.x*500, enemyPieces[i].animation.z*500]);
+                        enemyPieces[i].animation = new PieceMoveAnimation(this.scene, piecePushed[1]-piecePushed[3], piecePushed[0]-piecePushed[2]);
+                    }
+                }
+            } else {
+                let capturedPiece = this.piecePile.pop();
+                this.pileHeight -= 0.5;
+                if(capturedPiece.animation != null)
+                    mat4.translate(capturedPiece.transformation, capturedPiece.transformation, [capturedPiece.animation.y, -capturedPiece.animation.x*500, capturedPiece.animation.z*500]);
+                capturedPiece.position[0] = piecePushed[1];
+                capturedPiece.position[1] = piecePushed[0];
+                capturedPiece.animation = new PieceUncaptureAnimation(this.scene, capturedPiece.position[0], capturedPiece.position[1], this.pileHeight, this.boardSize, this.boardSpacing);
+            }
+        }
+        for (let i = 0; i < pieces.length; i++) {
+            if(pieces[i].position[0] == move[3] && pieces[i].position[1] == move[2]) {
+                pieces[i].position[0] = move[1];
+                pieces[i].position[1] = move[0];
+                if(pieces[i].animation != null)
+                    mat4.translate(pieces[i].transformation, pieces[i].transformation, [pieces[i].animation.y, -pieces[i].animation.x*500, pieces[i].animation.z*500]);
+                pieces[i].animation = new PieceMoveAnimation(this.scene, -move[3]+move[1], -move[2]+move[0]);
+            }
+        }
+    }
+
+    checkGameOver() {
+        let whiteWon = false;
+        let blackWon = false;
+        for(let pieceOffset = 0; pieceOffset <= 3*this.boardSize; pieceOffset += this.boardSize) {
+            for(let i = pieceOffset; i < pieceOffset+this.boardSize; i++) {
+                if(this.whitePieces[i].position[0] != -1)
+                    break;
+                if(i == pieceOffset+this.boardSize-1) {
+                    this.timer.stopCount();
+                    blackWon = true;
+                }
+            }
+            for(let i = pieceOffset; i < pieceOffset+this.boardSize; i++) {
+                if(this.blackPieces[i].position[0] != -1)
+                    break;
+                if(i == pieceOffset+this.boardSize-1) {
+                    this.timer.stopCount();
+                    whiteWon = true;
+                }
+            }
+        }
+        if(whiteWon) {
+            this.phase = "gameOver";
+            this.winner = 'w';
+        } else if (blackWon) {
+            this.phase = "gameOver";
+            this.winner = 'b';
+        }
+    }
+
+    toggleGameCamera() {
+        if(this.gameCameraActive) {
+            this.scene.camera = this.gameCamera;
+            this.scene.interface.setActiveCamera(null);
+        } else {
+            this.scene.camera = this.scene.cameras[this.scene.selectedViewIndex];
+            this.scene.interface.setActiveCamera(this.scene.camera);
+        }
+    }
+
+    rotateGameCamera() {
+        if(this.gameCameraRotation > 0) {
+            this.gameCameraRotation -= Math.PI/32;
+            this.gameCamera.orbit(CGFcameraAxis.Y, Math.PI/32);
+        }
+    }
+
+    timeout() {
+        console.log("Timed out.");
+        this.gameCameraRotation += Math.PI;
+        if(this.turn == 1)
+            this.moves.push([],[]);
+        else
+            this.moves.push([]);
+        this.turn=1;
+        if(this.player=='w')
+            this.player='b';
+        else this.player='w';
+        if(!this.isHumanPlaying())
+            postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + "]", this.botMovePiece.bind(this));
+        this.timer.resetCount();
     }
 }

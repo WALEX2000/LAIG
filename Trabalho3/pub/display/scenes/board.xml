@@ -1,27 +1,16 @@
 <lxs>
     <scene root="root" axis_length="0"/>
 
-    <views default="mainFrame">
-        <perspective id="mainFrame" near="0.1" far="1500" angle="45">
+    <views default="whiteSide">
+        <perspective id="whiteSide" near="0.1" far="1500" angle="45">
             <from x="0" y="10" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="closeUp" near="0.1" far="1500" angle="60">
-            <from x="10" y="8" z="-10" />
-            <to x="-10" y="3" z="-10" />
+        <perspective id="blackSide" near="0.1" far="1500" angle="45">
+            <from x="0" y="10" z="-10" />
+            <to x="0" y="0" z="0" />
         </perspective>
-
-        <perspective id="victimPOV" near="0.1" far="1500" angle="60">
-            <from x="-10" y="1" z="-6" />
-            <to x="-11" y="20" z="-5" />
-        </perspective>
-
-        <ortho id="layout" near="0.1" far="1500" left="-40.0" right="40.0" top="20" bottom="-40">
-            <from x="5" y="30" z="5" />
-            <to x="5" y="0" z="5" />
-            <up x="1" y="0" z="0" />
-        </ortho>
     </views>
 
     <globals>
@@ -383,7 +372,7 @@
         <component id="divider">
             <transformation>
                 <translate x="-0.5" y="0" z="-0.5"/>
-                <scale x="0.25" y="0.25" z="10"/>
+                <scale x="0.25" y="0.25" z="1"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />

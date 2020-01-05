@@ -4,8 +4,8 @@
 :-consult('logic.pl').
 :-consult('input.pl').
 
-start_game(InitialBoard, _, Message):-
-    create_board(4, InitialBoard),
+start_game(BoardSize, InitialBoard, _, Message):-
+    create_board(BoardSize, InitialBoard),
     Message = "Game reset.".
 
 get_moves_piece(Board, Player, 1, X, Y, Moves,_,Message):-
