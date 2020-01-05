@@ -32,6 +32,7 @@ serialInclude(['../lib/CGF.js',
                 'CGFResourceReader.js', 
                 'CGFOBJModel.js', 
                 'MyTimer.js',
+                'MyCounter.js',
 
 main=function()
 {
