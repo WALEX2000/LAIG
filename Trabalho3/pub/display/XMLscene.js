@@ -13,7 +13,7 @@ class XMLscene extends CGFscene {
         this.graphs = [];
         this.loadedGraphs = 0;
         this.selectedGraphName = 'Desert';
-        this.selectedGraph = 1;
+        this.selectedGraph = 0;
         this.interface = myinterface;
         this.board;
     }
@@ -150,7 +150,7 @@ class XMLscene extends CGFscene {
      */
     onGraphLoaded() {
         this.loadedGraphs++;
-        if(this.loadedGraphs != 2)
+        if(this.loadedGraphs != 1)
             return;
         console.log(this.graphs[this.selectedGraph]);
         this.gl.clearColor(this.graphs[this.selectedGraph].background[0], this.graphs[this.selectedGraph].background[1], this.graphs[this.selectedGraph].background[2], this.graphs[this.selectedGraph].background[3]);
@@ -227,11 +227,11 @@ class XMLscene extends CGFscene {
             i++;
         }
 
-        this.graphs[this.selectedGraph].displayScene();
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
             // Displays the scene (MySceneGraph function).
+            this.graphs[this.selectedGraph].displayScene();
             this.pushMatrix();
             this.translate(0,5,0);
             this.board.display();
@@ -247,10 +247,10 @@ class XMLscene extends CGFscene {
     changeSelectedGraph() {
         switch(this.selectedGraphName) {
             case 'Desert':
-                this.selectedGraphName = 1;
+                this.selectedGraphName = 0;
                 break;
             case 'hi':
-                this.selectedGraphName = 1;
+                this.selectedGraphName = 0;
                 break;
         }
         this.initCameras();

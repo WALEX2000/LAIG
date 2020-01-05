@@ -52,7 +52,6 @@ main=function()
 
 	// create and load graph, and associate it to scene. 
     // Check console for loading errors
-    new MySceneGraph('board.xml', myScene);
 	var myGraphs = [
         new MySceneGraph('myScene.xml', myScene)
     ];

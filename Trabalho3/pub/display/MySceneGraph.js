@@ -1136,7 +1136,7 @@ class MySceneGraph {
                 checkIfLengthsProvided.call(this, textureNode);
             }
             else if(this.textures[texID] == null) {
-                this.onXMLError("Texture with ID " + matID + " in component: " + componentID + " doesn't exist");
+                this.onXMLError("Texture with ID " + texID + " in component: " + componentID + " doesn't exist");
                 return null;
             }
             else {
@@ -1229,8 +1229,8 @@ class MySceneGraph {
                 this.boardTable = this.allComponents[componentID];
             }
         }
-        if(this.whiteTile != undefined)
-            this.scene.board = new MyBoard(this.scene, this.whiteTile, this.blackTile, this.whitePiece, this.blackPiece, this.divider, this.indicator, this.boardTable);
+        
+        this.scene.board = new MyBoard(this.scene, this.whiteTile, this.blackTile, this.whitePiece, this.blackPiece, this.divider, this.indicator, this.boardTable);
         
         //check if any component is not loaded.
         for(let component in this.allComponents) {
