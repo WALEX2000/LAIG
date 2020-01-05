@@ -247,10 +247,10 @@ class XMLscene extends CGFscene {
     changeSelectedGraph() {
         switch(this.selectedGraphName) {
             case 'Desert':
-                this.selectedGraphName = 0;
+                this.selectedGraph = 0;
                 break;
-            case 'hi':
-                this.selectedGraphName = 0;
+            case 'Restaurant':
+                this.selectedGraph = 1;
                 break;
         }
         this.initCameras();

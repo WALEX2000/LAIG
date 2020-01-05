@@ -1,0 +1,194 @@
+<lxs>
+    <scene root="root" axis_length="0"/>
+
+    <views default="mainFrame">
+        <perspective id="mainFrame" near="0.1" far="1500" angle="45">
+            <from x="0" y="50" z="30" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+    </views>
+
+    <globals>
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <background r="0.0" g="0.0" b="0.0" a="1.0" />
+    </globals>
+
+    <lights>
+        <omni id="mainLight" enabled="1">
+            <location x="-10" y="100" z="10" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+    </lights>
+
+    <textures>
+        <texture id="shipHull" file="scenes/images/futuristic_blue.png" />
+    </textures>
+
+    <materials>
+        <material id="whiteDiffuse" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.7" g="0.7" b="0.7" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        </material>
+
+        <material id="blueGlass" shininess="1">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.607" g="0.886" b="0.949" a=".8" />
+            <diffuse r="0.607" g="0.886" b="0.949" a=".8" />
+            <specular r="0.607" g="0.886" b="0.949" a=".8" />
+        </material>
+
+        <material id="blueFire" shininess="1">
+            <emission r="0.189" g="0.592" b="0.949" a="1" />
+            <ambient r="0.189" g="0.592" b="0.949" a=".8" />
+            <diffuse r="0.189" g="0.592" b="0.949" a=".8" />
+            <specular r="0.189" g="0.592" b="0.949" a=".8" />
+        </material>
+
+        <material id="greyDiffuse" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.26" g="0.29" b="0.30" a="1.0" />
+            <diffuse r=".26" g=".29" b=".30" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        </material>
+
+        <material id="pinkGoodness" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.93" g="0.07" b="0.54" a="1.0" />
+            <diffuse r="0.93" g="0.07" b="0.54" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        </material>
+
+        <material id="greenEmission" shininess="1">
+            <emission r="0.4" g="0.8" b="0.4" a="1.0" />
+            <ambient r="0.26" g="0.79" b="0.12" a="1.0" />
+            <diffuse r=".1" g=".69" b=".30" a="1.0" />
+            <specular r="0.25" g="0.7" b="0.25" a="1.0" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="demoTransform">
+            <scale x="5" y="1" z="5" />
+            <rotate axis="x" angle="-45" />
+            <rotate axis="z" angle="-45" />
+        </transformation>
+    </transformations>
+
+    <animations>
+
+    </animations>
+
+    <primitives>
+       <primitive id="floor">
+           <plane npartsU="10" npartsV="10" />
+       </primitive>
+
+       <!-- ERASE LATER -->
+
+        <primitive id="trunk">
+            <cylinder2 base=".75" top=".25" height="8" slices="16" stacks="16" />
+        </primitive>
+
+        <primitive id="leaf">
+            <patch npointsU="3" npointsV="3" npartsU="10" npartsV="10">
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+
+                <controlpoint xx="0.5" yy="0" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.5" zz="0" />
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+            </patch>
+        </primitive>
+
+        <primitive id="leafBack">
+            <patch npointsU="3" npointsV="3" npartsU="10" npartsV="10">
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="0" />
+
+                <controlpoint xx="0.5" yy="0" zz="-0.5" />
+                <controlpoint xx="0.5" yy="0.5" zz="0" />
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="0" />
+            </patch>
+        </primitive>
+        <primitive id="thinCylinder">
+            <cylinder top=".15" base=".15" height="1" slices="15" stacks="30" />
+        </primitive>
+        <primitive id="decreasingCylinder">
+            <cylinder top="0.7" base="0.4" height="0.5" slices="15" stacks="15" />
+        </primitive>
+        <primitive id="spaceShipBorder">
+            <torus inner = "0.1" outer = "2.5" slices="10" loops="20" />
+        </primitive>
+        <primitive id="cone">
+            <cylinder base="2.5" top="0" height="2.0" slices="15" stacks="30" />
+        </primitive>
+        <primitive id="sphere">
+            <sphere radius="1" slices="10" stacks="10" />
+        </primitive>
+        <primitive id="cylinder">
+            <cylinder top="3" base="1" height="5" slices="10" stacks="10" />
+        </primitive>
+        <primitive id="torus">
+            <torus inner = "0.25" outer = "1" slices="10" loops="20" />
+        </primitive>
+        <primitive id="pyramidFront">
+            <triangle x1="-1" y1="0" z1="1" x2="1" y2="0" z2="1" x3="0" y3="1" z3="0" />
+        </primitive>
+        <primitive id="pyramidBack">
+            <triangle x1="-1" y1="0" z1="-1" x2="1" y2="0" z2="-1" x3="0" y3="1" z3="0" />
+        </primitive>
+        <primitive id="pyramidLeft">
+            <triangle x1="-1" y1="0" z1="1" x2="-1" y2="0" z2="-1" x3="0" y3="1" z3="0" />
+        </primitive>
+        <primitive id="pyramidRight">
+            <triangle x1="1" y1="0" z1="1" x2="1" y2="0" z2="-1" x3="0" y3="1" z3="0" />
+        </primitive>
+        <primitive id="pyramidBottom">
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+        <primitive id="skyboxRectangle">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+    </primitives>
+
+    <components>
+        <component id="root">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="building"/>
+            </children>
+        </component>
+
+        <component id="building">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="floor"/>
+            </children>
+        </component>
+    </components>
+</lxs>
