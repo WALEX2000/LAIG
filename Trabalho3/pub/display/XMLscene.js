@@ -180,7 +180,7 @@ class XMLscene extends CGFscene {
 
         this.pushMatrix();
         this.translate(0,5,0);
-        this.axis.display();
+        //this.axis.display();
         this.popMatrix();
 
         this.pushMatrix();

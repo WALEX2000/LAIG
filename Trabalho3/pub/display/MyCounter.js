@@ -39,19 +39,28 @@ class MyCounter extends CGFobject {
         this.displayMaterial.apply();
 
         this.scene.pushMatrix();
-        this.scene.translate(-1.1, 0.5, 0);
+        this.scene.translate(-1.1, 1, 0);
+        this.scene.scale(1,1.5,1);
         this.scene.rotate(Math.PI/2, 1, 0, 0);
         this.cylinder.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(1.1, 0.5, 0);
+        this.scene.translate(1.1, 1, 0);
+        this.scene.scale(1,1.5,1);
         this.scene.rotate(Math.PI/2, 1, 0, 0);
         this.cylinder.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(0,0.6,0);
+        this.scene.translate(0, 1, 0);
+        this.scene.scale(0.6,1.5,0.6);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0,1,0);
         this.scene.scale(2.5, 0.2, 0.2);
         this.cube.display();
         this.scene.popMatrix();
@@ -64,8 +73,8 @@ class MyCounter extends CGFobject {
         this.square.display();
         this.displayMaterial.setTexture(this.whiteTex);
         this.displayMaterial.apply();
-        this.scene.translate(0,0,-0.6);
-        this.scene.scale(1,1,0.2);
+        this.scene.translate(0,0,-0.7);
+        this.scene.scale(1,1,0.4);
         this.square.display();
         this.scene.popMatrix();
 
@@ -78,8 +87,8 @@ class MyCounter extends CGFobject {
         this.square.display();
         this.displayMaterial.setTexture(this.whiteTex);
         this.displayMaterial.apply();
-        this.scene.translate(0,0,-0.6);
-        this.scene.scale(1,1,0.2);
+        this.scene.translate(0,0,-0.7);
+        this.scene.scale(1,1,0.4);
         this.square.display();
         this.scene.popMatrix();
 
@@ -91,8 +100,8 @@ class MyCounter extends CGFobject {
         this.square.display();
         this.displayMaterial.setTexture(this.blackTex);
         this.displayMaterial.apply();
-        this.scene.translate(0,0,-0.6);
-        this.scene.scale(1,1,0.2);
+        this.scene.translate(0,0,-0.7);
+        this.scene.scale(1,1,0.4);
         this.square.display();
         this.scene.popMatrix();
 
@@ -105,8 +114,8 @@ class MyCounter extends CGFobject {
         this.square.display();
         this.displayMaterial.setTexture(this.blackTex);
         this.displayMaterial.apply();
-        this.scene.translate(0,0,-0.6);
-        this.scene.scale(1,1,0.2);
+        this.scene.translate(0,0,-0.7);
+        this.scene.scale(1,1,0.4);
         this.square.display();
         this.scene.popMatrix();
     }
