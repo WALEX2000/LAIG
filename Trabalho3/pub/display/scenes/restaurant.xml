@@ -122,6 +122,9 @@
         <primitive id="cone">
             <cylinder base="2.5" top="0" height="2.0" slices="15" stacks="30" />
         </primitive>
+        <primitive id="piece">
+            <OBJprimitive path="models/gamePiece.obj" />
+        </primitive>
 
        <!-- ERASE LATER -->
 
