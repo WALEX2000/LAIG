@@ -50,14 +50,18 @@ class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
 
+    createGraphDropdown() {
+        this.gui.add(this.scene, 'selectedGraphName', ['Desert', 'hi']).onChange(this.scene.changeSelectedGraph.bind(this.scene)).name("Scene");
+    }
+
     createCameraDropdown() {
         this.gui.add(this.scene, 'selectedViewIndex', this.scene.viewIds).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View');
     }
 
-    createLightsDropdown() {
+    createLightsDropdown(lights) {
         let lightsDropdownFolder = this.gui.addFolder("Lights");
-        for (let key in this.scene.graph.lights) {
-            lightsDropdownFolder.add(this.scene.graph.lights[key], '0').name(key);
+        for (let key in lights) {
+            lightsDropdownFolder.add(lights[key], '0').name(key);
         }
     }
 

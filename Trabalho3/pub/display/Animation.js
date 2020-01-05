@@ -138,35 +138,35 @@ class PieceMoveAnimation extends KeyframeAnimation {
                         }
                     },
                     {
-                        instant: t + 0.2, transforms: {
+                        instant: t + 0.1, transforms: {
                             translate: { x: 50, y: 0, z: 0 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 60, z: Math.sign(x) * 60 }
                         }
                     },
                     {
-                        instant: t + 0.4, transforms: {
+                        instant: t + 0.2, transforms: {
                             translate: { x: 75, y: x * 100, z: z * 100 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 120, z: Math.sign(x) * 120 }
                         }
                     },
                     {
-                        instant: t + 0.6, transforms: {
+                        instant: t + 0.3, transforms: {
                             translate: { x: 75, y: x * 250, z: z * 250 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 180, z: Math.sign(x) * 180 }
                         }
                     },
                     {
-                        instant: t + 0.8, transforms: {
+                        instant: t + 0.4, transforms: {
                             translate: { x: 50, y: x * 400, z: z * 400 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 270, z: Math.sign(x) * 270 }
                         }
                     },
                     {
-                        instant: t + 1, transforms: {
+                        instant: t + 0.5, transforms: {
                             translate: { x: 0, y: x * 500, z: z * 500 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 360, z: Math.sign(x) * 360 }
@@ -201,42 +201,42 @@ class PieceCaptureAnimation extends KeyframeAnimation {
                         }
                     },
                     {
-                        instant: t + 0.2, transforms: {
+                        instant: t + 0.1, transforms: {
                             translate: { x: 300 + height / 2, y: 0, z: 0 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 60, z: Math.sign(x) * 60 }
                         }
                     },
                     {
-                        instant: t + 0.4, transforms: {
+                        instant: t + 0.2, transforms: {
                             translate: { x: 300 + height, y: x * 100, z: z * 100 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 120, z: Math.sign(x) * 120 }
                         }
                     },
                     {
-                        instant: t + 0.6, transforms: {
+                        instant: t + 0.3, transforms: {
                             translate: { x: 300 + height, y: x * 250, z: z * 250 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 180, z: Math.sign(x) * 180 }
                         }
                     },
                     {
-                        instant: t + 0.8, transforms: {
+                        instant: t + 0.4, transforms: {
                             translate: { x: 300 + height, y: x * 400, z: z * 400 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 270, z: Math.sign(x) * 270 }
                         }
                     },
                     {
-                        instant: t + 1, transforms: {
+                        instant: t + 0.5, transforms: {
                             translate: { x: 300 + height, y: x * 500, z: z * 500 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 360, z: Math.sign(x) * 360 }
                         }
                     },
                     {
-                        instant: t + 1.2, transforms: {
+                        instant: t + 0.6, transforms: {
                             translate: { x: height, y: x * 500, z: z * 500 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 360, z: Math.sign(x) * 360 }
@@ -271,42 +271,42 @@ class PieceUncaptureAnimation extends KeyframeAnimation {
                         }
                     },
                     {
-                        instant: t + 0.2, transforms: {
+                        instant: t + 0.1, transforms: {
                             translate: { x: 300 - height / 2, y: 0, z: 0 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 60, z: Math.sign(x) * 60 }
                         }
                     },
                     {
-                        instant: t + 0.4, transforms: {
+                        instant: t + 0.2, transforms: {
                             translate: { x: 300 - height, y: x * 100, z: z * 100 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 120, z: Math.sign(x) * 120 }
                         }
                     },
                     {
-                        instant: t + 0.6, transforms: {
+                        instant: t + 0.3, transforms: {
                             translate: { x: 300 - height, y: x * 250, z: z * 250 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 180, z: Math.sign(x) * 180 }
                         }
                     },
                     {
-                        instant: t + 0.8, transforms: {
+                        instant: t + 0.4, transforms: {
                             translate: { x: 300 - height, y: x * 400, z: z * 400 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 270, z: Math.sign(x) * 270 }
                         }
                     },
                     {
-                        instant: t + 1, transforms: {
+                        instant: t + 0.5, transforms: {
                             translate: { x: 300 - height, y: x * 500, z: z * 500 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 360, z: Math.sign(x) * 360 }
                         }
                     },
                     {
-                        instant: t + 1.2, transforms: {
+                        instant: t + 0.6, transforms: {
                             translate: { x: -height, y: x * 500, z: z * 500 },
                             scale: { x: 1, y: 1, z: 1 },
                             rotate: { x: 0, y: -Math.sign(z) * 360, z: Math.sign(x) * 360 }

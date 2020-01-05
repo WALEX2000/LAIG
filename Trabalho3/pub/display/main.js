@@ -51,9 +51,11 @@ main=function()
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 
 	// create and load graph, and associate it to scene. 
-	// Check console for loading errors
-	var myGraph = new MySceneGraph(myScene);
-	
+    // Check console for loading errors
+    new MySceneGraph('board.xml', myScene);
+	var myGraphs = [
+        new MySceneGraph('myScene.xml', myScene)
+    ];
 	// start
     app.run();
 }

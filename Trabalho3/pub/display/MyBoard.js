@@ -8,7 +8,7 @@ function translatePLtoJSboard(PLBoard) {
 
 class MyBoard {
     //Todos estes parametros são Components
-    constructor(scene, whiteTile, blackTile, whitePiece, blackPiece, divider, indicator) {
+    constructor(scene, whiteTile, blackTile, whitePiece, blackPiece, divider, indicator, table) {
         this.scene = scene;
         this.gameCamera = new CGFcamera(45, 0.1, 1500, vec3.fromValues(0.0,10.0,10.0), vec3.fromValues(0.0,0.0,0.0));
         this.gameCameraActive = false;
@@ -23,6 +23,7 @@ class MyBoard {
         this.blackPiece = blackPiece;
         this.divider = divider;
         this.indicator = indicator;
+        this.table = table;
 
         this.player = 'w';
         this.gamemode = 'PvP';
@@ -77,6 +78,9 @@ class MyBoard {
         this.boardSize = Number(this.boardSize);
         this.moves=[];
         this.boards=[];
+        this.whitePieces=[];
+        this.blackPieces=[];
+        this.timer.stopCount();
         this.player='w';
         this.turn=1;
     }
@@ -84,12 +88,14 @@ class MyBoard {
     //Dar display das Tiles e divider em posições corretas 
     //Dar display das pieces em número e posição corretas
     display() {
-        //Display 2 boards, a rope and a 2 other boards
+        this.rotateGameCamera();
+
+        //Display 2 boards, a rope and a 2 other boards, with a timer, counters and table
         this.scene.pushMatrix();
         this.scene.translate(0,0.75,0);
         this.timer.display();
         this.scene.popMatrix();
-        this.rotateGameCamera();
+
         this.scene.pushMatrix();
         this.scene.translate(0.5,0,0.5);
         this.drawBoard(this.whiteTile, [0,0]);
@@ -105,6 +111,11 @@ class MyBoard {
 
         this.drawPieces(this.whitePieces, 0);
         this.drawPieces(this.blackPieces, this.boardSize*4);
+        this.scene.popMatrix();
+        
+        this.scene.pushMatrix();
+        this.scene.scale(this.boardSize/4, 1, this.boardSize/4);
+        this.table.display();
         this.scene.popMatrix();
 
         this.time = performance.now();
@@ -209,13 +220,19 @@ class MyBoard {
     }
 
     resetGame() {
-        this.timer.resetCount();
+        this.resetGame2();
+    }
+
+    async resetGame2() {
         this.validMoves = [];
         if(this.player == 'b') {
             this.gameCameraRotation += Math.PI;
         }
-        while(this.moves.length != 0)
+        while(this.moves.length != 0) {
             this.undoMove(false);
+            await new Promise(r => setTimeout(r, 200));
+        }
+        this.timer.resetCount();
     }
 
     replayGame() {
@@ -225,18 +242,19 @@ class MyBoard {
     async replayGame2() {
         let moves = [];
         let boards = [];
+        let moveNum = this.moves.length;
         for(let i = 0; i < this.moves.length; i++) {
             moves.push(this.moves[i]);
             boards.push(this.boards[i]);
         }
-        this.resetGame();
+        await this.resetGame2();
         this.phase = "gameOver";
         this.timer.stopCount();
         this.boards=boards;
         this.board_state = this.boards[this.boards.length-1];
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise(r => setTimeout(r, 250));
         for(let i = 0; i < moves.length; i++) {
-            await new Promise(r => setTimeout(r, 500));
+            await new Promise(r => setTimeout(r, 250));
             if(this.phase != 'gameOver')
                 return;
             let move = moves[i];
@@ -636,8 +654,8 @@ class MyBoard {
 
     rotateGameCamera() {
         if(this.gameCameraRotation > 0) {
-            this.gameCameraRotation -= Math.PI/32;
-            this.gameCamera.orbit(CGFcameraAxis.Y, Math.PI/32);
+            this.gameCameraRotation -= Math.PI/16;
+            this.gameCamera.orbit(CGFcameraAxis.Y, Math.PI/16);
         }
     }
 

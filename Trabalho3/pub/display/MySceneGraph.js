@@ -19,12 +19,12 @@ class MySceneGraph {
     /**
      * @constructor
      */
-    constructor(scene) {
+    constructor(filename, scene) {
         this.loadedOk = true;
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
-        scene.graph = this;
+        scene.graphs.push(this);
 
         this.nodes = [];
 
@@ -43,7 +43,7 @@ class MySceneGraph {
          * After the file is read, the reader calls onXMLReady on this object.
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
-        this.reader.open('scenes/board.xml', this);
+        this.reader.open('scenes/' + filename, this);
     }
 
     /*
@@ -496,9 +496,7 @@ class MySceneGraph {
             numLights++;
         }
 
-        if (numLights == 0)
-            return "at least one light must be defined";
-        else if (numLights > 8)
+        if (numLights > 8)
             this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
 
         this.log("Parsed lights");
@@ -1227,9 +1225,12 @@ class MySceneGraph {
                 this.divider = this.allComponents[componentID];
             } else if(componentID == "indicator") {
                 this.indicator = this.allComponents[componentID];
+            } else if(componentID == "boardTable") {
+                this.boardTable = this.allComponents[componentID];
             }
         }
-        this.scene.board = new MyBoard(this.scene, this.whiteTile, this.blackTile, this.whitePiece, this.blackPiece, this.divider, this.indicator);
+        if(this.whiteTile != undefined)
+            this.scene.board = new MyBoard(this.scene, this.whiteTile, this.blackTile, this.whitePiece, this.blackPiece, this.divider, this.indicator, this.boardTable);
         
         //check if any component is not loaded.
         for(let component in this.allComponents) {
@@ -1428,6 +1429,7 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
+        //console.log(this.rootComponent);
         this.rootComponent.display(this.scene);
     }
 

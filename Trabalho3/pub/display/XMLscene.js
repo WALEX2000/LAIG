@@ -10,7 +10,10 @@ class XMLscene extends CGFscene {
      */
     constructor(myinterface) {
         super();
-
+        this.graphs = [];
+        this.loadedGraphs = 0;
+        this.selectedGraphName = 'Desert';
+        this.selectedGraph = 1;
         this.interface = myinterface;
         this.board;
     }
@@ -45,15 +48,15 @@ class XMLscene extends CGFscene {
         //Choose the camera with the appropriate default ID in case it exists.
         this.viewIds = [];
         this.cameras = [];
-        for(let viewNode in this.graph.views) {
-            let view = this.graph.views[viewNode];
+        for(let viewNode in this.graphs[this.selectedGraph].views) {
+            let view = this.graphs[this.selectedGraph].views[viewNode];
             if(view.type == "perspective"){
                 this.cameras[view.id] = new CGFcamera(DEGREE_TO_RAD*view.angle, view.near, view.far, view.from, view.to);
             } else if(view.type == "ortho"){
                 this.cameras[view.id] = new CGFcameraOrtho(view.left, view.right, view.bottom, view.top, view.near, view.far, view.from, view.to, view.up);
             }
             this.viewIds.push(viewNode);
-            if(view.id == this.graph.defaultView) {
+            if(view.id == this.graphs[this.selectedGraph].defaultView) {
                 this.selectedViewIndex = view.id;
             }
         }
@@ -69,13 +72,17 @@ class XMLscene extends CGFscene {
         var i = 0;
         // Lights index.
 
+        for(let j = 0; j < 8; j++) {
+            this.lights[j].disable();
+        }
+
         // Reads the lights from the scene graph.
-        for (var key in this.graph.lights) {
+        for (var key in this.graphs[this.selectedGraph].lights) {
             if (i >= 8)
                 break;              // Only eight lights allowed by WebGL.
 
-            if (this.graph.lights.hasOwnProperty(key)) {
-                var light = this.graph.lights[key];
+            if (this.graphs[this.selectedGraph].lights.hasOwnProperty(key)) {
+                var light = this.graphs[this.selectedGraph].lights[key];
 
                 this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
@@ -99,6 +106,37 @@ class XMLscene extends CGFscene {
                 i++;
             }
         }
+
+        // Reads the lights from the board graph.
+        for (var key in this.graphs[0].lights) {
+            if (i >= 8)
+                break;              // Only eight lights allowed by WebGL.
+
+            if (this.graphs[0].lights.hasOwnProperty(key)) {
+                var light = this.graphs[0].lights[key];
+
+                this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
+                this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
+                this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
+                this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
+
+                if (light[i] == "spot") {
+                    this.lights[i].setSpotCutOff(light[6]);
+                    this.lights[i].setSpotExponent(light[7]);
+                    this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
+                }
+
+                this.lights[i].setVisible(true);
+                if (light[0])
+                    this.lights[i].enable();
+                else
+                    this.lights[i].disable();
+
+                this.lights[i].update();
+
+                i++;
+            }
+        }
     }
 
     setDefaultAppearance() {
@@ -111,14 +149,20 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
-        this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
+        this.loadedGraphs++;
+        if(this.loadedGraphs != 2)
+            return;
+        console.log(this.graphs[this.selectedGraph]);
+        this.gl.clearColor(this.graphs[this.selectedGraph].background[0], this.graphs[this.selectedGraph].background[1], this.graphs[this.selectedGraph].background[2], this.graphs[this.selectedGraph].background[3]);
+        this.setGlobalAmbientLight(this.graphs[this.selectedGraph].ambient[0], this.graphs[this.selectedGraph].ambient[1], this.graphs[this.selectedGraph].ambient[2], this.graphs[this.selectedGraph].ambient[3]);
+
+        this.interface.createGraphDropdown();
 
         this.initCameras();
-        this.interface.createCameraDropdown(this.graph.views);
+        this.interface.createCameraDropdown(this.graphs[this.selectedGraph].views);
 
         this.initLights();
-        this.interface.createLightsDropdown(this.graph.lights);
+        this.interface.createLightsDropdown(this.graphs[this.selectedGraph].lights);
 
         this.interface.createGameInterface();
 
@@ -135,7 +179,7 @@ class XMLscene extends CGFscene {
     }
 
     nextMaterial() { //function called upon pressing M (to change material in all componenets)
-        for(let comp in this.graph.allComponents) this.graph.nextMat(this.graph.allComponents[comp]);
+        for(let comp in this.graphs[this.selectedGraph].allComponents) this.graphs[this.selectedGraph].nextMat(this.graphs[this.selectedGraph].allComponents[comp]);
     }
 
     /**
@@ -163,13 +207,16 @@ class XMLscene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
 
-        //this.axis.display();
+        this.pushMatrix();
+        this.translate(0,5,0);
+        this.axis.display();
+        this.popMatrix();
 
         this.pushMatrix();
 
         let i = 0;
-        for(let key in this.graph.lights) {
-            let light = this.graph.lights[key];
+        for(let key in this.graphs[this.selectedGraph].lights) {
+            let light = this.graphs[this.selectedGraph].lights[key];
             if(light[0])
                 this.lights[i].enable();
             else
@@ -180,17 +227,34 @@ class XMLscene extends CGFscene {
             i++;
         }
 
+        this.graphs[this.selectedGraph].displayScene();
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
             // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
+            this.pushMatrix();
+            this.translate(0,5,0);
             this.board.display();
+            this.popMatrix();
         }
 
         this.board.checkPicking();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+
+    changeSelectedGraph() {
+        switch(this.selectedGraphName) {
+            case 'Desert':
+                this.selectedGraphName = 1;
+                break;
+            case 'hi':
+                this.selectedGraphName = 1;
+                break;
+        }
+        this.initCameras();
+        this.initLights();
+        console.log(this.lights.length);
     }
 }
