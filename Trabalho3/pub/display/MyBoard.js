@@ -10,7 +10,7 @@ class MyBoard {
     //Todos estes parametros são Components
     constructor(scene, whiteTile, blackTile, whitePiece, blackPiece, divider, indicator, table) {
         this.scene = scene;
-        this.gameCamera = new CGFcamera(45, 0.1, 1500, vec3.fromValues(0.0,100.0,10.0), vec3.fromValues(0.0,15.0,0.0));
+        this.gameCamera = new CGFcamera(45, 0.1, 1500, vec3.fromValues(0.0,15.0,10.0), vec3.fromValues(0.0,0.0,0.0));
         this.gameCameraActive = false;
         this.gameCameraRotation = 0;
         this.timer = new MyTimer(this.scene, this);
