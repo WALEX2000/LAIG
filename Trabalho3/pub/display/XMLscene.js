@@ -13,7 +13,7 @@ class XMLscene extends CGFscene {
         this.graphs = [];
         this.loadedGraphs = 0;
         this.selectedGraphName = 'Desert';
-        this.selectedGraph = 0;
+        this.selectedGraph = 1;
         this.interface = myinterface;
         this.board;
     }
