@@ -234,7 +234,7 @@ class XMLscene extends CGFscene {
         this.board.blackPiece = this.graphs[this.selectedGraph].blackPiece;
         this.board.divider = this.graphs[this.selectedGraph].divider;
         this.board.indicator = this.graphs[this.selectedGraph].indicator;
-        this.board.boardtable = this.graphs[this.selectedGraph].boardTable;
+        this.board.table = this.graphs[this.selectedGraph].boardTable;
         this.board.updatePieces();
         //this.board = new MyBoard(this, this.graphs[this.selectedGraph].whiteTile, this.graphs[this.selectedGraph].blackTile, this.graphs[this.selectedGraph].whitePiece, this.graphs[this.selectedGraph].blackPiece, this.graphs[this.selectedGraph].divider, this.graphs[this.selectedGraph].indicator, this.graphs[this.selectedGraph].boardTable);
         this.initCameras();
