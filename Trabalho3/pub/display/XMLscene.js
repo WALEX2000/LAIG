@@ -202,7 +202,9 @@ class XMLscene extends CGFscene {
             // Draw axis
             this.setDefaultAppearance();
             // Displays the scene (MySceneGraph function).
+            this.pushMatrix();
             this.graphs[this.selectedGraph].displayScene();
+            this.popMatrix();
             this.pushMatrix();
             this.translate(0,5,0);
             this.board.display();

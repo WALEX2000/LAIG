@@ -3,7 +3,7 @@
 
     <views default="mainFrame">
         <perspective id="mainFrame" near="0.1" far="1500" angle="45">
-            <from x="-35" y="40" z="35" />
+            <from x="0" y="50" z="30" />
             <to x="0" y="0" z="0" />
         </perspective>
     </views>
@@ -37,6 +37,8 @@
         <texture id="furnaceSides" file="scenes/images/funaceSides.png" />
         <texture id="furnaceFront" file="scenes/images/furnaceFront.png" />
         <texture id="furnaceTop" file="scenes/images/furnaceTop.png" />
+        <texture id="woodChairTex" file="scenes/images/woodTex1.jpg" />
+        <texture id="creeperTex" file="scenes/images/creeperTex.png" />
     </textures>
 
     <materials>
@@ -47,11 +49,25 @@
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
 
+        <material id="yellow" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.94" g="0.9" b="0.54" a="1.0" />
+            <diffuse r="0.94" g="0.9" b="0.54" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        </material>
+
+        <material id="silver" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.6" g="0.6" b="0.6" a="1.0" />
+            <diffuse r=".9" g=".9" b=".9" a="1.0" />
+            <specular r="0.8" g="0.8" b="0.8" a="1.0" />
+        </material>
+
         <material id="blackDiffuse" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.1" g="0.1" b="0.1" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
         </material>
 
         <material id="greenSpecular" shininess="2">
@@ -84,8 +100,8 @@
 
         <material id="pinkGoodness" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.93" g="0.07" b="0.54" a="1.0" />
-            <diffuse r="0.93" g="0.07" b="0.54" a="1.0" />
+            <ambient r="0.83" g="0.07" b="0.54" a="1.0" />
+            <diffuse r="0.83" g="0.07" b="0.54" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
 
@@ -123,7 +139,31 @@
             <cylinder base="2.5" top="0" height="2.0" slices="15" stacks="30" />
         </primitive>
         <primitive id="chair">
-            <OBJprimitive path="models/gamePiece.obj" />
+            <OBJprimitive path="models/chair.obj" />
+        </primitive>
+        <primitive id="piano">
+            <OBJprimitive path="models/piano.obj" />
+        </primitive>
+        <primitive id="plate">
+            <OBJprimitive path="models/plate.obj" />
+        </primitive>
+        <primitive id="fork">
+            <OBJprimitive path="models/Fork.obj" />
+        </primitive>
+        <primitive id="knife">
+            <OBJprimitive path="models/Knife.obj" />
+        </primitive>
+        <primitive id="creeper">
+            <OBJprimitive path="models/creeper.obj" />
+        </primitive>
+        <primitive id="creeperFace">
+            <OBJprimitive path="models/creeperFace.obj" />
+        </primitive>
+        <primitive id="chocolateCake">
+            <OBJprimitive path="models/chocolateCake.obj" />
+        </primitive>
+        <primitive id="chocolateCakePink">
+            <OBJprimitive path="models/chocolateCakePink.obj" />
         </primitive>
 
        <!-- ERASE LATER -->
@@ -193,7 +233,6 @@
         <primitive id="skyboxRectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
-
         <primitive id="plane">
             <plane npartsU="4" npartsV="4"/>
         </primitive>
@@ -211,6 +250,7 @@
     <components>
         <component id="root">
             <transformation>
+                <translate x="0" y="-2" z="-5"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
@@ -219,6 +259,36 @@
             <children>
                 <componentref id="building"/>
                 <componentref id="furniture"/>
+                <componentref id="creeper"/>
+            </children>
+        </component>
+
+        <component id="creeper">
+            <transformation>
+                <scale x="2" y="2" z="2"/>
+                <translate x="-5" y="0" z="-5"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse"/>
+            </materials>
+            <texture id="creeperTex" length_t="1" length_s="1"/>
+            <children>
+                <primitiveref id="creeper"/>
+                <componentref id="creeperFace"/>
+            </children>
+        </component>
+
+        <component id="creeperFace">
+            <transformation>
+                <scale x="2.8" y="2.8" z="2.8"/>
+                <translate x="1.70" y="1.72" z="-1.61"/>
+            </transformation>
+            <materials>
+                <material id="blackDiffuse"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="creeperFace"/>
             </children>
         </component>
 
@@ -234,6 +304,117 @@
                 <componentref id="counterChairs"/>
                 <componentref id="prateleira"/>
                 <componentref id="furnaces"/>
+                <componentref id="piano"/>
+                <componentref id="platesRow"/>
+            </children>
+        </component>
+
+        <component id="platesRow">
+            <transformation>
+                <translate x="-32.5" y="11" z="-20"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="plate1"/>
+                <componentref id="plate2"/>
+            </children>
+        </component>
+
+        <component id="plate1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="plateFork"/>
+            </children>
+        </component>
+
+        <component id="plate2">
+            <transformation>
+                <translate x="12.5" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="plateFork"/>
+            </children>
+        </component>
+
+        <component id="plateFork">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="fork"/>
+                <componentref id="knife"/>
+                <componentref id="plate"/>
+            </children>
+        </component>
+
+        <component id="fork">
+            <transformation>
+                <scale x="0.2" y="0.2" z="0.2"/>
+                <translate x="-12" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="silver"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="fork"/>
+            </children>
+        </component>
+
+        <component id="knife">
+            <transformation>
+                <scale x="0.2" y="0.2" z="0.2"/>
+                <translate x="12" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="silver"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="knife"/>
+            </children>
+        </component>
+
+        <component id="plate">
+            <transformation>
+                <scale x="5" y="5" z="5"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="plate"/>
+            </children>
+        </component>
+
+        <component id="piano">
+            <transformation>
+                <scale x="0.01" y="0.01" z="0.01"/>
+                <rotate axis="y" angle="130"/>
+                <translate x="0" y="0" z="3000"/>
+            </transformation>
+            <materials>
+                <material id="blackDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="piano"/>
             </children>
         </component>
 
@@ -509,7 +690,7 @@
             <materials>
                 <material id="inherit"/>
             </materials>
-            <texture id="metal" length_s="1" length_t="1"/>
+            <texture id="metal"/>
             <children>
                 <componentref id="ChairBottomCylinder"/>
                 <componentref id="ChairBottomCone"/>
@@ -982,30 +1163,27 @@
             </children>
         </component>
 
-
         <component id="whitePiece">
             <transformation>
-                <scale x="0.002" y="0.002" z="0.002" />
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="pinkGoodness" />
             </materials>
             <texture id="none" />
             <children>
-                <primitiveref id="piece" />
+                <primitiveref id="chocolateCakePink" />
             </children>
         </component>
 
         <component id="blackPiece">
             <transformation>
-                <scale x="0.002" y="0.002" z="0.002" />
             </transformation>
             <materials>
-                <material id="blackDiffuse" />
+                <material id="yellow" />
             </materials>
             <texture id="none" />
             <children>
-                <primitiveref id="piece" />
+                <primitiveref id="chocolateCake" />
             </children>
         </component>
 
@@ -1073,6 +1251,37 @@
             <children>
                 <componentref id="tableTop"/>
                 <componentref id="tableLegs"/>
+                <componentref id="chair1"/>
+                <componentref id="chair2"/>
+            </children>
+        </component>
+
+        <component id="chair1">
+            <transformation>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <translate x="0" y="-70" z="60"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="woodChairTex" length_t="1" length_s="1"/>
+            <children>
+                <primitiveref id="chair"/>
+            </children>
+        </component>
+
+        <component id="chair2">
+            <transformation>
+                <scale x="0.1" y="0.1" z="0.1"/>
+                <rotate axis="y" angle="180"/>
+                <translate x="0" y="-70" z="60"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="woodChairTex" length_t="1" length_s="1"/>
+            <children>
+                <primitiveref id="chair"/>
             </children>
         </component>
 
@@ -1185,6 +1394,8 @@
 
         <component id="tableLegs">
             <transformation>
+                <scale x="1" y="1.5" z="1"/>
+                <translate x="0" y="0.8" z="0"/>
             </transformation>
             <materials>
                 <material id="inherit" />
