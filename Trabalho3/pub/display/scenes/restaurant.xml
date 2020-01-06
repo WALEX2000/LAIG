@@ -738,7 +738,7 @@
             <materials>
                 <material id="inherit"/>
             </materials>
-            <texture id="metal"/>
+            <texture id="metal" length_s="1" length_t="1"/>
             <children>
                 <componentref id="ChairBottomCylinder"/>
                 <componentref id="ChairBottomCone"/>
@@ -950,7 +950,7 @@
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="brownMarble"/>
+            <texture id="brownMarble" length_s="1" length_t="1"/>
             <children>
                 <componentref id="window"/>
                 <componentref id="wall1"/>

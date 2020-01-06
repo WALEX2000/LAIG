@@ -122,7 +122,6 @@ class XMLscene extends CGFscene {
         this.loadedGraphs++;
         if(this.loadedGraphs != 3)
             return;
-        console.log(this.graphs[this.selectedGraph].whiteTile);
         this.board = new MyBoard(this, this.graphs[this.selectedGraph].whiteTile, this.graphs[this.selectedGraph].blackTile, this.graphs[this.selectedGraph].whitePiece, this.graphs[this.selectedGraph].blackPiece, this.graphs[this.selectedGraph].divider, this.graphs[this.selectedGraph].indicator, this.graphs[this.selectedGraph].boardTable);
         this.gl.clearColor(this.graphs[this.selectedGraph].background[0], this.graphs[this.selectedGraph].background[1], this.graphs[this.selectedGraph].background[2], this.graphs[this.selectedGraph].background[3]);
         this.setGlobalAmbientLight(this.graphs[this.selectedGraph].ambient[0], this.graphs[this.selectedGraph].ambient[1], this.graphs[this.selectedGraph].ambient[2], this.graphs[this.selectedGraph].ambient[3]);
