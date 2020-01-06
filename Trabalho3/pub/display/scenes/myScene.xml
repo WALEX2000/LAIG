@@ -124,6 +124,13 @@
             <diffuse r=".1" g=".69" b=".30" a="1.0" />
             <specular r="0.25" g="0.7" b="0.25" a="1.0" />
         </material>
+
+        <material id="gold" shininess="1">
+            <emission r="0.4" g="0.8" b="0.4" a="1.0" />
+            <ambient r="0.85" g="0.65" b="0.12" a="1.0" />
+            <diffuse r=".85" g=".65" b=".13" a="1.0" />
+            <specular r="0.85" g="0.7" b="0.12" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -1523,7 +1530,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="gold" />
             </materials>
             <texture id="lightWoodTex" length_s="1" length_t="1"/>
             <children>
