@@ -52,6 +52,13 @@
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
 
+        <material id="choko" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.49" g="0.24" b="0" a="1.0" />
+            <diffuse r="0.49" g=".25" b="0" a="1.0" />
+            <specular r="0.2" g="0.1" b="0" a="1.0" />
+        </material>
+
         <material id="yellow" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.94" g="0.9" b="0.54" a="1.0" />
@@ -385,6 +392,21 @@
                 <componentref id="fork"/>
                 <componentref id="knife"/>
                 <componentref id="plate"/>
+                <componentref id="cakeOnTop"/>
+            </children>
+        </component>
+
+        <component id="cakeOnTop">
+            <transformation>
+                <scale x="4" y="4" z="4"/>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="choko"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="chocolateCake"/>
             </children>
         </component>
 
