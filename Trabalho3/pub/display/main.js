@@ -57,8 +57,13 @@ main=function()
     // Check console for loading errors
 	var myGraphs = [
         new MySceneGraph('myScene.xml', myScene),
-        new MySceneGraph('restaurant.xml', myScene)
+        new MySceneGraph('restaurant.xml', myScene),
+        new MySceneGraph('zombieland.xml', myScene)
     ];
+
+    for (let i = 0; i < myGraphs.length; i++) {
+        myScene.graphs.push(myGraphs[i]);
+    }
 	// start
     app.run();
 }

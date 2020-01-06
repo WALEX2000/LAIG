@@ -24,7 +24,6 @@ class MySceneGraph {
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
-        scene.graphs.push(this);
 
         this.nodes = [];
 

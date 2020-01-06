@@ -29,6 +29,7 @@ class CGFOBJModel extends CGFobject{
 		
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
+		this.texCoords = [];
 
 		// spawn resource reading
 		this.rr = new CGFresourceReader();
@@ -164,6 +165,9 @@ class CGFOBJModel extends CGFobject{
 		else
 			this.primitiveType = this.scene.gl.LINES;
 		
+		this.texCoords = this.texcoords;
 		this.initGLBuffers();
+
+
 	};
 }
