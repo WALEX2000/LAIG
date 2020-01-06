@@ -123,6 +123,7 @@ class KeyframeAnimation extends Animation {
     }
 }
 
+//Animation that moves a piece in an arch by [x,0,z]
 class PieceMoveAnimation extends KeyframeAnimation {
     constructor(scene, x, z) {
         let t = performance.now() * 0.001 - 0.6;
@@ -181,6 +182,7 @@ class PieceMoveAnimation extends KeyframeAnimation {
     }
 }
 
+//Animation that moves a piece in an arch from [x,0,z] to [boardSize+0.5,height,0]
 class PieceCaptureAnimation extends KeyframeAnimation {
     constructor(scene, x, z, height, boardSize, boardSpacing) {
         let tempX = Math.floor(x / boardSize) * (boardSize + boardSpacing) + x % boardSize - boardSize - boardSpacing / 2;
@@ -250,6 +252,7 @@ class PieceCaptureAnimation extends KeyframeAnimation {
     }
 }
 
+//Animation that moves a piece in an arch from [boardSize+0.5,height,0] to [x,0,z]
 class PieceUncaptureAnimation extends KeyframeAnimation {
     constructor(scene, x, z, height, boardSize, boardSpacing) {
         let tempX = Math.floor(x / boardSize) * (boardSize + boardSpacing) + x % boardSize - boardSize - boardSpacing / 2;
@@ -319,6 +322,7 @@ class PieceUncaptureAnimation extends KeyframeAnimation {
     }
 }
 
+//Animation that moves a piece in an arch from [x,10,z] to [x,0,z]
 class PieceFallingAnimation extends KeyframeAnimation {
     constructor(scene) {
         let t = performance.now() * 0.001 - 0.6;

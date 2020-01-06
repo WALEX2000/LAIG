@@ -10,22 +10,28 @@ class MyBoard {
     //Todos estes parametros são Components
     constructor(scene, whiteTile, blackTile, whitePiece, blackPiece, divider, indicator, table) {
         this.scene = scene;
+
+        //Game camera and its variables (angle and active)
         this.gameCamera = new CGFcamera(45, 0.1, 1500, vec3.fromValues(0.0,15.0,10.0), vec3.fromValues(0.0,0.0,0.0));
         this.gameCameraActive = false;
         this.gameCameraRotation = 0;
+
+        //Game timer (for timing plays) and counter (for counting pieces in board)
         this.timer = new MyTimer(this.scene, this);
         this.counter = new MyCounter(this.scene);
         
+        //Setting board components from XMLGraph
         this.whiteTile = whiteTile;
         this.blackTile = blackTile;
-        this.whiteTile.type = "tile";
-        this.blackTile.type = "tile";
         this.whitePiece = whitePiece;
         this.blackPiece = blackPiece;
         this.divider = divider;
         this.indicator = indicator;
         this.table = table;
 
+        //Additional game state variables
+        this.whiteTile.type = "tile";
+        this.blackTile.type = "tile";
         this.player = 'w';
         this.gamemode = 'PvP';
         this.difficulty = 0;
@@ -35,6 +41,7 @@ class MyBoard {
         this.boardSpacing = 2; //Spacing between boards
         this.busy = false;
 
+        //Score matrix for boards
         this.scores=
         [
             [
@@ -46,6 +53,8 @@ class MyBoard {
                 [this.boardSize, this.boardSize]
             ]
         ]
+
+        //Required game structures
         this.whitePieces = [];
         this.blackPieces = [];
         this.validMoves = [];
@@ -55,6 +64,7 @@ class MyBoard {
         this.piecePile = [];
     }
 
+    //Sets initial piece positions, animations and readies piece arrays
     initPieces() {
         this.whitePieces = [];
         this.blackPieces = [];
@@ -327,6 +337,7 @@ class MyBoard {
                 pieces = this.whitePieces;
             else
                 pieces = this.blackPieces;
+            //Check if move wasn't a timeout
             if(move.length!=0) {
                 if(Array.isArray(move[0])) {
                     piecePushed = move[1];
@@ -337,13 +348,16 @@ class MyBoard {
                 }
             }  
 
+            //Check if an enemy piece was pushed
             if(piecePushed != undefined && piecePushed != []) {
+                //If one was, move it either to:
                 let enemyPieces;
                 if(this.player == 'w')
                     enemyPieces = this.blackPieces;
                 else
                     enemyPieces = this.whitePieces;
                 if(piecePushed.length == 4) {
+                    //Another position in the board
                     for (let i = 0; i < enemyPieces.length; i++) {
                         if(enemyPieces[i].position[0] == piecePushed[1] && enemyPieces[i].position[1] == piecePushed[0]) {
                             enemyPieces[i].position[0] = piecePushed[3];
@@ -354,6 +368,7 @@ class MyBoard {
                         }
                     }
                 } else if (piecePushed.length == 2){
+                    //Captured pieces pile
                     if(enemyPieces == this.blackPieces)
                         this.scores[Math.floor(piecePushed[1]/this.boardSize)][Math.floor(piecePushed[0]/this.boardSize)][0]-=1;
                     else
@@ -371,6 +386,7 @@ class MyBoard {
                     }
                 }
             }
+            //If move isn't timeout, move the actual piece
             if(move.length != 0) {
                 for (let i = 0; i < pieces.length; i++) {
                     if(pieces[i].position[0] == move[1] && pieces[i].position[1] == move[0]) {
@@ -385,6 +401,7 @@ class MyBoard {
 
             await new Promise(r => setTimeout(r, 500));
 
+            //Ready next turn/player
             if(this.turn==1) {
                 this.turn=2;
             } else {
@@ -399,6 +416,7 @@ class MyBoard {
         this.busy=false;
     }
 
+    //Receives a list of valid moves for the player in turn 1, and displays them with a green arrow
     getPieceMovesTurn1(reply) {
         let response = JSON.parse(reply.target.response);
         this.validMoves = JSON.parse(response.argA.replace(/\//g,','));
@@ -407,6 +425,7 @@ class MyBoard {
         }
     }
 
+    //Receives a list of valid moves for the player in turn 2, and displays them with a green arrow
     getPieceMovesTurn2(reply) {
         let response = JSON.parse(reply.target.response);
         this.validMoves = JSON.parse(response.argA.replace(/\//g,','));
@@ -417,6 +436,7 @@ class MyBoard {
         }
     }
 
+    //Shows the green arrows that indicate a piece's current valid moves
     showSuggestions() {
         for (let i = 0; i < this.validMoves.length; i++) {
             this.scene.pushMatrix();
@@ -429,6 +449,7 @@ class MyBoard {
         }
     }
 
+    //Player's response to a prolog move
     async movePiece(reply) {
         let response = JSON.parse(reply.target.response);
         if(response.message == "Invalid move")
@@ -436,7 +457,9 @@ class MyBoard {
         else {
             this.boards.push(this.board_state);
             this.board_state = translatePLtoJSboard(response.argA);
+            //Check if there was any piece pushed
             if(response.argB[0] != "_") {
+                //If one was, move it either to:
                 let piecePushed = JSON.parse(response.argB.replace(/\//g,','));
                 this.moves.push([[this.selectedPieceY,this.selectedPieceX,this.selectedTileY,this.selectedTileX],piecePushed]);
                 let enemyPieces;
@@ -445,6 +468,7 @@ class MyBoard {
                 else
                     enemyPieces = this.whitePieces;
                 if(piecePushed.length == 4) {
+                    //Another position in the board
                     for (let i = 0; i < enemyPieces.length; i++) {
                         if(enemyPieces[i].position[0] == piecePushed[1] && enemyPieces[i].position[1] == piecePushed[0]) {
                             enemyPieces[i].position[0] = this.selectedTileX;
@@ -455,6 +479,7 @@ class MyBoard {
                         }
                     }
                 } else if (piecePushed.length == 2) {
+                    //The captured piece pile
                     if(enemyPieces == this.blackPieces)
                         this.scores[Math.floor(piecePushed[1]/this.boardSize)][Math.floor(piecePushed[0]/this.boardSize)][0]-=1;
                     else
@@ -472,6 +497,8 @@ class MyBoard {
                     }
                 }
             } else this.moves.push([this.selectedPieceY,this.selectedPieceX,this.selectedTileY,this.selectedTileX]);
+
+            //Move actual piece selected
             let pieces;
             if(this.player == 'w')
                 pieces = this.whitePieces;
@@ -486,11 +513,15 @@ class MyBoard {
                     pieces[i].animation = new PieceMoveAnimation(this.scene, this.selectedTileX-this.selectedPieceX, this.selectedTileY-this.selectedPieceY);
                 }
             }
+            //Check if game is over
             this.checkGameOver();
             if(this.phase == "gameOver")
                 return;
+
+            //Ready next turn
             if(this.turn==1) {
                 this.turn=2;
+                //Save last move (important for turn 2 possible moves)
                 this.lastMoveStartX = this.selectedPieceX;
                 this.lastMoveStartY = this.selectedPieceY;
                 this.lastMoveEndX = this.selectedTileX;
@@ -503,13 +534,14 @@ class MyBoard {
                 if(this.player=='w')
                     this.player='b';
                 else this.player='w';
+                //If next player isn't human, send move request to bot
                 if(!this.isHumanPlaying())
                     postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + "]", this.botMovePiece.bind(this));
             }
             console.log("Move successful");
         }
     }
-
+    //Bot's response to a prolog move
     async botMovePiece(reply) {
         if(this.timer.counting==false || this.phase == 'gameOver' || this.busy)
             return;
@@ -524,6 +556,7 @@ class MyBoard {
             pieces = this.whitePieces;
         else
             pieces = this.blackPieces;
+        //Check if there was any piece pushed
         if(Array.isArray(move[0])) {
             piecePushed = move[1];
             move = move[0];
@@ -533,12 +566,14 @@ class MyBoard {
         }
 
         if(piecePushed != undefined && piecePushed.length != 0) {
+            //If one was, move it either to:
             let enemyPieces;
             if(this.player == 'w')
                 enemyPieces = this.blackPieces;
             else
                 enemyPieces = this.whitePieces;
             if(piecePushed.length == 4) {
+                //Another position in the board
                 for (let i = 0; i < enemyPieces.length; i++) {
                     if(enemyPieces[i].position[0] == piecePushed[1] && enemyPieces[i].position[1] == piecePushed[0]) {
                         enemyPieces[i].position[0] = piecePushed[3];
@@ -548,7 +583,8 @@ class MyBoard {
                         enemyPieces[i].animation = new PieceMoveAnimation(this.scene, piecePushed[3]-piecePushed[1], piecePushed[2]-piecePushed[0]);
                     }
                 }
-            } else {
+            } else if (piecePushed.length == 2){
+                //The captured pieces pile
                 if(enemyPieces == this.blackPieces)
                     this.scores[Math.floor(piecePushed[1]/this.boardSize)][Math.floor(piecePushed[0]/this.boardSize)][0]-=1;
                 else
@@ -566,6 +602,7 @@ class MyBoard {
                 }
             }
         }
+        //Move the actual piece
         for (let i = 0; i < pieces.length; i++) {
             if(pieces[i].position[0] == move[1] && pieces[i].position[1] == move[0]) {
                 pieces[i].position[0] = move[3];
@@ -578,6 +615,7 @@ class MyBoard {
 
         await new Promise(r => setTimeout(r, 500));
 
+        //Ready next turn
         if(this.turn==1) {
             this.turn=2;
             this.lastMoveStartX = move[1];
@@ -606,6 +644,7 @@ class MyBoard {
         console.log('Bot move successful');
     }
 
+    //Interface function that is called once gamemode is changed between PvP/PvM/MvM
     checkGamemodeChange() {
         if(!this.isHumanPlaying() && this.whitePieces.length != 0) {
             if(this.turn == 1)
@@ -615,6 +654,7 @@ class MyBoard {
         }
     }
 
+    //Interface function that is called when a player wants to undo a move
     undoMove(rotateCamera) {
         if(rotateCamera)
             this.phase = "TilePicking";
@@ -626,6 +666,7 @@ class MyBoard {
             return;
         this.board_state = this.boards.pop();
 
+        //Rewind turn/player
         if(this.turn == 2)
             this.turn = 1;
         else {
@@ -643,6 +684,7 @@ class MyBoard {
                 this.player='w';
         }
 
+        //Check if there was a piece pushed
         let piecePushed;
         if(Array.isArray(move[0])) {
             piecePushed = move[1];
@@ -655,12 +697,14 @@ class MyBoard {
             pieces = this.blackPieces;
 
         if(piecePushed != undefined && piecePushed.length != 0) {
+            //If a piece was pushed, retrieve it from either:
             let enemyPieces;
             if(this.player == 'w')
                 enemyPieces = this.blackPieces;
             else
                 enemyPieces = this.whitePieces;
             if(piecePushed.length == 4) {
+                //Another position in the board
                 for (let i = 0; i < enemyPieces.length; i++) {
                     if(enemyPieces[i].position[0] == piecePushed[3] && enemyPieces[i].position[1] == piecePushed[2]) {
                         enemyPieces[i].position[0] = piecePushed[1];
@@ -670,7 +714,8 @@ class MyBoard {
                         enemyPieces[i].animation = new PieceMoveAnimation(this.scene, piecePushed[1]-piecePushed[3], piecePushed[0]-piecePushed[2]);
                     }
                 }
-            } else {
+            } else if (piecePushed.length == 2){
+                //From the captured piece pile
                 if(enemyPieces == this.blackPieces)
                     this.scores[Math.floor(piecePushed[1]/this.boardSize)][Math.floor(piecePushed[0]/this.boardSize)][0]+=1;
                 else
@@ -684,6 +729,7 @@ class MyBoard {
                 capturedPiece.animation = new PieceUncaptureAnimation(this.scene, capturedPiece.position[0], capturedPiece.position[1], this.pileHeight, this.boardSize, this.boardSpacing);
             }
         }
+        //Move actual piece
         for (let i = 0; i < pieces.length; i++) {
             if(pieces[i].position[0] == move[3] && pieces[i].position[1] == move[2]) {
                 pieces[i].position[0] = move[1];
@@ -695,9 +741,11 @@ class MyBoard {
         }
     }
 
+    //Checks if game is over
     checkGameOver() {
         let whiteWon = false;
         let blackWon = false;
+        //Game is over if, in any board, a player has no pieces left
         for(let pieceOffset = 0; pieceOffset <= 3*this.boardSize; pieceOffset += this.boardSize) {
             for(let i = pieceOffset; i < pieceOffset+this.boardSize; i++) {
                 if(this.whitePieces[i].position[0] != -1)
@@ -725,6 +773,7 @@ class MyBoard {
         }
     }
 
+    //Interface function that is called when game camera is toggled
     toggleGameCamera() {
         if(this.gameCameraActive) {
             this.scene.camera = this.gameCamera;
@@ -735,6 +784,7 @@ class MyBoard {
         }
     }
 
+    //Function that rotates camera a fraction of an angle when rotation is active
     rotateGameCamera() {
         if(this.gameCameraRotation > 0) {
             this.gameCameraRotation -= Math.PI/32;
@@ -742,6 +792,7 @@ class MyBoard {
         }
     }
 
+    //Play timeout that advances a turn when timer runs out
     timeout() {
         console.log("Timed out.");
         this.gameCameraRotation += Math.PI;
@@ -758,11 +809,12 @@ class MyBoard {
         this.timer.resetCount();
     }
 
+    //On scene switch, update the piece's appearance
     updatePieces() {
         let newBlackPieces = [];
         let newWhitePieces = [];
 
-        for (let i = 0; i < this.boardSize*4; i++) {
+        for (let i = 0; i < this.whitePieces.length; i++) {
             let newBlackPiece = this.blackPiece.clone();
             newBlackPiece.transformation = this.blackPieces[i].transformation;
             newBlackPiece.position = this.blackPieces[i].position;
