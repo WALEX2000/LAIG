@@ -915,8 +915,9 @@
 
         <component id="divider">
             <transformation>
-                <translate x="-0.5" y="0" z="-0.5"/>
-                <scale x="0.25" y="0.25" z="1"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.25" y="0.25" z="8"/>
+                <translate x="0" y="0" z="-0.5"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />

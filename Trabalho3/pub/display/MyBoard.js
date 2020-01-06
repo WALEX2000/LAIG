@@ -125,10 +125,10 @@ class MyBoard {
         this.drawBoard(this.whiteTile, [0,0]);
         this.drawBoard(this.blackTile, [1,0]);
         this.scene.pushMatrix();
-        this.scene.translate(-0.5,0,-1);
-        this.scene.rotate(Math.PI/2, 0, 1, 0);
-        this.scene.scale(1,1,this.boardSize*2+this.boardSpacing);
-        this.divider.display();
+        //this.scene.translate(0,0,-1);
+        //this.scene.rotate(Math.PI/2, 0, 1, 0);
+        //this.scene.scale(1,1,this.boardSize*2+this.boardSpacing);
+        //this.divider.display();
         this.scene.popMatrix();
         this.drawBoard(this.whiteTile, [0,1]);
         this.drawBoard(this.blackTile, [1,1]);
@@ -139,6 +139,10 @@ class MyBoard {
         this.scene.popMatrix();
         
         //Display table
+        this.scene.pushMatrix();
+        this.divider.display();
+        this.scene.popMatrix();
+
         this.scene.pushMatrix();
         this.scene.scale(this.boardSize/4, 1, this.boardSize/4);
         this.table.display();

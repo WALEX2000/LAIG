@@ -64,6 +64,7 @@
         <texture id="whiteTileTex" file="scenes/images/white_tile.jpg" />
         <texture id="woodTex" file="scenes/images/wood.jpg" />
         <texture id="lightWoodTex" file="scenes/images/lightWood.jpg" />
+        <texture id="snakeTex" file="scenes/images/snakeTex.jpg" />
     </textures>
 
     <materials>
@@ -303,6 +304,10 @@
     <primitives>
         <primitive id="trunk">
             <cylinder2 base=".75" top=".25" height="8" slices="16" stacks="16" />
+        </primitive>
+
+        <primitive id="snake">
+            <OBJprimitive path="models/snake.obj" />
         </primitive>
 
         <primitive id="leaf">
@@ -1735,15 +1740,16 @@
 
         <component id="divider">
             <transformation>
-                <translate x="-0.5" y="0" z="-0.5"/>
-                <scale x="0.25" y="0.25" z="1"/>
+                <scale x="2" y="1.5" z="2"/>
+                <rotate axis="y" angle="90"/>
+                <rotate axis="x" angle="180"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="ropeTex" length_s="1" length_t="1"/>
+            <texture id="snakeTex" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="cylinder"/>
+                <primitiveref id="snake"/>
             </children>
         </component>
 

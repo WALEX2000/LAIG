@@ -40,6 +40,8 @@
         <texture id="woodChairTex" file="scenes/images/woodTex1.jpg" />
         <texture id="creeperTex" file="scenes/images/creeperTex.png" />
         <texture id="windowView" file="scenes/images/windowView.jpg" />
+        <texture id="baguetteTex" file="scenes/images/baguetteTex.jpg" />
+        <texture id="painting" file="scenes/images/painting.jpg" />
     </textures>
 
     <materials>
@@ -169,6 +171,9 @@
         <primitive id="windowFrame">
             <OBJprimitive path="models/window.obj" />
         </primitive>
+        <primitive id="baguette">
+            <OBJprimitive path="models/baguette.obj" />
+        </primitive>
 
        <!-- ERASE LATER -->
 
@@ -263,14 +268,31 @@
             <children>
                 <componentref id="building"/>
                 <componentref id="furniture"/>
-                <componentref id="creeper"/>
+                <componentref id="creeper1"/>
+                <componentref id="creeper2"/>
             </children>
         </component>
 
-        <component id="creeper">
+        <component id="creeper1">
             <transformation>
                 <scale x="2" y="2" z="2"/>
-                <translate x="-5" y="0" z="-5"/>
+                <translate x="-10" y="0" z="-15"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse"/>
+            </materials>
+            <texture id="creeperTex" length_t="1" length_s="1"/>
+            <children>
+                <primitiveref id="creeper"/>
+                <componentref id="creeperFace"/>
+            </children>
+        </component>
+
+        <component id="creeper2">
+            <transformation>
+                <rotate axis="y" angle="-45"/>
+                <scale x="2" y="2" z="2"/>
+                <translate x="0" y="0" z="-20"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse"/>
@@ -881,6 +903,21 @@
             <children>
                 <componentref id="rectangle"/>
                 <componentref id="walls"/>
+                <componentref id="ceiling"/>
+            </children>
+        </component>
+
+        <component id="ceiling">
+            <transformation>
+                <rotate axis="x" angle="90"/>
+                <translate x="0" y="0" z="-2"/>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="painting" length_s="2" length_t="2"/>
+            <children>
+                <primitiveref id="rectangle"/>
             </children>
         </component>
 
@@ -1262,15 +1299,15 @@
 
         <component id="divider">
             <transformation>
-                <translate x="-0.5" y="0" z="-0.5"/>
-                <scale x="0.25" y="0.25" z="1"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="1" y="4" z="1.5"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="ropeTex" length_s="1" length_t="1"/>
+            <texture id="baguetteTex" length_s="0.25" length_t="0.25"/>
             <children>
-                <primitiveref id="cylinder"/>
+                <primitiveref id="baguette"/>
             </children>
         </component>
 
