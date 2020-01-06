@@ -60,7 +60,7 @@ class MyInterface extends CGFinterface {
     }
 
     createGraphDropdown() {
-        this.gui.add(this.scene, 'selectedGraphName', ['Desert', 'Restaurant', 'Zombieland']).onChange(this.scene.changeSelectedGraph.bind(this.scene)).name("Scene");
+        this.gui.add(this.scene, 'selectedGraphName', ['Restaurant', 'Desert', 'Zombieland']).onChange(this.scene.changeSelectedGraph.bind(this.scene)).name("Scene");
     }
 
     createCameraDropdown() {

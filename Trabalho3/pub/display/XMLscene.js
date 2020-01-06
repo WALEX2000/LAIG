@@ -12,8 +12,8 @@ class XMLscene extends CGFscene {
         super();
         this.graphs = [];
         this.loadedGraphs = 0;
-        this.selectedGraphName = 'Desert';
-        this.selectedGraph = 1;
+        this.selectedGraphName = 'Restaurant';
+        this.selectedGraph = 0;
         this.interface = myinterface;
         this.board;
     }
@@ -219,20 +219,28 @@ class XMLscene extends CGFscene {
 
     changeSelectedGraph() {
         switch(this.selectedGraphName) {
-            case 'Desert':
+            case 'Restaurant':
                 this.selectedGraph = 0;
                 break;
-            case 'Restaurant':
+            case 'Desert':
                 this.selectedGraph = 1;
                 break;
             case 'Zombieland':
                 this.selectedGraph = 2;
                 break;
         }
-        this.board = new MyBoard(this, this.graphs[this.selectedGraph].whiteTile, this.graphs[this.selectedGraph].blackTile, this.graphs[this.selectedGraph].whitePiece, this.graphs[this.selectedGraph].blackPiece, this.graphs[this.selectedGraph].divider, this.graphs[this.selectedGraph].indicator, this.graphs[this.selectedGraph].boardTable);
+        this.board.whiteTile = this.graphs[this.selectedGraph].whiteTile;
+        this.board.blackTile = this.graphs[this.selectedGraph].blackTile;
+        this.board.whitePiece = this.graphs[this.selectedGraph].whitePiece;
+        this.board.blackPiece = this.graphs[this.selectedGraph].blackPiece;
+        this.board.divider = this.graphs[this.selectedGraph].divider;
+        this.board.indicator = this.graphs[this.selectedGraph].indicator;
+        this.board.boardtable = this.graphs[this.selectedGraph].boardTable;
+        this.board.updatePieces();
+        //this.board = new MyBoard(this, this.graphs[this.selectedGraph].whiteTile, this.graphs[this.selectedGraph].blackTile, this.graphs[this.selectedGraph].whitePiece, this.graphs[this.selectedGraph].blackPiece, this.graphs[this.selectedGraph].divider, this.graphs[this.selectedGraph].indicator, this.graphs[this.selectedGraph].boardTable);
         this.initCameras();
         this.initLights();
         this.interface.resetInterface();
-        console.log(this.lights.length);
+        this.board.toggleGameCamera();
     }
 }

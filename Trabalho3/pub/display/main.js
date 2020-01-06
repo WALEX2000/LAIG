@@ -56,8 +56,8 @@ main=function()
 	// create and load graph, and associate it to scene. 
     // Check console for loading errors
 	var myGraphs = [
-        new MySceneGraph('myScene.xml', myScene),
         new MySceneGraph('restaurant.xml', myScene),
+        new MySceneGraph('myScene.xml', myScene),
         new MySceneGraph('zombieland.xml', myScene)
     ];
 

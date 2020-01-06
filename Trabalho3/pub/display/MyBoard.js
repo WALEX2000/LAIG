@@ -753,4 +753,28 @@ class MyBoard {
             postGameRequest("[bot_move," + translateJStoPLboard(this.board_state) + "," + this.difficulty + "," + this.player + "," + this.turn + "]", this.botMovePiece.bind(this));
         this.timer.resetCount();
     }
+
+    updatePieces() {
+        let newBlackPieces = [];
+        let newWhitePieces = [];
+
+        for (let i = 0; i < this.boardSize*4; i++) {
+            let newBlackPiece = this.blackPiece.clone();
+            newBlackPiece.transformation = this.blackPieces[i].transformation;
+            newBlackPiece.position = this.blackPieces[i].position;
+            newBlackPiece.animation = this.blackPieces[i].animation;
+            newBlackPiece.type = "blackPiece";
+            newBlackPieces.push(newBlackPiece);
+            
+            let newWhitePiece = this.whitePiece.clone();
+            newWhitePiece.transformation = this.whitePieces[i].transformation;
+            newWhitePiece.position = this.whitePieces[i].position;
+            newWhitePiece.type = "whitePiece";
+            newWhitePiece.animation = this.whitePieces[i].animation;
+            newWhitePieces.push(newWhitePiece);
+        }
+
+        this.blackPieces = newBlackPieces;
+        this.whitePieces = newWhitePieces;
+    }
 }

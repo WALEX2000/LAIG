@@ -63,6 +63,13 @@
             <specular r="1.0" g="0.6" b="0.7" a="1.0" />
         </material>
 
+        <material id="zombieGreen" shininess="2">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.04" g="0.35" b="0.2" a="1.0" />
+            <diffuse r="0.08" g="0.72" b="0.4" a="1.0" />
+            <specular r="0.02" g="0.15" b="0.1" a="1.0" />
+        </material>
+
         <material id="greyDiffuse" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.26" g="0.29" b="0.30" a="1.0" />
@@ -96,6 +103,9 @@
         </primitive>
         <primitive id="grave">
             <OBJprimitive path="models/grave.obj" />
+        </primitive>
+        <primitive id="tree">
+            <OBJprimitive path="models/deadTree.obj" />
         </primitive>
 
         <!-- Belongs to Board -->
@@ -132,6 +142,228 @@
                 <componentref id="ground"/>
                 <componentref id="graves"/>
                 <componentref id="SkyBox"/>
+                <componentref id="trees"/>
+            </children>
+        </component>
+
+        <component id="trees">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="lightWoodTex" length_s="1" length_t="1" />
+            <children>
+                <componentref id="treePatch1"/>
+                <componentref id="treePatch2"/>
+                <componentref id="treePatch3"/>
+                <componentref id="treePatch4"/>
+                <componentref id="treePatch5"/>
+                <componentref id="treePatch6"/>
+                <componentref id="treePatch7"/>
+                <componentref id="treePatch8"/>
+                <componentref id="treePatch9"/>
+                <componentref id="treePatch10"/>
+            </children>
+        </component>
+
+        <component id="treePatch">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="tree1" />
+                <componentref id="tree2" />
+                <componentref id="tree3" />
+                <componentref id="tree4" />
+            </children>
+        </component>
+
+        <component id="treePatch1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch2">
+            <transformation>
+                <translate x="-40" y="0" z="-80" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch3">
+            <transformation>
+                <translate x="40" y="0" z="-80" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch4">
+            <transformation>
+                <translate x="-80" y="0" z="-80" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch5">
+            <transformation>
+                <translate x="90" y="0" z="-80" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch6">
+            <transformation>
+                <translate x="30" y="0" z="120" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch7">
+            <transformation>
+                <translate x="-10" y="0" z="110" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch8">
+            <transformation>
+                <translate x="-30" y="0" z="130" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch9">
+            <transformation>
+                <translate x="-90" y="0" z="-10" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="treePatch10">
+            <transformation>
+                <translate x="80" y="0" z="10" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="treePatch"/>
+            </children>
+        </component>
+
+        <component id="tree1">
+            <transformation>
+                <translate x="-18" y="0" z="-18" />
+                <scale x="3.5" y="4" z="4" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="tree" />
+            </children>
+        </component>
+
+        <component id="tree2">
+            <transformation>
+                <translate x="20" y="0" z="20" />
+                <scale x="4" y="4.5" z="3.5" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="tree" />
+            </children>
+        </component>
+
+        <component id="tree3">
+            <transformation>
+                <translate x="5" y="0" z="40" />
+                <scale x="4" y="3.5" z="3.5" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="tree" />
+            </children>
+        </component>
+
+        <component id="tree4">
+            <transformation>
+                <translate x="-20" y="0" z="30" />
+                <scale x="3.5" y="4" z="4" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="tree" />
             </children>
         </component>
 
@@ -228,6 +460,7 @@
 
         <component id="graves">
             <transformation>
+                <translate x="0" y="0" z="30" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -251,17 +484,77 @@
             <texture id="none" />
             <children>
                 <primitiveref id="grave" />
-                <componentref id="hand" />
+                <componentref id="hand1" />
+                <componentref id="hand2" />
+                <componentref id="hand3" />
+                <componentref id="hand4" />
+                <componentref id="hand5" />
             </children>
         </component>
 
-        <component id="hand">
+        <component id="hand1">
             <transformation>
                 <translate x="0" y="0" z="-0.1" />
                 <scale x="0.1" y="0.1" z="0.1" />
             </transformation>
             <materials>
-                <material id="bloodRed" />
+                <material id="zombieGreen" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="blackPiece" />
+            </children>
+        </component>
+
+        <component id="hand2">
+            <transformation>
+                <translate x="0.3" y="0" z="-0.15" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="zombieGreen" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="blackPiece" />
+            </children>
+        </component>
+
+        <component id="hand3">
+            <transformation>
+                <translate x="0.1" y="0" z="-0.05" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="zombieGreen" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="blackPiece" />
+            </children>
+        </component>
+
+        <component id="hand4">
+            <transformation>
+                <translate x="-0.25" y="0" z="-0.15" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="zombieGreen" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="blackPiece" />
+            </children>
+        </component>
+
+        <component id="hand5">
+            <transformation>
+                <translate x="-0.1" y="0" z="-0.2" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="zombieGreen" />
             </materials>
             <texture id="none" />
             <children>
