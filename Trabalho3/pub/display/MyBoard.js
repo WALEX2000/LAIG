@@ -61,6 +61,7 @@ class MyBoard {
         for(let x = 0; x < 2; x++) {
             for(let y = 0; y < 2; y++) {
                 for (let row = 0; row < this.boardSize; row++) {
+                    //Each piece gets a transformation to their relative position in the board, aswell as a falling animation and a piece type
                     let newBlackPiece = this.blackPiece.clone();
                     newBlackPiece.transformation = mat4.create();
                     mat4.translate(newBlackPiece.transformation, newBlackPiece.transformation, [x * (this.boardSize + this.boardSpacing), 0.35, y * (this.boardSize + this.boardSpacing)]);
@@ -83,6 +84,7 @@ class MyBoard {
         }
     }
 
+    //Function that is called when the board size is changed in the interface, to set the correct board
     updateBoardSize() {
         this.boardSize = Number(this.boardSize);
         this.moves=[];
@@ -108,14 +110,16 @@ class MyBoard {
     //Dar display das Tiles e divider em posições corretas 
     //Dar display das pieces em número e posição corretas
     display() {
+        //If camera is in rotation, update its angle
         this.rotateGameCamera();
 
-        //Display 2 boards, a rope and a 2 other boards, with a timer, counters and table
+        //Display timer
         this.scene.pushMatrix();
         this.scene.translate(0,0.75,0);
         this.timer.display();
         this.scene.popMatrix();
 
+        //Display 4 boards
         this.scene.pushMatrix();
         this.scene.translate(0.5,0,0.5);
         this.drawBoard(this.whiteTile, [0,0]);
@@ -129,10 +133,12 @@ class MyBoard {
         this.drawBoard(this.whiteTile, [0,1]);
         this.drawBoard(this.blackTile, [1,1]);
 
+        //Display pieces
         this.drawPieces(this.whitePieces, 0);
         this.drawPieces(this.blackPieces, this.boardSize*4);
         this.scene.popMatrix();
-
+        
+        //Display table
         this.scene.pushMatrix();
         this.divider.display();
         this.scene.popMatrix();
@@ -144,23 +150,27 @@ class MyBoard {
 
         this.time = performance.now();
 
+        //Show valid moves if there is a piece selected
         this.showSuggestions();
-        //TODO display fallen pieces in appropriate locations
     }
 
     drawBoard(tile, boardPos) {
         this.scene.pushMatrix();
         this.scene.translate(boardPos[0] * (this.boardSize + this.boardSpacing), 0, boardPos[1] * (this.boardSize + this.boardSpacing));
+
+        //Display board's piece counter
         this.scene.pushMatrix();
-        //this.scene.translate(-this.boardSize+0.5,0.75,boardPos[1]==1?-this.boardSize-1.5:-1.5);
         this.scene.translate(boardPos[0]==1?-1.5:-1.5-this.boardSize,0.75,-1.5-this.boardSize/2);
         this.scene.rotate(Math.PI/2, 0, 1, 0);
         this.counter.display(this.scores[boardPos[0]][boardPos[1]][0], this.scores[boardPos[0]][boardPos[1]][1]);
         this.scene.popMatrix();
+
+        //Display board's tiles
         for(let row = 0; row < this.boardSize; row++) {
             for(let col = 0; col < this.boardSize; col++) {
                 this.scene.pushMatrix();
-                this.scene.translate(row-this.boardSize-this.boardSpacing/2, 0, col-this.boardSize-this.boardSpacing/2); //apply row on x and col on y TODO needs to account for tileSize..
+                this.scene.translate(row-this.boardSize-this.boardSpacing/2, 0, col-this.boardSize-this.boardSpacing/2);
+                //Board picking id's starts at 420, and its order is such as [0,0],[0,1]...[1,0],[1,1]...
                 this.scene.registerForPick(420+(boardPos[0]*this.boardSize+row)*(this.boardSize*2)+boardPos[1]*this.boardSize+col, tile);
                 tile.display();
                 this.scene.clearPickRegistration();
@@ -171,6 +181,7 @@ class MyBoard {
     }
 
     drawPieces(pieces, offset) {
+        //Piece picking id's start at 64 starting with the white pieces, and at 64 + 4*this.boardSize start the black pieces
         for (let i = 0; i < pieces.length; i++) {
             this.scene.pushMatrix();
             this.scene.registerForPick(64+i+offset, pieces[i]);
@@ -180,6 +191,7 @@ class MyBoard {
         }
     }
 
+    //Checks if it's a human's turn (true) or a computer's turn (false)
     isHumanPlaying() {
         if(this.gamemode == 'PvP')
             return true;
@@ -196,7 +208,9 @@ class MyBoard {
                     let customId = this.scene.pickResults[i][1];
                     if(obj == undefined)
                         continue;
+                    //Possible phases: "TilePicking", "PiecePicking" and "gameOver"
                     switch(this.phase) {
+                        //Game phase where a board tile may be selected to move a piece, or select a new piece
                         case "TilePicking":
                             if(obj==this.blackTile || obj==this.whiteTile) {
                                 customId -= 420;
@@ -204,6 +218,7 @@ class MyBoard {
                                 customId = customId % (this.boardSize*2);
                                 this.selectedTileY = customId;
                                 console.log("Picked tile ["+this.selectedTileX+","+this.selectedTileY+"].");
+                                //[move_piece] is the player's prolog function to move a piece when the initial and final positions are provided by the player picking
                                 if(this.turn==1)
                                     postGameRequest("[move_piece," + translateJStoPLboard(this.board_state) + "," + this.player + "," + this.turn + "," + this.selectedPieceX + "," + this.selectedPieceY + "," + this.selectedTileX + "," + this.selectedTileY + "]", this.movePiece.bind(this));
                                 else
@@ -211,6 +226,8 @@ class MyBoard {
                                 this.phase="PiecePicking";
                                 this.validMoves = [];
                             }
+                            //No "break;" to allow new piece picking
+                        //Game phase where a board piece may be selected to be moved
                         case "PiecePicking":
                             if(obj.type == "whitePiece" || obj.type == "blackPiece") {
                                 customId -= 64;
@@ -222,6 +239,7 @@ class MyBoard {
                                 this.selectedPieceX = position[0];
                                 this.selectedPieceY = position[1];
                                 console.log("Position: x="+this.selectedPieceX+",y="+this.selectedPieceY);
+                                //[get_moves_piece] is the player's prolog function to show a piece's possible moves when the initial and final positions are provided by the player picking
                                 if(this.turn==1)
                                     postGameRequest("[get_moves_piece," + translateJStoPLboard(this.board_state) + ","+this.player+",1,"+this.selectedPieceX + "," + this.selectedPieceY + "]", this.getPieceMovesTurn1.bind(this));
                                 else
@@ -235,11 +253,13 @@ class MyBoard {
 		}
     }
     
+    //[start_game] is the prolog function that initializes the game board, according to a given board size
     initGame() {
         postGameRequest("[start_game,"+this.boardSize+"]", this.startGame.bind(this));
     }
 
     startGame(reply) {
+        //Receives board from prolog, and initializes everything needed for a game
         let response = JSON.parse(reply.target.response);
         this.board_state = translatePLtoJSboard(response.argA);
         this.moves = [];
@@ -265,6 +285,7 @@ class MyBoard {
         if(this.player == 'b') {
             this.gameCameraRotation += Math.PI;
         }
+        //To reset game, every move is undone with an animation in quick succession
         while(this.moves.length != 0) {
             this.undoMove(false);
             await new Promise(r => setTimeout(r, 200));
@@ -283,7 +304,7 @@ class MyBoard {
     async replayGame2() {
         let moves = [];
         let boards = [];
-        let moveNum = this.moves.length;
+        //Save moves and board for resuming game
         for(let i = 0; i < this.moves.length; i++) {
             moves.push(this.moves[i]);
             boards.push(this.boards[i]);
@@ -294,6 +315,7 @@ class MyBoard {
         this.boards=boards;
         this.board_state = this.boards[this.boards.length-1];
         await new Promise(r => setTimeout(r, 250));
+        //Replay every move
         for(let i = 0; i < moves.length; i++) {
             await new Promise(r => setTimeout(r, 250));
             if(this.phase != 'gameOver')

@@ -30,6 +30,8 @@
         <texture id="woodTex" file="scenes/images/wood.jpg" />
         <texture id="lightWoodTex" file="scenes/images/lightWood.jpg" />
         <texture id="rottingWoodTex" file="scenes/images/rottingWoodTexture.jpg"/>
+        <texture id="darkGrass" file="scenes/images/darkGrass.png"/>
+        <texture id="sky" file="scenes/images/starrySky.jpg"/>
     </textures>
 
     <materials>
@@ -52,6 +54,13 @@
             <ambient r="0.2" g="0.7" b="0.3" a="1.0" />
             <diffuse r="0.3" g="1.0" b="0.4" a="1.0" />
             <specular r="0.6" g="1.0" b="0.7" a="1.0" />
+        </material>
+
+        <material id="bloodRed" shininess="2">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.7" g="0.2" b="0.3" a="1.0" />
+            <diffuse r="1.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="1.0" g="0.6" b="0.7" a="1.0" />
         </material>
 
         <material id="greyDiffuse" shininess="1">
@@ -85,6 +94,10 @@
         <primitive id="house">
             <OBJprimitive path="models/house.obj" />
         </primitive>
+        <primitive id="grave">
+            <OBJprimitive path="models/grave.obj" />
+        </primitive>
+
         <!-- Belongs to Board -->
         <primitive id="cylinder">
             <cylinder base="1" top="1" height="1.0" slices="25" stacks="15" />
@@ -92,8 +105,14 @@
         <primitive id="plane">
             <plane npartsU="4" npartsV="4"/>
         </primitive>
-        <primitive id="piece">
-            <OBJprimitive path="models/gamePiece.obj" />
+        <primitive id="rectangle">
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+        <primitive id="whitePiece">
+            <OBJprimitive path="models/hand.obj" />
+        </primitive>
+        <primitive id="blackPiece">
+            <OBJprimitive path="models/hand2.obj" />
         </primitive>
         <primitive id="arrow">
             <OBJprimitive path="models/arrow.obj" />
@@ -109,19 +128,245 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="building"/>
+                <componentref id="buildings"/>
+                <componentref id="ground"/>
+                <componentref id="graves"/>
+                <componentref id="SkyBox"/>
             </children>
         </component>
 
-        <component id="building">
+        <component id="SkyBox">
+            <transformation>
+                <scale x="5" y="5" z="5" />
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="sky" length_s="1" length_t="1" />
+            <children>
+                <componentref id="SkyBoxTop" />
+                <componentref id="SkyBoxLeft" />
+                <componentref id="SkyBoxRight" />
+                <componentref id="SkyBoxBack" />
+                <componentref id="SkyBoxFront" />
+            </children>
+        </component>
+
+        <component id="SkyBoxTop">
+            <transformation>
+                <translate x="0" y="100" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="SkyBoxLeft">
+            <transformation>
+                <translate x="-50" y="50" z="0" />
+                <rotate axis="y" angle="90" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="SkyBoxRight">
+            <transformation>
+                <translate x="50" y="50" z="0" />
+                <rotate axis="y" angle="-90" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="SkyBoxBack">
+            <transformation>
+                <translate x="0" y="50" z="50" />
+                <rotate axis="y" angle="180" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="SkyBoxFront">
+            <transformation>
+                <translate x="0" y="50" z="-50" />
+                <scale x="100" y="100" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+        <component id="graves">
             <transformation>
             </transformation>
             <materials>
-                <material id="whiteDiffuse" />
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="grave1" />
+                <componentref id="grave2" />
+                <componentref id="grave3" />
+            </children>
+        </component>
+
+        <component id="grave1">
+            <transformation>
+                <translate x="0" y="0" z="30" />
+                <scale x="40" y="40" z="40" />
+            </transformation>
+            <materials>
+                <material id="greyDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="grave" />
+                <componentref id="hand" />
+            </children>
+        </component>
+
+        <component id="hand">
+            <transformation>
+                <translate x="0" y="0" z="-0.1" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="bloodRed" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="blackPiece" />
+            </children>
+        </component>
+
+        <component id="grave2">
+            <transformation>
+                <translate x="-10" y="0" z="30" />
+                <scale x="40" y="40" z="40" />
+            </transformation>
+            <materials>
+                <material id="greyDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="grave" />
+            </children>
+        </component>
+
+        <component id="grave3">
+            <transformation>
+                <translate x="10" y="0" z="30" />
+                <scale x="40" y="40" z="40" />
+            </transformation>
+            <materials>
+                <material id="greyDiffuse" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="grave" />
+            </children>
+        </component>
+
+
+        <component id="buildings">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="house1"/>
+                <componentref id="house2"/>
+                <componentref id="house3"/>
+            </children>
+        </component>
+
+        <component id="house1">
+            <transformation>
+                <translate x="0" y="0" z="-40" />
+                <scale x="4" y="4" z="4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
             </materials>
             <texture id="rottingWoodTex" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="house"/>
+            </children>
+        </component>
+
+        <component id="house2">
+            <transformation>
+                <translate x="40" y="0" z="0" />
+                <rotate axis="y" angle="-90" />
+                <scale x="4" y="4" z="4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="rottingWoodTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="house"/>
+            </children>
+        </component>
+
+        <component id="house3">
+            <transformation>
+                <translate x="-40" y="0" z="0" />
+                <rotate axis="y" angle="90" />
+                <scale x="4" y="4" z="4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="rottingWoodTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="house"/>
+            </children>
+        </component>
+
+        <component id="ground">
+            <transformation>
+                <scale x="250" y="1" z="250" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="darkGrass" length_s="0.1" length_t="0.1"/>
+            <children>
+                <primitiveref id="rectangle"/>
             </children>
         </component>
 
@@ -334,7 +579,7 @@
             </materials>
             <texture id="none" />
             <children>
-                <primitiveref id="piece" />
+                <primitiveref id="whitePiece" />
             </children>
         </component>
 
@@ -347,7 +592,7 @@
             </materials>
             <texture id="none" />
             <children>
-                <primitiveref id="piece" />
+                <primitiveref id="blackPiece" />
             </children>
         </component>
 
