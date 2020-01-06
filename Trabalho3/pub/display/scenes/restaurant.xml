@@ -39,6 +39,7 @@
         <texture id="furnaceTop" file="scenes/images/furnaceTop.png" />
         <texture id="woodChairTex" file="scenes/images/woodTex1.jpg" />
         <texture id="creeperTex" file="scenes/images/creeperTex.png" />
+        <texture id="baguetteTex" file="scenes/images/baguetteTex.jpg" />
     </textures>
 
     <materials>
@@ -164,6 +165,9 @@
         </primitive>
         <primitive id="chocolateCakePink">
             <OBJprimitive path="models/chocolateCakePink.obj" />
+        </primitive>
+        <primitive id="baguette">
+            <OBJprimitive path="models/baguette.obj" />
         </primitive>
 
        <!-- ERASE LATER -->
@@ -1213,15 +1217,15 @@
 
         <component id="divider">
             <transformation>
-                <translate x="-0.5" y="0" z="-0.5"/>
-                <scale x="0.25" y="0.25" z="1"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="1" y="4" z="1.5"/>
             </transformation>
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="ropeTex" length_s="1" length_t="1"/>
+            <texture id="baguetteTex" length_s="0.25" length_t="0.25"/>
             <children>
-                <primitiveref id="cylinder"/>
+                <primitiveref id="baguette"/>
             </children>
         </component>
 
