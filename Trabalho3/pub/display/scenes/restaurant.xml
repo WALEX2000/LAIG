@@ -39,6 +39,7 @@
         <texture id="furnaceTop" file="scenes/images/furnaceTop.png" />
         <texture id="woodChairTex" file="scenes/images/woodTex1.jpg" />
         <texture id="creeperTex" file="scenes/images/creeperTex.png" />
+        <texture id="windowView" file="scenes/images/windowView.jpg" />
     </textures>
 
     <materials>
@@ -164,6 +165,9 @@
         </primitive>
         <primitive id="chocolateCakePink">
             <OBJprimitive path="models/chocolateCakePink.obj" />
+        </primitive>
+        <primitive id="windowFrame">
+            <OBJprimitive path="models/window.obj" />
         </primitive>
 
        <!-- ERASE LATER -->
@@ -887,12 +891,57 @@
             <materials>
                 <material id="whiteDiffuse" />
             </materials>
-            <texture id="none"/>
+            <texture id="brownMarble"/>
             <children>
+                <componentref id="window"/>
                 <componentref id="wall1"/>
                 <componentref id="wall2"/>
                 <componentref id="wall3"/>
                 <componentref id="wall4"/>
+            </children>
+        </component>
+
+        <component id="window">
+            <transformation>
+                <translate x="0" y="0.1" z="0.2" />
+                <scale x="1" y="1.3" z="1.3" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="windowFrame"/>
+                <componentref id="windowView" />
+            </children>
+        </component>
+
+        <component id="windowFrame">
+            <transformation>
+                <translate x="-1.025" y="-0.5" z="0" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="woodChairTex" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="windowFrame" />
+            </children>
+        </component>
+
+        <component id="windowView">
+            <transformation>
+                <translate x="-0.98" y="-0.21" z="-0.01" />
+                <rotate axis="y" angle="90" />
+                <scale x="0.17" y="0.25" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="whiteDiffuse" />
+            </materials>
+            <texture id="windowView" length_s="2" length_t="2"/>
+            <children>
+                <primitiveref id="rectangle" />
             </children>
         </component>
 

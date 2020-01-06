@@ -80,7 +80,7 @@ class CGFOBJModel extends CGFobject{
 			  texcoords.push(
 				[
 				  parseFloat(parts[1]),
-				  parseFloat(parts[2])
+				  1-parseFloat(parts[2])
 				]
 			  );
 			  break;
